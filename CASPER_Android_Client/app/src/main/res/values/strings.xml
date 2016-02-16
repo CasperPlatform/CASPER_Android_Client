@@ -15,4 +15,9 @@
         completions."
     </string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="Logo">CASP.ER</string>
+    <string name="LoginButtonText">Login</string>
+    <string name="PasswordHint">Password</string>
+    <string name="UserHint">USER</string>
+    <string name="BackButton">Back</string>
 </resources>

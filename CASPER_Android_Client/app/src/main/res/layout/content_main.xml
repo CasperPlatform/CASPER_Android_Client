@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="CASP.ER"
+        android:text="@string/Logo"
         android:id="@+id/Logo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -30,7 +30,7 @@
         android:layout_height="40dp"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/User"
+        android:id="@+id/User2"
         android:layout_below="@+id/Logo"
         android:layout_marginTop="61dp"
         android:layout_alignRight="@+id/Logo"
@@ -38,7 +38,7 @@
         android:background="#ffffff"
         android:textAlignment="center"
         android:autoText="false"
-        android:hint="USER"
+        android:hint="@string/UserHint"
         android:textIsSelectable="false" />
 
     <EditText
@@ -46,27 +46,28 @@
         android:layout_height="40dp"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/editText2"
+        android:id="@+id/Password2"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:background="#ffffff"
         android:layout_alignEnd="@id/Logo"
         android:layout_alignParentEnd="false"
         android:textAlignment="center"
-        android:hint="Password" />
+        android:hint="@string/PasswordHint" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/LoginButtonText"
         android:id="@+id/LoginButton"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="91dp"
-        android:layout_alignLeft="@+id/User"
-        android:layout_alignStart="@+id/User"
-        android:layout_alignRight="@+id/editText2"
-        android:layout_alignEnd="@+id/editText2"
+        android:layout_alignLeft="@+id/User2"
+        android:layout_alignStart="@+id/User2"
+        android:layout_alignRight="@+id/Password2"
+        android:layout_alignEnd="@+id/Password2"
         android:background="#2DEF96"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:onClick="onClick" />
 
 </RelativeLayout>
