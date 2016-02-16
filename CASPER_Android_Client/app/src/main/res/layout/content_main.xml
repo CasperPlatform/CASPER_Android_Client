@@ -22,5 +22,51 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="54dp"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="@dimen/abc_text_size_display_3_material" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/User"
+        android:layout_below="@+id/Logo"
+        android:layout_marginTop="61dp"
+        android:layout_alignRight="@+id/Logo"
+        android:layout_alignEnd="@+id/Logo"
+        android:background="#ffffff"
+        android:textAlignment="center"
+        android:autoText="false"
+        android:hint="USER"
+        android:textIsSelectable="false" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/editText2"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:background="#ffffff"
+        android:layout_alignEnd="@id/Logo"
+        android:layout_alignParentEnd="false"
+        android:textAlignment="center"
+        android:hint="Password" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:id="@+id/LoginButton"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="91dp"
+        android:layout_alignLeft="@+id/User"
+        android:layout_alignStart="@+id/User"
+        android:layout_alignRight="@+id/editText2"
+        android:layout_alignEnd="@+id/editText2"
+        android:background="#2DEF96"
+        android:textColor="#000000" />
+
 </RelativeLayout>
