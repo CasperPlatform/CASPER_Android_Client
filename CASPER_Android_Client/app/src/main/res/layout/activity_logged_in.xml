@@ -18,11 +18,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/username"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="98dp"
         android:textColor="#ffffff"
-        android:textSize="@dimen/abc_text_size_display_3_material" />
+        android:textSize="@dimen/abc_text_size_display_3_material"
+        android:layout_above="@+id/thepassword"
+        android:layout_alignLeft="@+id/thepassword"
+        android:layout_alignStart="@+id/thepassword" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,11 +30,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/thepassword"
-        android:layout_below="@+id/username"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
         android:textColor="#ffffff"
-        android:textSize="@dimen/abc_text_size_display_3_material" />
+        android:textSize="@dimen/abc_text_size_display_3_material"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="230dp"
@@ -43,7 +42,7 @@
         android:id="@+id/backButton"
         android:background="#2DEF96"
         android:onClick="backButton"
-        android:layout_marginBottom="91dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/thepassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp" />
 </RelativeLayout>
