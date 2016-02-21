@@ -20,8 +20,7 @@
         android:text="Large Text"
         android:id="@+id/showUsername"
         android:textColor="#ffffff"
-        android:textSize="@dimen/abc_text_size_display_3_material"
-        android:layout_marginTop="100dp"
+        android:textSize="30dp"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/showPassword"
         android:layout_alignStart="@+id/showPassword" />
@@ -33,7 +32,7 @@
         android:text="Large Text"
         android:id="@+id/showPassword"
         android:textColor="#ffffff"
-        android:textSize="@dimen/abc_text_size_display_3_material"
+        android:textSize="30dp"
         android:layout_below="@+id/showUsername"
         android:layout_centerHorizontal="true" />
 

@@ -22,6 +22,21 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    compile files('libs/jna-4.0.0.jar')
+    compile files('libs/ObjCBridge.jar')
+    compile files('libs/okhttp-2.6.0.jar')
+    compile files('libs/okio-1.6.0.jar')
+    compile files('libs/ApacheHttp/commons-codec-1.9.jar')
+    compile files('libs/ApacheHttp/commons-logging-1.2.jar')
+    compile files('libs/ApacheHttp/fluent-hc-4.5.1.jar')
+    compile files('libs/ApacheHttp/httpclient-4.5.1.jar')
+    compile files('libs/ApacheHttp/httpclient-cache-4.5.1.jar')
+    compile files('libs/ApacheHttp/httpclient-win-4.5.1.jar')
+    compile files('libs/ApacheHttp/httpcore-4.4.3.jar')
+    compile files('libs/ApacheHttp/httpmime-4.5.1.jar')
+    compile files('libs/ApacheHttp/jna-4.1.0.jar')
+    compile files('libs/ApacheHttp/jna-platform-4.1.0.jar')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:support-v4:23.1.1'
 }

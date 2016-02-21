@@ -17,12 +17,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoggedIn"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity">
+            android:name=".LoggedInActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoggedIn"></meta-data>
+                android:value=".LoggedInActivity" />
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".LoggedInActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoggedInActivity" />
+
+        </activity>
+        <activity
+            android:name=".VideoStreamActivity"
+            android:parentActivityName=".LoggedInActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="landscape">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".VideoStreamActivity" />
 
 
         </activity>

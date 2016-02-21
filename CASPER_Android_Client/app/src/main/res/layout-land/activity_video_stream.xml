@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VideoStreamActivity"
+    android:background="@drawable/bg2">
+
+    <RelativeLayout
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/layout_joystick"
+        android:nestedScrollingEnabled="true"
+        android:background="@drawable/image_button_bg"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"></RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/xAxis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/angle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Y"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:layout_below="@+id/xAxis"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/yAxis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Angle"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:layout_below="@+id/angle"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/direction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Distance"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:layout_below="@+id/yAxis"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Direction"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:layout_below="@+id/direction"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
+</RelativeLayout>

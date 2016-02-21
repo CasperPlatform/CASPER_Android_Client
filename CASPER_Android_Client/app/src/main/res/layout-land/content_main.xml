@@ -36,11 +36,8 @@
         android:hint="@string/UserHint"
         android:textIsSelectable="false"
         android:layout_below="@+id/Logo"
-        android:layout_alignRight="@+id/Logo"
-        android:layout_alignEnd="@+id/Logo"
-        android:layout_marginTop="32dp"
-        android:layout_alignLeft="@+id/Logo"
-        android:layout_alignStart="@+id/Logo" />
+        android:layout_alignLeft="@+id/Password"
+        android:layout_alignStart="@+id/Password" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -52,9 +49,9 @@
         android:textAlignment="center"
         android:hint="@string/PasswordHint"
         android:layout_below="@+id/User"
-        android:layout_alignLeft="@+id/User"
-        android:layout_alignStart="@+id/User"
-        android:layout_marginTop="28dp" />
+        android:layout_marginTop="28dp"
+        android:layout_alignLeft="@+id/Logo"
+        android:layout_alignStart="@+id/Logo" />
 
     <Button
         android:layout_width="wrap_content"
@@ -66,21 +63,10 @@
         android:onClick="onClick"
         android:layout_gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="116dp"
+        android:layout_marginBottom="20dp"
         android:layout_alignLeft="@+id/Password"
         android:layout_alignStart="@+id/Password"
-        android:layout_alignRight="@+id/Password"
-        android:layout_alignEnd="@+id/Password" />
-
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:visibility="invisible"
-        android:indeterminate="true"
-        android:indeterminateOnly="true"
-        android:layout_above="@+id/LoginButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="39dp" />
+        android:layout_alignRight="@+id/Logo"
+        android:layout_alignEnd="@+id/Logo" />
 
 </RelativeLayout>
