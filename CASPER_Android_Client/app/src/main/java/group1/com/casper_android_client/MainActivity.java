@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         // change Activity on buttonclick
         public void onClick(View v){
 
-
             TextView user = (TextView)findViewById(R.id.User);
             TextView password = (TextView)findViewById(R.id.Password);
             ProgressBar loading = (ProgressBar)findViewById(R.id.progressBar);

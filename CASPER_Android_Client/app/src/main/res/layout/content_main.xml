@@ -40,7 +40,8 @@
         android:layout_alignEnd="@+id/Logo"
         android:layout_marginTop="32dp"
         android:layout_alignLeft="@+id/Logo"
-        android:layout_alignStart="@+id/Logo" />
+        android:layout_alignStart="@+id/Logo"
+        android:textColor="#080808" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -54,7 +55,8 @@
         android:layout_below="@+id/User"
         android:layout_alignLeft="@+id/User"
         android:layout_alignStart="@+id/User"
-        android:layout_marginTop="28dp" />
+        android:layout_marginTop="28dp"
+        android:textColor="#000000" />
 
     <Button
         android:layout_width="wrap_content"

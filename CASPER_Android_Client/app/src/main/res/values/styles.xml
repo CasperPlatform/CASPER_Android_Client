@@ -2,11 +2,15 @@
 
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#203448</item>
+        <item name="colorPrimary">@color/Casper</item>
         <item name="colorPrimaryDark">#203448</item>
-            </style>
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="android:windowBackground">@color/Casper</item>
+        <item name="android:colorBackground">@color/Casper</item>
+    </style>
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
