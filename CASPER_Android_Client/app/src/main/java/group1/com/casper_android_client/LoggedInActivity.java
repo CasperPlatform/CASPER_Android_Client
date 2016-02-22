@@ -51,9 +51,15 @@ public class LoggedInActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.Settings:
-                System.out.println("pressed button");
+                System.out.println("Going to settings");
                 Intent intent = new Intent(this,SettingsActivity.class);
                 startActivity(intent);
+
+                return true;
+            case R.id.logout:
+                System.out.println("logging out");
+                finish();
+                logout();
                 return true;
             default:
                 return false;
@@ -77,6 +83,10 @@ public class LoggedInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void logout(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+    }
 
 
 }

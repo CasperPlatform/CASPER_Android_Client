@@ -6,6 +6,7 @@ package group1.com.casper_android_client;
 public class Singleton {
     private static Singleton ourInstance = new Singleton();
     private String userName;
+    private String passWord;
 
     public String getPassWord() {
         return passWord;
@@ -23,7 +24,6 @@ public class Singleton {
         this.userName = userName;
     }
 
-    private String passWord;
 
     public static Singleton getInstance() {
         return ourInstance;

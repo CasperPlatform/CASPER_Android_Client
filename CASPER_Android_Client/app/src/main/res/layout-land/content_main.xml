@@ -63,7 +63,7 @@
         android:id="@+id/LoginButton"
         android:background="#2DEF96"
         android:textColor="#000000"
-        android:onClick="onClick"
+        android:onClick="onLogin"
         android:layout_gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
@@ -81,5 +81,18 @@
         android:indeterminateOnly="true"
         android:layout_above="@+id/User"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/Error_msg"
+        android:id="@+id/textView"
+        android:textColor="#ff0000"
+        android:visibility="invisible"
+        android:textAlignment="center"
+        android:layout_alignTop="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
 
 </RelativeLayout>
