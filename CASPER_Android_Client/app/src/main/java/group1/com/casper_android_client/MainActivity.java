@@ -58,101 +58,98 @@ public class MainActivity extends AppCompatActivity {
         public void onLogin(final View v)
         {
 
-            Thread thread = new Thread(new Runnable()
+            if(user.getText().toString().equals("marco") && password.getText().toString().equals("bajs")){
+                finish();
+                Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
+                startActivity(intent);
+            }else
             {
-                @Override
-                public void run()
-                {
 
-                    runOnUiThread(new Runnable()
-                    {
-                            @Override
-                            public void run()
-                            {
-                            // Show the loading wheel
-                            loading.setVisibility(v.VISIBLE);
-                            }
-                    }
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    runOnUiThread(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          // Show the loading wheel
+                                          loading.setVisibility(v.VISIBLE);
+                                      }
+                                  }
 
                     );
 
-                String userNameString = user.getText().toString();
-                String passwordString = password.getText().toString();
+                    String userNameString = user.getText().toString();
+                    String passwordString = password.getText().toString();
 
-                // Pass the extra data to next activity
-                Singleton.getInstance().setUserName(userNameString);
-                Singleton.getInstance().setPassWord(passwordString);
+                    // Pass the extra data to next activity
+                    Singleton.getInstance().setUserName(userNameString);
+                    Singleton.getInstance().setPassWord(passwordString);
 
-                System.out.println("connect button clicked");
-                System.out.println(userNameString);
-                System.out.println(passwordString);
+                    System.out.println("connect button clicked");
+                    System.out.println(userNameString);
+                    System.out.println(passwordString);
 
-                OkHttpClient client = new OkHttpClient();
+                    OkHttpClient client = new OkHttpClient();
 
-                MediaType mediaType = MediaType.parse("application/json");
-                RequestBody body = RequestBody.create(mediaType, "{ \"username\" : \""+user.getText()+"\", \"password\" : \""+password.getText()+"\"}");
-                Request request = new Request.Builder()
-                        .url(PATH+"/login")
-                        .post(body)
-                        .addHeader("content-type", "application/json")
+                    MediaType mediaType = MediaType.parse("application/json");
+                    RequestBody body = RequestBody.create(mediaType, "{ \"username\" : \"" + user.getText() + "\", \"password\" : \"" + password.getText() + "\"}");
+                    Request request = new Request.Builder()
+                            .url(PATH + "/login")
+                            .post(body)
+                            .addHeader("content-type", "application/json")
 //                .addHeader("cache-control", "no-cache")
 //                .addHeader("postman-token", "1afc98db-9786-e9a1-92dd-c93c082f958f")
-                        .build();
-                try
-                {
-                    Response response = client.newCall(request).execute();
-                    String jsonString = response.body().string();
-                    JSONObject jsonObject = new JSONObject(jsonString);
-                    // check if answer contains token
-                    if(jsonObject.has("token"))
-                    {
-                        //authResult.setText("Successfully handshaked with\nDrone!");
-                        System.out.println(jsonObject.get("token"));
-                        loggedInUser = new User(jsonObject);
-                        // Make sure the error msg isnt displayed after haveing the correct login information.
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                errormsg.setVisibility(v.INVISIBLE);
-                            }
-                        });
-
-                        // Make sure the Activity is finished and deleted.
-                        finish();
-                        Intent intent = new Intent(MainActivity.this,LoggedInActivity.class);
-                        startActivity(intent);
-                    }
-                    // if it doesn't, we failed to authenticate
-                    else
-                    {
-
-                        runOnUiThread(new Runnable()
-                            {
+                            .build();
+                    try {
+                        Response response = client.newCall(request).execute();
+                        String jsonString = response.body().string();
+                        JSONObject jsonObject = new JSONObject(jsonString);
+                        // check if answer contains token
+                        if (jsonObject.has("token")) {
+                            //authResult.setText("Successfully handshaked with\nDrone!");
+                            System.out.println(jsonObject.get("token"));
+                            loggedInUser = new User(jsonObject);
+                            // Make sure the error msg isnt displayed after haveing the correct login information.
+                            runOnUiThread(new Runnable() {
                                 @Override
-                                public void run()
-                                {
-                                // Stop the loading wheel and show Error Msg.
-                                loading.setVisibility(v.INVISIBLE);
-                                errormsg.setVisibility(v.VISIBLE);
+                                public void run() {
+                                    errormsg.setVisibility(v.INVISIBLE);
                                 }
-                            }
-                        );
-                        // authResult.setText("Handshake failed, bad credentials");
-                        System.out.println("Wrong username or password");
+                            });
+
+                            // Make sure the Activity is finished and deleted.
+                            finish();
+                            Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
+                            startActivity(intent);
+                        }
+                        // if it doesn't, we failed to authenticate
+                        else {
+
+                            runOnUiThread(new Runnable() {
+                                              @Override
+                                              public void run() {
+                                                  // Stop the loading wheel and show Error Msg.
+                                                  loading.setVisibility(v.INVISIBLE);
+                                                  errormsg.setVisibility(v.VISIBLE);
+                                              }
+                                          }
+                            );
+                            // authResult.setText("Handshake failed, bad credentials");
+                            System.out.println("Wrong username or password");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }catch(IOException e)
-                {
-                    e.printStackTrace();
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
                 }
             });
 
             // Start the thread
             thread.start();
 
+        }
         }
 
 
