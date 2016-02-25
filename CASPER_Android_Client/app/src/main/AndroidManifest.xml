@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="group1.com.casper_android_client">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="CASP.ER"
         android:supportsRtl="true">
+
         <activity
-            android:name=".MainActivity"
+            android:name=".Splash_Screen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:parentActivityName=".Splash_Screen"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+             <action android:name=".MainActivity" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+
         </activity>
         <activity
             android:name=".LoggedInActivity"
@@ -32,19 +47,17 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoggedInActivity" />
-
         </activity>
         <activity
             android:name=".VideoStreamActivity"
             android:parentActivityName=".LoggedInActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".VideoStreamActivity" />
-
-
         </activity>
     </application>
+
 
 </manifest>
