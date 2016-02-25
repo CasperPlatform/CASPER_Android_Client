@@ -83,4 +83,13 @@
     <string name="logout">logout</string>
     <string name="Error_msg">Wrong Username \nOr Password</string>
     <string name="logo">logo</string>
+    <string name="sockets">sockets</string>
+    <string name="messageToServer">Message</string>
+    <string name="portHint">Port</string>
+    <string name="addressHint">Address</string>
+    <string name="sendButton">send</string>
+    <string name="clearButton">clear</string>
+    <string name="connectButton">connect</string>
+    <string name="incommmingMessage">Incomming msg</string>
+    <string name="socketLogo">Socket Connector</string>
 </resources>

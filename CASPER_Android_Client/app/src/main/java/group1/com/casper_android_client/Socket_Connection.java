@@ -1,0 +1,254 @@
+package group1.com.casper_android_client;
+
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class Socket_Connection extends AppCompatActivity {
+
+    // Input and output text fields
+    private TextView response;
+    private TextView address;
+    private TextView port;
+    private TextView message;
+    private TextView error;
+
+    // Buttons
+    private Button connectButton;
+    private Button clearButton;
+    private Button sendButton;
+
+    // View handleing to access when in asynctask
+    private View errorView;
+
+    // Socket connection
+    Socket socket = new Socket();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_socket__connection);
+
+
+        // user login inputfields
+        address = (TextView)findViewById(R.id.address);
+        port = (TextView)findViewById(R.id.port);
+        message = (TextView)findViewById(R.id.message);
+
+        // Display for server messages
+        response = (TextView)findViewById(R.id.response);
+        error = (TextView)findViewById(R.id.errorMsg);
+
+        // Activity buttons
+        connectButton = (Button)findViewById(R.id.connectButton);
+        clearButton = (Button)findViewById(R.id.clearButton);
+        sendButton = (Button)findViewById(R.id.sendButton);
+
+        // Set listener to connect Button
+        connectButton.setOnClickListener(buttonConnectOnClickListener);
+
+        // Clear server messages listener
+        clearButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                response.setText("");
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.Settings:
+                System.out.println("Going to settings");
+                Intent intent = new Intent(this,SettingsActivity.class);
+                startActivity(intent);
+
+                return true;
+            case R.id.logout:
+                System.out.println("logging out");
+                logout();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // Quit connection
+    public void logout(){
+        // Debug
+        System.out.println("--------------------->Bound? " + socket.isBound());
+        System.out.println("---------------------->closed? " +socket.isClosed());
+        if(socket.isBound()) {
+            // Close Socket
+            try {
+                finish();
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Transfer to main
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }else{
+            error.setText("You are not logged in!");
+        }
+
+    }
+
+    public void setVisable(View v){
+         error.setVisibility(v.VISIBLE);
+    }
+
+    View.OnClickListener buttonConnectOnClickListener =
+            new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    errorView = v;
+                    // convertion task
+                    MyClientTask myClientTask = new MyClientTask(
+                            address.getText().toString(),
+                            Integer.parseInt(port.getText().toString()));
+                    myClientTask.execute();
+                }};
+
+    public class MyClientTask extends AsyncTask<Void, Void, Void> {
+
+        // Convesion variables
+        String dstAddress;
+        int dstPort;
+        String responsemsg = "";
+
+        MyClientTask(String addr, int port){
+            dstAddress = addr;
+            dstPort = port;
+        }
+
+        @Override
+        protected Void doInBackground(Void... v) {
+
+
+            try {
+                // Start a socket connection
+                socket = new Socket(dstAddress, dstPort);
+
+                    runOnUiThread(new Runnable() {
+                                     @Override
+                                     public void run() {
+                                         setVisable(errorView);
+                                         error.setText("server is reacheble");
+                                     }
+                                 }
+
+                    );
+
+
+
+                ByteArrayOutputStream byteArrayOutputStream =
+                        new ByteArrayOutputStream(1024);
+                byte[] buffer = new byte[1024];
+
+                int bytesRead;
+                InputStream inputStream = socket.getInputStream();
+
+
+                // Get server address as message
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      response.setText("Server respond -> " + socket.getInetAddress().toString());
+                                  }
+                              }
+
+                );
+
+                /*
+                 * notice:
+                 * inputStream.read() will block if no data return
+                */
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, bytesRead);
+                    responsemsg += byteArrayOutputStream.toString("UTF-8");
+                }
+
+            } catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                responsemsg = "UnknownHostException: " + e.toString();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                // Show user there was a problem
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      setVisable(errorView);
+                                      error.setText("server is unreacheble!");
+                                  }
+                              }
+
+                );
+                e.printStackTrace();
+                responsemsg = "IOException: " + e.toString();
+            } finally {
+
+                if (socket != null) {
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    // Send a message to the socket server and print it.
+    public void sendMessageToServer(View v){
+        String str = message.getText().toString();
+        try {
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(socket.getOutputStream())),
+                    true);
+            out.println(str);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

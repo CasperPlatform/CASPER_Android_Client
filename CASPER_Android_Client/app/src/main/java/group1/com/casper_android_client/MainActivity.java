@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         public void onLogin(final View v)
         {
             // Backdoor for test purposes
-            if(user.getText().toString().equals("marco") && password.getText().toString().equals("bajs")){
+            if(user.getText().toString().equals("demo") && password.getText().toString().equals("demo")){
                 finish();
                 Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
                 startActivity(intent);
@@ -141,6 +141,19 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println("Wrong username or password");
                         }
                     } catch (IOException e) {
+                        runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              // Stop the loading wheel and show Error Msg.
+                                              loading.setVisibility(v.INVISIBLE);
+                                              errormsg.setText("Connection Error!");
+                                              errormsg.setVisibility(v.VISIBLE);
+                                          }
+                                      }
+                        );
+                        // authResult.setText("Handshake failed, bad credentials");
+                        System.out.println("Wrong username or password");
+                    
                         e.printStackTrace();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -152,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
             thread.start();
 
         }
+
+
         }
 
 

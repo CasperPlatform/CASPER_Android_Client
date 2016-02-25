@@ -17,6 +17,7 @@ public class LoggedInActivity extends AppCompatActivity {
     private Button back;
     private Button settings;
     private Button controls;
+    private Button sockets;
 
 
     @Override
@@ -41,7 +42,8 @@ public class LoggedInActivity extends AppCompatActivity {
         // Declare Video controller Button
         controls = (Button) findViewById(R.id.controlButton);
 
-
+        // Socket connection activity
+        sockets = (Button)findViewById(R.id.sockets);
 
     }
 
@@ -95,5 +97,9 @@ public class LoggedInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void socket(View v){
+        Intent intent = new Intent(this,Socket_Connection.class);
+        startActivity(intent);
+    }
 
 }

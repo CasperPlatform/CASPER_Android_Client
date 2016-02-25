@@ -9,7 +9,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="CASP.ER"
         android:supportsRtl="true">
-
         <activity
             android:name=".Splash_Screen"
             android:theme="@style/AppTheme.NoActionBar">
@@ -24,12 +23,10 @@
             android:parentActivityName=".Splash_Screen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-             <action android:name=".MainActivity" />
+                <action android:name=".MainActivity" />
 
-            <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
-
         </activity>
         <activity
             android:name=".LoggedInActivity"
@@ -57,7 +54,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".VideoStreamActivity" />
         </activity>
+        <activity android:name=".Socket_Connection"
+            android:label="sockets"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoggedInActivity" />
+        </activity>
     </application>
-
 
 </manifest>
