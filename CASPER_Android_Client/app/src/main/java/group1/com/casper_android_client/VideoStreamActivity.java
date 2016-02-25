@@ -16,9 +16,9 @@ import android.widget.TextView;
  * Created by Andreas Fransson
  */
 public class VideoStreamActivity extends AppCompatActivity {
-    RelativeLayout layout_joystick;
-    ImageView image_joystick, image_border;
-    TextView xAxis, yAxis, angle, distance, direction;
+    private RelativeLayout layout_joystick;
+    private ImageView image_joystick, image_border;
+    private TextView xAxis, yAxis, angle, distance, direction;
 
     JoyStick js;
 
@@ -27,7 +27,7 @@ public class VideoStreamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_stream);
 
-
+        // Joystick textfields listening on joystick input.
         xAxis = (TextView)findViewById(R.id.xAxis);
         yAxis = (TextView)findViewById(R.id.yAxis);
         angle = (TextView)findViewById(R.id.angle);

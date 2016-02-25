@@ -12,6 +12,13 @@ import android.widget.TextView;
 
 public class LoggedInActivity extends AppCompatActivity {
 
+    private TextView user;
+    private TextView password;
+    private Button back;
+    private Button settings;
+    private Button controls;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,19 +27,19 @@ public class LoggedInActivity extends AppCompatActivity {
         // get the intent sen
         Intent intent = getIntent();
 
-        TextView user = (TextView) findViewById(R.id.showUsername);
-        TextView password = (TextView) findViewById(R.id.showPassword);
+        user = (TextView) findViewById(R.id.showUsername);
+        password = (TextView) findViewById(R.id.showPassword);
         user.setText(Singleton.getInstance().getUserName());
         password.setText(Singleton.getInstance().getPassWord());
 
         // Declare Back button
-        Button back = (Button) findViewById(R.id.backButton);
+        back = (Button) findViewById(R.id.backButton);
 
         // Declare Settings Button
-        Button settings = (Button) findViewById(R.id.Settingsbutton);
+        settings = (Button) findViewById(R.id.Settingsbutton);
 
         // Declare Video controller Button
-        Button controls = (Button) findViewById(R.id.controlButton);
+        controls = (Button) findViewById(R.id.controlButton);
 
 
 

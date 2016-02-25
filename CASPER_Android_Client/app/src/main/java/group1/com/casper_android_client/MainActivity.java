@@ -57,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
         // & break into UI threads to access View items
         public void onLogin(final View v)
         {
-
+            // Backdoor for test purposes
             if(user.getText().toString().equals("marco") && password.getText().toString().equals("bajs")){
                 finish();
                 Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
                 startActivity(intent);
-            }else
+            }
+            // Actual code
+            else
             {
 
             Thread thread = new Thread(new Runnable() {
