@@ -12,6 +12,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 /**
  * Created by Andreas Fransson
  */
@@ -75,6 +80,15 @@ public class VideoStreamActivity extends AppCompatActivity {
                     } else if(direction == JoyStick.STICK_NONE) {
                         VideoStreamActivity.this.direction.setText("Direction : Center");
                     }
+
+                    try {
+                        PrintWriter out = new PrintWriter(new BufferedWriter(
+                                new OutputStreamWriter(Singleton.getInstance().getSocket().getOutputStream())),
+                                true);
+                        out.println(VideoStreamActivity.this.direction.getText());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else if(arg1.getAction() == MotionEvent.ACTION_UP) {
                     xAxis.setText("X :");
                     yAxis.setText("Y :");
@@ -114,9 +128,26 @@ public class VideoStreamActivity extends AppCompatActivity {
         }
     }
 
+    // Quit connection
     public void logout(){
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
+        // Debug
+        System.out.println("--------------------->Bound? " + Singleton.getInstance().getSocket().isBound());
+        System.out.println("---------------------->closed? " + Singleton.getInstance().getSocket().isClosed());
+        if(Singleton.getInstance().getSocket().isBound()) {
+            // Close Socket
+            try {
+                finish();
+                Singleton.getInstance().getSocket().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Transfer to main
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }else{
+       
+        }
+
     }
 
 

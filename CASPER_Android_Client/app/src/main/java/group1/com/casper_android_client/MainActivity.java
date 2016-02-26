@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                         );
                         // authResult.setText("Handshake failed, bad credentials");
                         System.out.println("Wrong username or password");
-                    
+
                         e.printStackTrace();
                     } catch (JSONException e) {
                         e.printStackTrace();

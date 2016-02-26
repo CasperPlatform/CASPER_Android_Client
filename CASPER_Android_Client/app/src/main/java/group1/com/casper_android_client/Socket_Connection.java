@@ -37,8 +37,7 @@ public class Socket_Connection extends AppCompatActivity {
     // View handleing to access when in asynctask
     private View errorView;
 
-    // Socket connection
-    Socket socket = new Socket();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,7 @@ public class Socket_Connection extends AppCompatActivity {
             public void onClick(View v) {
                 response.setText("");
                 try {
-                    socket.close();
+                    Singleton.getInstance().getSocket().close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -107,13 +106,13 @@ public class Socket_Connection extends AppCompatActivity {
     // Quit connection
     public void logout(){
         // Debug
-        System.out.println("--------------------->Bound? " + socket.isBound());
-        System.out.println("---------------------->closed? " +socket.isClosed());
-        if(socket.isBound()) {
+        System.out.println("--------------------->Bound? " + Singleton.getInstance().getSocket().isBound());
+        System.out.println("---------------------->closed? " + Singleton.getInstance().getSocket().isClosed());
+        if(Singleton.getInstance().getSocket().isBound()) {
             // Close Socket
             try {
                 finish();
-                socket.close();
+                Singleton.getInstance().getSocket().close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -161,7 +160,7 @@ public class Socket_Connection extends AppCompatActivity {
 
             try {
                 // Start a socket connection
-                socket = new Socket(dstAddress, dstPort);
+                Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
 
                     runOnUiThread(new Runnable() {
                                      @Override
@@ -180,14 +179,14 @@ public class Socket_Connection extends AppCompatActivity {
                 byte[] buffer = new byte[1024];
 
                 int bytesRead;
-                InputStream inputStream = socket.getInputStream();
+                InputStream inputStream = Singleton.getInstance().getSocket().getInputStream();
 
 
                 // Get server address as message
                 runOnUiThread(new Runnable() {
                                   @Override
                                   public void run() {
-                                      response.setText("Server respond -> " + socket.getInetAddress().toString());
+                                      response.setText("Server respond -> " + Singleton.getInstance().getSocket().getInetAddress().toString());
                                   }
                               }
 
@@ -222,9 +221,9 @@ public class Socket_Connection extends AppCompatActivity {
                 responsemsg = "IOException: " + e.toString();
             } finally {
 
-                if (socket != null) {
+                if (Singleton.getInstance().getSocket() != null) {
                     try {
-                        socket.close();
+                        Singleton.getInstance().getSocket().close();
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -240,7 +239,7 @@ public class Socket_Connection extends AppCompatActivity {
         String str = message.getText().toString();
         try {
             PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream())),
+                    new OutputStreamWriter(Singleton.getInstance().getSocket().getOutputStream())),
                     true);
             out.println(str);
         } catch (UnknownHostException e) {
