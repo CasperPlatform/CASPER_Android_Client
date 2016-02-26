@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 public class LoggedInActivity extends AppCompatActivity {
 
     private TextView user;
@@ -92,9 +94,26 @@ public class LoggedInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Quit connection
     public void logout(){
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
+        // Debug
+        System.out.println("--------------------->Bound? " + Singleton.getInstance().getSocket().isBound());
+        System.out.println("---------------------->closed? " + Singleton.getInstance().getSocket().isClosed());
+        if(Singleton.getInstance().getSocket().isBound()) {
+            // Close Socket
+            try {
+                finish();
+                Singleton.getInstance().getSocket().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Transfer to main
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }else{
+
+        }
+
     }
 
     public void socket(View v){
