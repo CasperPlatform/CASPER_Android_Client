@@ -1,6 +1,7 @@
 package group1.com.casper_android_client;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -69,6 +70,8 @@ public class Socket_Connection extends AppCompatActivity {
             public void onClick(View v) {
                 response.setText("");
                 try {
+                    error.setTextColor(Color.rgb(255,0,0));
+                    error.setText("Logged out");
                     Singleton.getInstance().getSocket().close();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -166,6 +169,7 @@ public class Socket_Connection extends AppCompatActivity {
                                      @Override
                                      public void run() {
                                          setVisable(errorView);
+                                         error.setTextColor(Color.rgb(0,255,0));
                                          error.setText("server is reacheble");
                                      }
                                  }
@@ -212,6 +216,7 @@ public class Socket_Connection extends AppCompatActivity {
                                   @Override
                                   public void run() {
                                       setVisable(errorView);
+                                      error.setTextColor(Color.rgb(255,0,0));
                                       error.setText("server is unreacheble!");
                                   }
                               }

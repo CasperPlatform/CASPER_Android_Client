@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         {
             // Backdoor for test purposes
             if(user.getText().toString().equals("demo") && password.getText().toString().equals("demo")){
+                Singleton.getInstance().setUserName(user.getText().toString());
+                Singleton.getInstance().setPassWord(password.getText().toString());
                 finish();
                 Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
                 startActivity(intent);
