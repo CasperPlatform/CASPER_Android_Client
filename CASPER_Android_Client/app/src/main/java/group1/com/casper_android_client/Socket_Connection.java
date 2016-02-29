@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.BufferedWriter;
@@ -38,6 +39,9 @@ public class Socket_Connection extends AppCompatActivity {
     // View handleing to access when in asynctask
     private View errorView;
 
+    // Progress Bar
+    private ProgressBar loading;
+
 
 
     @Override
@@ -45,6 +49,8 @@ public class Socket_Connection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_socket__connection);
 
+        // Progressbar
+        loading = (ProgressBar)findViewById(R.id.loading);
 
         // user login inputfields
         address = (TextView)findViewById(R.id.address);
@@ -68,13 +74,20 @@ public class Socket_Connection extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                response.setText("");
-                try {
-                    error.setTextColor(Color.rgb(255,0,0));
-                    error.setText("Logged out");
-                    Singleton.getInstance().getSocket().close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(Singleton.getInstance().getSocket().isBound()) {
+                    response.setText("");
+                    try {
+                        error.setVisibility(v.VISIBLE);
+                        error.setTextColor(Color.rgb(255, 0, 0));
+                        error.setText("Logged out");
+                        Singleton.getInstance().getSocket().close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    error.setVisibility(v.VISIBLE);
+                    error.setTextColor(Color.rgb(255, 0, 0));
+                    error.setText("Can't Log Out Becouse you are not Logged in");
                 }
             }
         });
@@ -137,13 +150,23 @@ public class Socket_Connection extends AppCompatActivity {
 
                 @Override
                 public void onClick(View v) {
+                    loading.setVisibility(v.VISIBLE);
                     errorView = v;
-                    // convertion task
-                    MyClientTask myClientTask = new MyClientTask(
-                            address.getText().toString(),
-                            Integer.parseInt(port.getText().toString()));
-                    myClientTask.execute();
-                }};
+                    System.out.println(address.getText().toString());
+                    if(address.getText().toString().equals("") || port.getText().toString().equals("")){
+
+                        error.setText("Please fill in the field's");
+                        error.setVisibility(v.VISIBLE);
+                        loading.setVisibility(v.INVISIBLE);
+
+                    }else {
+                        // convertion task
+                        MyClientTask myClientTask = new MyClientTask(
+                                address.getText().toString(),
+                                Integer.parseInt(port.getText().toString()));
+                        myClientTask.execute();
+                    }
+                    }};
 
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
 
@@ -168,6 +191,7 @@ public class Socket_Connection extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                                      @Override
                                      public void run() {
+                                         loading.setVisibility(errorView.INVISIBLE);
                                          setVisable(errorView);
                                          error.setTextColor(Color.rgb(0,255,0));
                                          error.setText("server is reacheble");
@@ -190,6 +214,7 @@ public class Socket_Connection extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                                   @Override
                                   public void run() {
+                                      loading.setVisibility(errorView.INVISIBLE);
                                       response.setText("Server respond -> " + Singleton.getInstance().getSocket().getInetAddress().toString());
                                   }
                               }
@@ -207,14 +232,27 @@ public class Socket_Connection extends AppCompatActivity {
 
             } catch (UnknownHostException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                // e.printStackTrace();
                 responsemsg = "UnknownHostException: " + e.toString();
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      loading.setVisibility(errorView.INVISIBLE);
+                                      setVisable(errorView);
+                                      error.setTextColor(Color.rgb(255,0,0));
+                                      error.setText("server is unreacheble!");
+                                  }
+                              }
+
+                );
+
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 // Show user there was a problem
                 runOnUiThread(new Runnable() {
                                   @Override
                                   public void run() {
+                                      loading.setVisibility(errorView.INVISIBLE);
                                       setVisable(errorView);
                                       error.setTextColor(Color.rgb(255,0,0));
                                       error.setText("server is unreacheble!");
@@ -241,18 +279,28 @@ public class Socket_Connection extends AppCompatActivity {
 
     // Send a message to the socket server and print it.
     public void sendMessageToServer(View v){
-        String str = message.getText().toString();
-        try {
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(Singleton.getInstance().getSocket().getOutputStream())),
-                    true);
-            out.println(str);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(message.getText().toString().equals("")){
+
+            error.setVisibility(v.VISIBLE);
+            error.setTextColor(Color.rgb(255,0,0));
+            error.setText("No Message to send");
+
+        }else {
+            
+            error.setVisibility(v.VISIBLE);
+            String str = message.getText().toString();
+            try {
+                PrintWriter out = new PrintWriter(new BufferedWriter(
+                        new OutputStreamWriter(Singleton.getInstance().getSocket().getOutputStream())),
+                        true);
+                out.println(str);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -9,24 +9,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="group1.com.casper_android_client.Splash_Screen">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/logo"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_launcher"
-        android:contentDescription="@string/logo" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/Logo"
-        android:id="@+id/textView2"
+        android:id="@+id/projectName"
         android:textColor="#ffffff"
         android:textSize="@dimen/abc_text_size_display_3_material"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="C"
+        android:id="@+id/casperLogo"
+        android:textSize="120dp"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#2DEF96" />
 </RelativeLayout>

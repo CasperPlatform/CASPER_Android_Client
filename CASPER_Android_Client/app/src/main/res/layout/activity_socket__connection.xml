@@ -125,6 +125,15 @@
         android:textColor="#ff0000"
         android:visibility="invisible" />
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loading"
+        android:visibility="invisible"
+        android:indeterminate="true"
+        android:indeterminateOnly="true"
+        android:layout_below="@+id/socketLogo"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
