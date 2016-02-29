@@ -21,7 +21,8 @@
         <activity
             android:name=".MainActivity"
             android:parentActivityName=".Splash_Screen"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name=".MainActivity" />
 
@@ -31,7 +32,8 @@
         <activity
             android:name=".LoggedInActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoggedInActivity" />
@@ -40,7 +42,8 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".LoggedInActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoggedInActivity" />
@@ -49,14 +52,16 @@
             android:name=".VideoStreamActivity"
             android:parentActivityName=".LoggedInActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".VideoStreamActivity" />
         </activity>
         <activity android:name=".Socket_Connection"
             android:label="sockets"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoggedInActivity" />

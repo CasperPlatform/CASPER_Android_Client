@@ -89,7 +89,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                     } else if (direction == JoyStick.STICK_NONE) {
                         VideoStreamActivity.this.direction.setText("Direction : Center");
                     }
-                    if(!fixedValues.isChecked()) {
+                    if(!fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()) {
                         // Try sending directional values to socket server
                         try {
                             PrintWriter out = new PrintWriter(new BufferedWriter(
@@ -118,7 +118,7 @@ public class VideoStreamActivity extends AppCompatActivity {
     }
 
     public void onFixed(View v){
-        if(fixedValues.isChecked()){
+        if(fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()){
             // Send values every 500 milliseconds --test--
              new Timer().scheduleAtFixedRate(task = new TimerTask() {
                 @Override
@@ -135,7 +135,9 @@ public class VideoStreamActivity extends AppCompatActivity {
                 }
             }, 0, 500);
         }else{
-            task.cancel();
+            if(task!=null) {
+                task.cancel();
+            }
         }
     }
 

@@ -16,10 +16,14 @@ public class Splash_Screen extends Activity {
         Thread timerThread = new Thread(){
             public void run(){
                 try{
+
+                    // Time to show Splash Screen
                     sleep(2000);
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
+
+                    // Go to Main Activity
                     Intent intent = new Intent(Splash_Screen.this,MainActivity.class);
                     startActivity(intent);
                 }

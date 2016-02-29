@@ -150,11 +150,16 @@ public class Socket_Connection extends AppCompatActivity {
 
                 @Override
                 public void onClick(View v) {
+
                     loading.setVisibility(v.VISIBLE);
+                    // Save our view localy
                     errorView = v;
+                    // Debug
                     System.out.println(address.getText().toString());
+                    // If the fields are empty show an error
                     if(address.getText().toString().equals("") || port.getText().toString().equals("")){
 
+                        // Address or Port fields are empty, show user error
                         error.setText("Please fill in the field's");
                         error.setVisibility(v.VISIBLE);
                         loading.setVisibility(v.INVISIBLE);
@@ -266,6 +271,7 @@ public class Socket_Connection extends AppCompatActivity {
 
                 if (Singleton.getInstance().getSocket() != null) {
                     try {
+                        // Try closeing the socket connection.
                         Singleton.getInstance().getSocket().close();
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
@@ -279,6 +285,8 @@ public class Socket_Connection extends AppCompatActivity {
 
     // Send a message to the socket server and print it.
     public void sendMessageToServer(View v){
+        // If no msg was inputted into the message field
+        // and user presses the send button show Error
         if(message.getText().toString().equals("")){
 
             error.setVisibility(v.VISIBLE);
@@ -286,8 +294,8 @@ public class Socket_Connection extends AppCompatActivity {
             error.setText("No Message to send");
 
         }else {
-            
-            error.setVisibility(v.VISIBLE);
+            // Grab the text in the msg field adn send to server
+            error.setVisibility(v.INVISIBLE);
             String str = message.getText().toString();
             try {
                 PrintWriter out = new PrintWriter(new BufferedWriter(
