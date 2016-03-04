@@ -1,7 +1,10 @@
 package group1.com.casper_android_client;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,12 +13,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -45,6 +50,9 @@ public class Socket_Connection extends AppCompatActivity {
     // View handleing to access when in asynctask
     private View errorView;
 
+    private ImageView bild;
+    Bitmap bitmap;
+
     // Progress Bar
     private ProgressBar loading;
 
@@ -54,6 +62,8 @@ public class Socket_Connection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_socket__connection);
+
+        bild = (ImageView)findViewById(R.id.bild);
 
         // Progressbar
         loading = (ProgressBar)findViewById(R.id.loading);
@@ -135,6 +145,7 @@ public class Socket_Connection extends AppCompatActivity {
             try {
                 finish();
                 Singleton.getInstance().getSocket().close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -185,8 +196,9 @@ public class Socket_Connection extends AppCompatActivity {
         String dstAddress;
         int dstPort;
         String responsemsg = "";
-        byte[] messages = new byte[1500];
+        byte[] messages = new byte[60000];
         String text;
+
 
         MyClientTask(String addr, int port){
             dstAddress = addr;
@@ -198,31 +210,62 @@ public class Socket_Connection extends AppCompatActivity {
 
 
             try {
-                // Start a socket connection
+                // Start a TCP socket connection
                 Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
 
-                /*
-                TEST UDP
-                 */
+                String messageStr="Request!";
+                // Socket Port
+                int udpSocketPort = 9998;
+                // New Socket
+                DatagramSocket UDPsocket = new DatagramSocket();
+                // Create an InetAddress
+                InetAddress casper = InetAddress.getByName("192.168.10.1");
 
-                // Recive Packages over UDP
-                Singleton.getInstance().setUDPsocketPackage(new DatagramPacket(messages, messages.length));
-                // Send messages over UDP
-                Singleton.getInstance().setUDPsocketSend(new DatagramSocket(dstPort - 1, InetAddress.getByName(dstAddress)));
-                // recive packages from socket
-                Singleton.getInstance().getUDPsocketSend().receive(Singleton.getInstance().getUDPsocketPackage());
-                // ett fanskap
-                text = new String(messages, 0, Singleton.getInstance().getUDPsocketPackage().getLength());
-                System.out.println("");
-                System.out.println(">>>>>:"+text+"<<<<<<");
-                System.out.println("");
-                // Close UDP Socket
-                Singleton.getInstance().getUDPsocketSend().close();
+                // Output msg lenght
+                int msg_length= messageStr.length();
+                // Msg to bytes convertion
+                byte[] message = messageStr.getBytes();
+                // Package the message
+                DatagramPacket msgPacket = new DatagramPacket(message, msg_length,casper,udpSocketPort);
+                // Send Message over UDP
+                UDPsocket.send(msgPacket);
 
-                    runOnUiThread(new Runnable() {
-                                      @Override
-                                      public void run() {
-                                          loading.setVisibility(errorView.INVISIBLE);
+                // Incomming message
+                byte[] incImage = new byte[60000];
+                // Pacckage incomming message
+                DatagramPacket imagePacket = new DatagramPacket(incImage, incImage.length,casper,udpSocketPort);
+
+                // Get data from incomming buffer
+                UDPsocket.receive(imagePacket);
+
+                // Debug
+                System.out.println(">>>>>>:" + imagePacket.getData().length);
+
+                // convert .JPG image into Bitmap
+                final Bitmap bMap = BitmapFactory.decodeByteArray(imagePacket.getData(), 0, imagePacket.getData().length);
+
+                // Debug
+                System.out.println(">>>>>>"+bMap.getHeight());
+                System.out.println(">>>>>"+bMap.getWidth());
+
+                // Set imageview to incomming bitmap
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  // UI element handling has to be run in UI thread
+                                  public void run() {
+                                      bild.setImageBitmap(bMap);
+                                      bild.invalidate();
+                                  }
+                              }
+
+                );
+
+
+
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      loading.setVisibility(errorView.INVISIBLE);
                                           setVisable(errorView);
                                           error.setTextColor(Color.rgb(0, 255, 0));
                                           error.setText("server is reacheble");
@@ -361,4 +404,7 @@ public class Socket_Connection extends AppCompatActivity {
             dos.write(myByteArray);
         }
     }
+
+
+
 }
