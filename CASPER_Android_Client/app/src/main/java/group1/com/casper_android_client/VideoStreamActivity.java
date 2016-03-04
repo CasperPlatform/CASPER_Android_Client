@@ -16,7 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Timer;
@@ -92,10 +94,62 @@ public class VideoStreamActivity extends AppCompatActivity {
                     if(!fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()) {
                         // Try sending directional values to socket server
                         try {
-                            PrintWriter out = new PrintWriter(new BufferedWriter(
-                                    new OutputStreamWriter(Singleton.getInstance().getSocket().getOutputStream())),
-                                    true);
-                            out.println(VideoStreamActivity.this.direction.getText());
+
+                            // Command Flags
+                            char driveFlag;
+                            char cmdFlag = 'D';
+                            char angleFlag;
+
+                            // Bad logics
+                            if (js.getY()>0){
+                                driveFlag = 'F';
+                            }else if(js.getY()==0){
+                                driveFlag = 'I';
+                            }else{
+                                driveFlag = 'B';
+                            }
+
+                            // Y
+                            int y = js.getY();
+                            if (y < 0) {
+                                y = Math.abs(y);
+                            }
+                            // not over 255
+                            if (y > 255) {
+                                y = 255;
+                            }else if(y==0){
+                                y=1;
+                            }
+
+                            // X
+                            int x = js.getX();
+                            if(x < 0){
+                                x = Math.abs(x);
+                                angleFlag = 'L';
+                            }else if (x > 0){
+                                angleFlag = 'R';
+                            }else{
+                                angleFlag = 'I';
+                            }
+                            // If X is bigger then it can be
+                            if (x > 90){
+                                x = 90;
+                            }else if(x==0){
+                                x=1;
+                            }
+
+                            byte[] byteArray = {0x44,(byte)driveFlag,(byte)angleFlag,(byte)y,(byte)x,0xd,0xa};
+
+                            System.out.println(">>>>>>DF:"+(byte)driveFlag+"<<<<");
+                            System.out.println(">>>>>>AF:"+(byte)angleFlag+"<<<<");
+                            System.out.println(">>>>>>Y:"+(byte)y+"<<<<");
+                            System.out.println(">>>>>>X:"+(byte)x+"<<<<");
+                            System.out.println(byteArray[5]);
+                            System.out.println(byteArray[6]);
+
+                            // Send the byteArray
+                            sendBytes(byteArray);
+
                         } catch (IOException e) {
                             // Server connection error
                             e.printStackTrace();
@@ -119,21 +173,72 @@ public class VideoStreamActivity extends AppCompatActivity {
 
     public void onFixed(View v){
         if(fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()){
-            // Send values every 500 milliseconds --test--
              new Timer().scheduleAtFixedRate(task = new TimerTask() {
                 @Override
                 public void run() {
                     try {
-                        PrintWriter out = new PrintWriter(new BufferedWriter(
-                                new OutputStreamWriter(Singleton.getInstance().getSocket().getOutputStream())),
-                                true);
-                        out.println(distance.getText());
+
+                        // Command Flags
+                        char driveFlag;
+                        char cmdFlag = 'D';
+                        char angleFlag;
+
+                        // Bad logics
+                        if (js.getY()>0){
+                            driveFlag = 'F';
+                        }else if(js.getY()==0){
+                            driveFlag = 'I';
+                        }else{
+                            driveFlag = 'B';
+                        }
+
+                        // Y
+                        int y = js.getY();
+                        if (y < 0) {
+                            y = Math.abs(y);
+                        }
+                        // not over 255
+                        if (y > 255) {
+                            y = 255;
+                        }else if(y==0){
+                            y=1;
+                        }
+
+                        // X
+                        int x = js.getX();
+                        if(x < 0){
+                            x = Math.abs(x);
+                            angleFlag = 'L';
+                        }else if (x > 0){
+                            angleFlag = 'R';
+                        }else{
+                            angleFlag = 'I';
+                        }
+                        // If X is bigger then it can be
+                        if (x > 90){
+                            x = 90;
+                        }else if(x==0){
+                            x=1;
+                        }
+
+                            byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0xd, 0xa};
+
+
+
+
+                        System.out.println(" ");
+                        System.out.println((byte)y);
+                        System.out.println((byte)x);
+                        System.out.println(" ");
+                        // Send the byteArray
+                        sendBytes(byteArray);
+
                     } catch (IOException e) {
                         // Server connection error
                         e.printStackTrace();
                     }
                 }
-            }, 0, 500);
+            }, 0, 50);
         }else{
             if(task!=null) {
                 task.cancel();
@@ -191,6 +296,26 @@ public class VideoStreamActivity extends AppCompatActivity {
         }
 
     }
+
+
+    public void sendBytes(byte[] myByteArray) throws IOException {
+        sendBytes(myByteArray, 0, myByteArray.length);
+    }
+
+    public void sendBytes(byte[] myByteArray, int start, int len) throws IOException {
+        if (len < 0)
+            throw new IllegalArgumentException("Negative length not allowed");
+        if (start < 0 || start >= myByteArray.length)
+            throw new IndexOutOfBoundsException("Out of bounds: " + start);
+
+        OutputStream out = Singleton.getInstance().getSocket().getOutputStream();
+        DataOutputStream dos = new DataOutputStream(out);
+
+        if (len > 0) {
+            dos.write(myByteArray);
+        }
+    }
+
 
 
 }

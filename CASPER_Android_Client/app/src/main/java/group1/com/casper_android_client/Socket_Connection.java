@@ -15,8 +15,10 @@ import android.widget.TextView;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -284,24 +286,29 @@ public class Socket_Connection extends AppCompatActivity {
     }
 
     // Send a message to the socket server and print it.
-    public void sendMessageToServer(View v){
+    public void sendMessageToServer(View v) {
         // If no msg was inputted into the message field
         // and user presses the send button show Error
-        if(message.getText().toString().equals("")){
+        if (message.getText().toString().equals("")) {
 
             error.setVisibility(v.VISIBLE);
-            error.setTextColor(Color.rgb(255,0,0));
+            error.setTextColor(Color.rgb(255, 0, 0));
             error.setText("No Message to send");
 
-        }else {
+        } else {
             // Grab the text in the msg field adn send to server
             error.setVisibility(v.INVISIBLE);
             String str = message.getText().toString();
             try {
-                PrintWriter out = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(Singleton.getInstance().getSocket().getOutputStream())),
-                        true);
-                out.println(str);
+                byte[] msg = new byte[str.length()+2];
+                for(int i=0;i<str.length();i++){
+                    msg[i] = (byte)str.charAt(i);
+                    System.out.println(msg[i]);
+                }
+                msg[str.length()] = 0xd;
+                msg[str.length()+1] = 0xa;
+                sendBytes(msg);
+
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -309,6 +316,25 @@ public class Socket_Connection extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+    public void sendBytes(byte[] myByteArray) throws IOException {
+        sendBytes(myByteArray, 0, myByteArray.length);
+    }
+
+    public void sendBytes(byte[] myByteArray, int start, int len) throws IOException {
+        if (len < 0)
+            throw new IllegalArgumentException("Negative length not allowed");
+        if (start < 0 || start >= myByteArray.length)
+            throw new IndexOutOfBoundsException("Out of bounds: " + start);
+
+        OutputStream out = Singleton.getInstance().getSocket().getOutputStream();
+        DataOutputStream dos = new DataOutputStream(out);
+
+        if (len > 0) {
+            dos.write(myByteArray);
         }
     }
 }
