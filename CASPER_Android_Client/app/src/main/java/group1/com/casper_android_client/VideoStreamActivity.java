@@ -100,13 +100,13 @@ public class VideoStreamActivity extends AppCompatActivity {
                             char cmdFlag = 'D';
                             char angleFlag;
 
-                            // Bad logics
-                            if (js.getY()>0){
-                                driveFlag = 'F';
+                            // Bad logics hue hue
+                            if (js.getY()<0){
+                                driveFlag = 'B';
                             }else if(js.getY()==0){
                                 driveFlag = 'I';
                             }else{
-                                driveFlag = 'B';
+                                driveFlag = 'F';
                             }
 
                             // Y
@@ -117,8 +117,6 @@ public class VideoStreamActivity extends AppCompatActivity {
                             // not over 255
                             if (y > 255) {
                                 y = 255;
-                            }else if(y==0){
-                                y=1;
                             }
 
                             // X
@@ -134,8 +132,6 @@ public class VideoStreamActivity extends AppCompatActivity {
                             // If X is bigger then it can be
                             if (x > 90){
                                 x = 90;
-                            }else if(x==0){
-                                x=1;
                             }
 
                             byte[] byteArray = {0x44,(byte)driveFlag,(byte)angleFlag,(byte)y,(byte)x,0xd,0xa};
@@ -184,12 +180,12 @@ public class VideoStreamActivity extends AppCompatActivity {
                         char angleFlag;
 
                         // Bad logics
-                        if (js.getY()>0){
-                            driveFlag = 'F';
+                        if (js.getY()<0){
+                            driveFlag = 'B';
                         }else if(js.getY()==0){
                             driveFlag = 'I';
                         }else{
-                            driveFlag = 'B';
+                            driveFlag = 'F';
                         }
 
                         // Y
@@ -200,8 +196,6 @@ public class VideoStreamActivity extends AppCompatActivity {
                         // not over 255
                         if (y > 255) {
                             y = 255;
-                        }else if(y==0){
-                            y=1;
                         }
 
                         // X
@@ -217,8 +211,6 @@ public class VideoStreamActivity extends AppCompatActivity {
                         // If X is bigger then it can be
                         if (x > 90){
                             x = 90;
-                        }else if(x==0){
-                            x=1;
                         }
 
                             byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0xd, 0xa};
