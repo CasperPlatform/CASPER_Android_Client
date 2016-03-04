@@ -21,6 +21,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -181,6 +185,8 @@ public class Socket_Connection extends AppCompatActivity {
         String dstAddress;
         int dstPort;
         String responsemsg = "";
+        byte[] messages = new byte[1500];
+        String text;
 
         MyClientTask(String addr, int port){
             dstAddress = addr;
@@ -195,15 +201,33 @@ public class Socket_Connection extends AppCompatActivity {
                 // Start a socket connection
                 Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
 
+                /*
+                TEST UDP
+                 */
+
+                // Recive Packages over UDP
+                Singleton.getInstance().setUDPsocketPackage(new DatagramPacket(messages, messages.length));
+                // Send messages over UDP
+                Singleton.getInstance().setUDPsocketSend(new DatagramSocket(dstPort - 1, InetAddress.getByName(dstAddress)));
+                // recive packages from socket
+                Singleton.getInstance().getUDPsocketSend().receive(Singleton.getInstance().getUDPsocketPackage());
+                // ett fanskap
+                text = new String(messages, 0, Singleton.getInstance().getUDPsocketPackage().getLength());
+                System.out.println("");
+                System.out.println(">>>>>:"+text+"<<<<<<");
+                System.out.println("");
+                // Close UDP Socket
+                Singleton.getInstance().getUDPsocketSend().close();
+
                     runOnUiThread(new Runnable() {
-                                     @Override
-                                     public void run() {
-                                         loading.setVisibility(errorView.INVISIBLE);
-                                         setVisable(errorView);
-                                         error.setTextColor(Color.rgb(0,255,0));
-                                         error.setText("server is reacheble");
-                                     }
-                                 }
+                                      @Override
+                                      public void run() {
+                                          loading.setVisibility(errorView.INVISIBLE);
+                                          setVisable(errorView);
+                                          error.setTextColor(Color.rgb(0, 255, 0));
+                                          error.setText("server is reacheble");
+                                      }
+                                  }
 
                     );
 
