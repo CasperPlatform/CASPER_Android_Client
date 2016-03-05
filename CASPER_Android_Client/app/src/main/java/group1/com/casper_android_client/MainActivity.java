@@ -28,12 +28,17 @@ public class MainActivity extends AppCompatActivity {
     // Declare server URL
     private final String PATH = "http://192.168.0.31:3000";
 
-    // Declare UI Elements
-    private User loggedInUser;
+    // Progress bar
     private ProgressBar loading;
+
+    // Login Button
     private Button LoginButton;
+
+    // Input fields for login
     private TextView user;
     private TextView password;
+
+    // Error message TextView
     private TextView errormsg;
 
 
@@ -44,28 +49,31 @@ public class MainActivity extends AppCompatActivity {
 
         // Declare Login Button
         LoginButton = (Button)findViewById(R.id.LoginButton);
+
         // Declare Text inputfields
         user = (TextView)findViewById(R.id.User);
         password = (TextView)findViewById(R.id.Password);
         errormsg = (TextView)findViewById(R.id.ErrorMsg);
+
         // Declare Loading wheel
         loading = (ProgressBar) findViewById(R.id.progressBar);
 
     }
 
-        // on Login start a new thread to authenticate credentials
-        // & break into UI threads to access View items
+        /**
+         * On Login start a new thread to authenticate credentials
+         * & break into UI threads to access View items
+         * @param v
+         */
         public void onLogin(final View v)
         {
             // Backdoor for test purposes
             if(user.getText().toString().equals("demo") && password.getText().toString().equals("demo")){
-                Singleton.getInstance().setUserName(user.getText().toString());
-                Singleton.getInstance().setPassWord(password.getText().toString());
                 finish();
                 Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
                 startActivity(intent);
             }
-            // Actual code
+            // Actual Access to Rest server and authentiation
             else
             {
 
@@ -73,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
+                    // Set progress wheel visable to indicate process
                     runOnUiThread(new Runnable() {
                                       @Override
                                       public void run() {
@@ -83,16 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
                     );
 
+                    // Get inputfield info
                     String userNameString = user.getText().toString();
                     String passwordString = password.getText().toString();
-
-                    // Pass the extra data to next activity
-                    Singleton.getInstance().setUserName(userNameString);
-                    Singleton.getInstance().setPassWord(passwordString);
-
-                    System.out.println("connect button clicked");
-                    System.out.println(userNameString);
-                    System.out.println(passwordString);
 
                     OkHttpClient client = new OkHttpClient();
 
@@ -113,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
                         if (jsonObject.has("token")) {
                             //authResult.setText("Successfully handshaked with\nDrone!");
                             System.out.println(jsonObject.get("token"));
-                            loggedInUser = new User(jsonObject);
+                            // Set User
+                            Singleton.getInstance().setLoggedInUser(new User(jsonObject));
                             // Make sure the error msg isnt displayed after haveing the correct login information.
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -170,8 +173,5 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
-
-
-
 
 }

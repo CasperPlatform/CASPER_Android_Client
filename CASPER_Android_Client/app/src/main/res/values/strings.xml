@@ -92,4 +92,5 @@
     <string name="connectButton">connect</string>
     <string name="incommmingMessage">Incomming msg</string>
     <string name="socketLogo">Socket Connector</string>
+    <string name="drive">Drive</string>
 </resources>

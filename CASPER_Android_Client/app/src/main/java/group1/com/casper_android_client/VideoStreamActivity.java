@@ -28,14 +28,27 @@ import java.util.TimerTask;
  * Created by Andreas Fransson
  */
 public class VideoStreamActivity extends AppCompatActivity {
+
+    // Joystick
     private RelativeLayout layout_joystick;
+
+    // Image's for Joystick
     private ImageView image_joystick, image_border;
+
+    // Debug Text fields for Joystick
     private TextView xAxis, yAxis, angle, distance, direction;
+
+    // Checkbox to start the timed sending of values
     private CheckBox fixedValues;
     TimerTask task;
 
+    // Make a Joystick
     JoyStick js;
 
+    /**
+     * Activate the activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +61,13 @@ public class VideoStreamActivity extends AppCompatActivity {
         distance = (TextView)findViewById(R.id.distance);
         direction = (TextView)findViewById(R.id.direction);
 
+        // Checkbox to start sending of fixed values
         fixedValues = (CheckBox)findViewById(R.id.fixedValue);
 
+        // Joystick
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
 
+        // Joystick creation
         js = new JoyStick(getApplicationContext()
                 , layout_joystick, R.drawable.image_button);
         js.setStickSize(150, 150);
@@ -61,6 +77,7 @@ public class VideoStreamActivity extends AppCompatActivity {
         js.setOffset(70);
         js.setMinimumDistance(50);
 
+        // Set Joystick listener
         layout_joystick.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 js.drawStick(arg1);
@@ -134,8 +151,10 @@ public class VideoStreamActivity extends AppCompatActivity {
                                 x = 90;
                             }
 
+                            // Create the 7 byte Array to send over TCP socket connection
                             byte[] byteArray = {0x44,(byte)driveFlag,(byte)angleFlag,(byte)y,(byte)x,0xd,0xa};
 
+                            // Debug
                             System.out.println(">>>>>>DF:"+(byte)driveFlag+"<<<<");
                             System.out.println(">>>>>>AF:"+(byte)angleFlag+"<<<<");
                             System.out.println(">>>>>>Y:"+(byte)y+"<<<<");
@@ -153,11 +172,22 @@ public class VideoStreamActivity extends AppCompatActivity {
 
                     }
                 } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
+
                     xAxis.setText("X :");
                     yAxis.setText("Y :");
                     angle.setText("Angle :");
                     distance.setText("Distance :");
                     direction.setText("Direction :");
+
+                    // Create the 7 byte Array to send over TCP socket connection
+                    byte[] byteArray = {0x44,(byte)'I',(byte)'I',(byte)0,(byte)0,0xd,0xa};
+
+                    // Send the byteArray
+                    try {
+                        sendBytes(byteArray);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 return true;
             }
@@ -167,6 +197,10 @@ public class VideoStreamActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Checkbox
+     * @param v
+     */
     public void onFixed(View v){
         if(fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()){
              new Timer().scheduleAtFixedRate(task = new TimerTask() {
@@ -238,6 +272,11 @@ public class VideoStreamActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Create the menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -245,6 +284,11 @@ public class VideoStreamActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Set the menu button actions
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -289,11 +333,22 @@ public class VideoStreamActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Send a bytearray over TCP socket connection.
+     * @param myByteArray
+     * @throws IOException
+     */
     public void sendBytes(byte[] myByteArray) throws IOException {
         sendBytes(myByteArray, 0, myByteArray.length);
     }
 
+    /**
+     * send bytearray over TCP socket connection.
+     * @param myByteArray
+     * @param start
+     * @param len
+     * @throws IOException
+     */
     public void sendBytes(byte[] myByteArray, int start, int len) throws IOException {
         if (len < 0)
             throw new IllegalArgumentException("Negative length not allowed");

@@ -14,8 +14,6 @@ import java.io.IOException;
 
 public class LoggedInActivity extends AppCompatActivity {
 
-    private TextView user;
-    private TextView password;
     private Button back;
     private Button settings;
     private Button controls;
@@ -27,13 +25,6 @@ public class LoggedInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logged_in);
 
-        // get the intent sen
-        Intent intent = getIntent();
-
-        user = (TextView) findViewById(R.id.showUsername);
-        password = (TextView) findViewById(R.id.showPassword);
-        user.setText(Singleton.getInstance().getUserName());
-        password.setText(Singleton.getInstance().getPassWord());
 
         // Declare Back button
         back = (Button) findViewById(R.id.backButton);

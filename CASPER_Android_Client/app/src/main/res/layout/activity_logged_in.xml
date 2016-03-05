@@ -13,30 +13,6 @@
     >
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/showUsername"
-        android:textColor="#ffffff"
-        android:textSize="@dimen/abc_text_size_display_3_material"
-        android:layout_marginTop="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/showPassword"
-        android:layout_alignStart="@+id/showPassword" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/showPassword"
-        android:textColor="#ffffff"
-        android:textSize="@dimen/abc_text_size_display_3_material"
-        android:layout_below="@+id/showUsername"
-        android:layout_centerHorizontal="true" />
-
     <Button
         android:layout_width="230dp"
         android:layout_height="wrap_content"
@@ -44,7 +20,6 @@
         android:id="@+id/backButton"
         android:background="#2DEF96"
         android:onClick="backButton"
-        android:layout_below="@+id/showPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
 
@@ -66,7 +41,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Controlls"
+        android:text="@string/drive"
         android:id="@+id/controlButton"
         android:background="#2DEF96"
         android:onClick="ctrl"
@@ -80,7 +55,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sockets"
+        android:text="@string/Socket Connector "
         android:id="@+id/sockets"
         android:layout_below="@+id/controlButton"
         android:layout_alignLeft="@+id/controlButton"
@@ -91,4 +66,5 @@
         android:layout_marginTop="10dp"
         android:nestedScrollingEnabled="false"
         android:onClick="socket" />
+
 </RelativeLayout>

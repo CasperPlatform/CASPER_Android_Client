@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,18 +16,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -50,7 +44,8 @@ public class Socket_Connection extends AppCompatActivity {
     // View handleing to access when in asynctask
     private View errorView;
 
-    private ImageView bild;
+    // Test for video streaming
+    private ImageView testImage;
     Bitmap bitmap;
 
     // Progress Bar
@@ -63,7 +58,7 @@ public class Socket_Connection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_socket__connection);
 
-        bild = (ImageView)findViewById(R.id.bild);
+        testImage = (ImageView)findViewById(R.id.bild);
 
         // Progressbar
         loading = (ProgressBar)findViewById(R.id.loading);
@@ -109,6 +104,12 @@ public class Socket_Connection extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * Create the menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -116,6 +117,11 @@ public class Socket_Connection extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Menu button actions
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -135,7 +141,9 @@ public class Socket_Connection extends AppCompatActivity {
         }
     }
 
-    // Quit connection
+    /**
+     * Logout method closing all Socket connections.
+     */
     public void logout(){
         // Debug
         System.out.println("--------------------->Bound? " + Singleton.getInstance().getSocket().isBound());
@@ -158,6 +166,10 @@ public class Socket_Connection extends AppCompatActivity {
 
     }
 
+    /**
+     * Progressbar method for visability
+     * @param v
+     */
     public void setVisable(View v){
          error.setVisibility(v.VISIBLE);
     }
@@ -209,6 +221,16 @@ public class Socket_Connection extends AppCompatActivity {
         protected Void doInBackground(Void... v) {
 
 
+            /**
+             *
+             * TEST UDP CONNECTION
+             *
+             * TODO Make functional implementation
+             * A no need to write in connection details
+             * Set fixed Ports UDP 9998 % TCP 9999
+             *
+             */
+
             try {
                 // Start a TCP socket connection
                 Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
@@ -253,8 +275,8 @@ public class Socket_Connection extends AppCompatActivity {
                                   @Override
                                   // UI element handling has to be run in UI thread
                                   public void run() {
-                                      bild.setImageBitmap(bMap);
-                                      bild.invalidate();
+                                      testImage.setImageBitmap(bMap);
+                                      testImage.invalidate();
                                   }
                               }
 
@@ -352,7 +374,10 @@ public class Socket_Connection extends AppCompatActivity {
         }
     }
 
-    // Send a message to the socket server and print it.
+    /**
+     * Send a message to the socket server and print it.
+     * @param v
+     */
     public void sendMessageToServer(View v) {
         // If no msg was inputted into the message field
         // and user presses the send button show Error
@@ -386,11 +411,22 @@ public class Socket_Connection extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Bytearray socket function
+     * @param myByteArray
+     * @throws IOException
+     */
     public void sendBytes(byte[] myByteArray) throws IOException {
         sendBytes(myByteArray, 0, myByteArray.length);
     }
 
+    /**
+     * Method for sending Bytearrays over TCP socket connection
+     * @param myByteArray
+     * @param start
+     * @param len
+     * @throws IOException
+     */
     public void sendBytes(byte[] myByteArray, int start, int len) throws IOException {
         if (len < 0)
             throw new IllegalArgumentException("Negative length not allowed");
