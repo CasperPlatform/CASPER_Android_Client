@@ -94,5 +94,6 @@
     <string name="socketLogo">Socket Connector</string>
     <string name="drive">Drive</string>
     <string name="auto">Auto Connect</string>
-    <string name="Socket_Connection">Socket Connector</string>
+    <string name="Socket_Connection">Manual Socket Connection</string>
+    <string name="User_Hint">Username</string>
 </resources>

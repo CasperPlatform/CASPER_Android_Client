@@ -155,13 +155,13 @@ public class VideoStreamActivity extends AppCompatActivity {
                             // Create the 7 byte Array to send over TCP socket connection
                             byte[] byteArray = {0x44,(byte)driveFlag,(byte)angleFlag,(byte)y,(byte)x,0xd,0xa};
 
-                            // Debug
-                            System.out.println(">>>>>>DF:"+(byte)driveFlag+"<<<<");
-                            System.out.println(">>>>>>AF:"+(byte)angleFlag+"<<<<");
-                            System.out.println(">>>>>>Y:"+(byte)y+"<<<<");
-                            System.out.println(">>>>>>X:"+(byte)x+"<<<<");
-                            System.out.println(byteArray[5]);
-                            System.out.println(byteArray[6]);
+//                            // Debug
+//                            System.out.println(">>>>>>DF:"+(byte)driveFlag+"<<<<");
+//                            System.out.println(">>>>>>AF:"+(byte)angleFlag+"<<<<");
+//                            System.out.println(">>>>>>Y:"+(byte)y+"<<<<");
+//                            System.out.println(">>>>>>X:"+(byte)x+"<<<<");
+//                            System.out.println(byteArray[5]);
+//                            System.out.println(byteArray[6]);
 
                             // Send the byteArray
                             Singleton.getInstance().getSocketConnection().sendBytes(byteArray);

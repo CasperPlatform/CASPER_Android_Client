@@ -14,7 +14,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by AnkanX on 16-03-06.
@@ -54,10 +56,11 @@ public class SocketConnection extends AsyncTask<Void, Void, Void> {
 
                 System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!");
                 // Start a TCP socket connection
-                Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
-                Singleton.getInstance().getSocket().setReuseAddress(true);
 
-                if(dstUDP == true) {
+                    Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
+
+
+                    if(dstUDP == true) {
 
                 String messageStr="Request!";
                 // Socket Port
@@ -129,14 +132,13 @@ public class SocketConnection extends AsyncTask<Void, Void, Void> {
 
             } catch (UnknownHostException e) {
                 // TODO Auto-generated catch block
-                // e.printStackTrace();
+                 e.printStackTrace();
                 responsemsg = "UnknownHostException: " + e.toString();
-
+                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!3");
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-
-
+                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!4");
                 e.printStackTrace();
                 responsemsg = "IOException: " + e.toString();
             } finally {
@@ -146,6 +148,7 @@ public class SocketConnection extends AsyncTask<Void, Void, Void> {
                         // Try closeing the socket connection.
                         Singleton.getInstance().getSocket().close();
                     } catch (IOException e) {
+                        System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!5");
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }

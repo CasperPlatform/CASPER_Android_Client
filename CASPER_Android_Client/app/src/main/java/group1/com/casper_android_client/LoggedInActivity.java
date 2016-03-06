@@ -12,11 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 public class LoggedInActivity extends AppCompatActivity {
 
-    private Button back;
-    private Button settings;
+
     private Button controls;
     private Button sockets;
 
@@ -30,11 +30,37 @@ public class LoggedInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_logged_in);
 
 
-        // Declare Back button
-        back = (Button) findViewById(R.id.backButton);
+        System.out.println("Is user Logged in via REST?: " + Singleton.getInstance().getLoggedInUser());
 
-        // Declare Settings Button
-        settings = (Button) findViewById(R.id.Settingsbutton);
+        if(Singleton.getInstance().getLoggedInUser() != null){
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    try {
+                        if (InetAddress.getByName("192.168.10.1").isReachable(2000)) {
+
+                            Singleton.getInstance().setSocketConnection(new SocketConnection(
+                                    "192.168.10.1",
+                                    Integer.parseInt("9999"), false));
+                            Singleton.getInstance().getSocketConnection().execute();
+
+
+
+                        }else{
+                            System.out.println("Connection error! Unable to connect Socket!");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+            // Start the thread
+            thread.start();
+        }
+
 
         // Declare Video controller Button
         controls = (Button) findViewById(R.id.controlButton);

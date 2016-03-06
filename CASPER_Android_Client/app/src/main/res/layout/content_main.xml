@@ -32,9 +32,9 @@
         android:ems="10"
         android:id="@+id/User"
         android:background="#ffffff"
-        android:textAlignment="center"
+        android:textAlignment="viewStart"
         android:autoText="false"
-        android:hint="@string/UserHint"
+        android:hint="@string/User_Hint"
         android:textIsSelectable="false"
         android:layout_below="@+id/Logo"
         android:layout_alignRight="@+id/Logo"
@@ -42,7 +42,8 @@
         android:layout_marginTop="32dp"
         android:layout_alignLeft="@+id/Logo"
         android:layout_alignStart="@+id/Logo"
-        android:textColor="#080808" />
+        android:textColor="#080808"
+        android:paddingStart="10dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -51,13 +52,16 @@
         android:ems="10"
         android:id="@+id/Password"
         android:background="#ffffff"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:hint="@string/PasswordHint"
         android:layout_below="@+id/User"
         android:layout_alignLeft="@+id/User"
         android:layout_alignStart="@+id/User"
         android:layout_marginTop="28dp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:paddingStart="10dp"
+        android:layout_alignRight="@+id/User"
+        android:layout_alignEnd="@+id/User" />
 
     <Button
         android:layout_width="wrap_content"
@@ -65,7 +69,7 @@
         android:text="@string/LoginButtonText"
         android:id="@+id/LoginButton"
         android:background="#2DEF96"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:onClick="onLogin"
         android:layout_gravity="center"
         android:layout_alignParentBottom="true"
