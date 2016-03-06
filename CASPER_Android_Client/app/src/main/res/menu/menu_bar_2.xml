@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".LoggedInActivity">
+    <item android:id="@+id/Settings"
+        android:title="@string/settings"
+        android:showAsAction="always"/>
+    <item
+        android:title="update"
+        android:id="@+id/Settings2"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:showAsAction="always"/>
+
+</menu>

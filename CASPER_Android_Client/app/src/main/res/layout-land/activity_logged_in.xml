@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".LoggedInActivity"
+    android:background="#000000"
+    >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/showUsername"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/showPassword"
+        android:layout_alignStart="@+id/showPassword" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/showPassword"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:layout_below="@+id/showUsername"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:text="@string/BackButton"
+        android:id="@+id/backButton"
+        android:background="#2DEF96"
+        android:onClick="backButton"
+        android:layout_below="@+id/showPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings"
+        android:id="@+id/Settingsbutton"
+        android:layout_below="@+id/backButton"
+        android:layout_marginTop="10dp"
+        android:layout_alignLeft="@+id/backButton"
+        android:layout_alignStart="@+id/backButton"
+        android:layout_alignRight="@+id/backButton"
+        android:layout_alignEnd="@+id/backButton"
+        android:background="#2DEF96"
+        android:onClick="options" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Controlls"
+        android:id="@+id/controlButton"
+        android:background="#2DEF96"
+        android:onClick="ctrl"
+        android:layout_below="@+id/Settingsbutton"
+        android:layout_alignLeft="@+id/Settingsbutton"
+        android:layout_alignStart="@+id/Settingsbutton"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/Settingsbutton"
+        android:layout_alignEnd="@+id/Settingsbutton" />
+</RelativeLayout>
