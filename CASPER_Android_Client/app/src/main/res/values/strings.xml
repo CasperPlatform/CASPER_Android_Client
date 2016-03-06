@@ -93,4 +93,6 @@
     <string name="incommmingMessage">Incomming msg</string>
     <string name="socketLogo">Socket Connector</string>
     <string name="drive">Drive</string>
+    <string name="auto">Auto Connect</string>
+    <string name="Socket_Connection">Socket Connector</string>
 </resources>

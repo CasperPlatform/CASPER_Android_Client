@@ -2,6 +2,7 @@ package group1.com.casper_android_client;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+
         // Declare Login Button
         LoginButton = (Button)findViewById(R.id.LoginButton);
 
@@ -67,9 +71,99 @@ public class MainActivity extends AppCompatActivity {
          */
         public void onLogin(final View v)
         {
-            // Backdoor for test purposes
-            if(user.getText().toString().equals("demo") && password.getText().toString().equals("demo")){
+            // admin
+            if(user.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
+
+                // Load next Activity
                 finish();
+                Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
+                startActivity(intent);
+
+
+            }// Backdoor for test purposes
+            else if(user.getText().toString().equals("demo") && password.getText().toString().equals("demo")){
+                // Setting up Socket connection
+                SocketConnection SocketConnection = new SocketConnection(
+                        "192.168.0.15",
+                        Integer.parseInt("9999"));
+                SocketConnection.execute();
+
+
+
+                // Set progress wheel visable to indicate process
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      // Show the loading wheel
+                                      loading.setVisibility(v.VISIBLE);
+                                  }
+                              }
+
+                );
+
+                // Ugly but it takes a few milliseconds to do
+                while(!Singleton.getInstance().getSocket().isBound() && Singleton.getInstance().getSocket().isClosed()){
+
+                }
+
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      // Stop the loading wheel and show Error Msg.
+                                      loading.setVisibility(v.INVISIBLE);
+                                  }
+                              }
+                );
+
+
+
+                // Load next Activity
+                finish();
+                Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
+                startActivity(intent);
+
+
+            }
+            else if(user.getText().toString().equals("demo2") && password.getText().toString().equals("demo2")) {
+                // Setting up Socket connection
+
+                Singleton.getInstance().setSocketConnection(new SocketConnection(
+                        "192.168.10.1",
+                        Integer.parseInt("9999")));
+                Singleton.getInstance().getSocketConnection().execute();
+
+
+
+
+                // Set progress wheel visable to indicate process
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      // Show the loading wheel
+                                      loading.setVisibility(v.VISIBLE);
+                                  }
+                              }
+
+                );
+
+                // Ugly but it takes a few milliseconds to do
+                while (!Singleton.getInstance().getSocket().isBound()) {
+
+                }
+
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      // Stop the loading wheel and show Error Msg.
+                                      loading.setVisibility(v.INVISIBLE);
+                                  }
+                              }
+                );
+
+
+                // Load next Activity
+                finish();
+
                 Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
                 startActivity(intent);
             }
@@ -173,5 +267,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+
+
 
 }

@@ -55,7 +55,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Socket Connector "
+        android:text="@string/Socket_Connection"
         android:id="@+id/sockets"
         android:layout_below="@+id/controlButton"
         android:layout_alignLeft="@+id/controlButton"
@@ -66,5 +66,16 @@
         android:layout_marginTop="10dp"
         android:nestedScrollingEnabled="false"
         android:onClick="socket" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/responce2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:textSize="22dp"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/sockets" />
 
 </RelativeLayout>

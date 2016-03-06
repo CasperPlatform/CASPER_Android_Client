@@ -54,11 +54,24 @@ public class Singleton {
     }
 
 
+    /**
+     *
+     */
+    private SocketConnection SocketConnection = new SocketConnection("0",0);
+
+    public group1.com.casper_android_client.SocketConnection getSocketConnection() {
+        return SocketConnection;
+    }
+
+    public void setSocketConnection(group1.com.casper_android_client.SocketConnection socketConnection) {
+        SocketConnection = socketConnection;
+    }
 
 
 
     // TCP Socket connection
     private Socket socket = new Socket();
+
 
     /**
      * Get the current TCP Socket connection

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VideoStreamActivity"
-    android:background="@drawable/bg2">
+    android:background="#afafaf">
 
     <RelativeLayout
         android:layout_width="150dp"
@@ -78,20 +78,6 @@
             android:layout_centerHorizontal="true" />
     </LinearLayout>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fixed Values"
-        android:id="@+id/fixedValue"
-        android:textColor="#ffffff"
-        android:checked="false"
-        android:onClick="onFixed"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp" />
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -99,4 +85,30 @@
         android:src="@drawable/pointer"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Get Video"
+        android:id="@+id/request"
+        android:layout_marginRight="23dp"
+        android:layout_marginEnd="23dp"
+        android:layout_alignBottom="@+id/layout_joystick"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="29dp"
+        android:background="#2DEF96" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fixed intevalles"
+        android:id="@+id/fixedValue"
+        android:layout_below="@+id/pointer"
+        android:layout_alignRight="@+id/request"
+        android:layout_alignEnd="@+id/request"
+        android:checked="false"
+        android:textColor="#ffffff"
+        android:onClick="onFixed" />
 </RelativeLayout>

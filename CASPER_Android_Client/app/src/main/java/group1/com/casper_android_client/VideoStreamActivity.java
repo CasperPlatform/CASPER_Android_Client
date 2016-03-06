@@ -3,6 +3,7 @@ package group1.com.casper_android_client;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -118,7 +119,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                             char angleFlag;
 
                             // Bad logics hue hue
-                            if (js.getY()<0){
+                            if (js.getY()>0){
                                 driveFlag = 'B';
                             }else if(js.getY()==0){
                                 driveFlag = 'I';
@@ -163,7 +164,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                             System.out.println(byteArray[6]);
 
                             // Send the byteArray
-                            sendBytes(byteArray);
+                            Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
 
                         } catch (IOException e) {
                             // Server connection error
@@ -184,7 +185,7 @@ public class VideoStreamActivity extends AppCompatActivity {
 
                     // Send the byteArray
                     try {
-                        sendBytes(byteArray);
+                        Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -203,7 +204,7 @@ public class VideoStreamActivity extends AppCompatActivity {
      */
     public void onFixed(View v){
         if(fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()){
-             new Timer().scheduleAtFixedRate(task = new TimerTask() {
+            new Timer().scheduleAtFixedRate(task = new TimerTask() {
                 @Override
                 public void run() {
                     try {
@@ -247,7 +248,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                             x = 90;
                         }
 
-                            byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0xd, 0xa};
+                        byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0xd, 0xa};
 
 
 
@@ -257,7 +258,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                         System.out.println((byte)x);
                         System.out.println(" ");
                         // Send the byteArray
-                        sendBytes(byteArray);
+                        Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
 
                     } catch (IOException e) {
                         // Server connection error
@@ -313,56 +314,30 @@ public class VideoStreamActivity extends AppCompatActivity {
     // Quit connection
     public void logout(){
         // Debug
-        System.out.println("--------------------->Bound? " + Singleton.getInstance().getSocket().isBound());
-        System.out.println("---------------------->closed? " + Singleton.getInstance().getSocket().isClosed());
         if(Singleton.getInstance().getSocket().isBound()) {
-            // Close Socket
             try {
-                task.cancel();
-                finish();
+                if(task != null){
+                    task.cancel();
+                    task = null;
+                }
+
                 Singleton.getInstance().getSocket().close();
+
+                // Transfer to main
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // Transfer to main
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
         }else{
 
         }
 
     }
 
-    /**
-     * Send a bytearray over TCP socket connection.
-     * @param myByteArray
-     * @throws IOException
-     */
-    public void sendBytes(byte[] myByteArray) throws IOException {
-        sendBytes(myByteArray, 0, myByteArray.length);
-    }
-
-    /**
-     * send bytearray over TCP socket connection.
-     * @param myByteArray
-     * @param start
-     * @param len
-     * @throws IOException
-     */
-    public void sendBytes(byte[] myByteArray, int start, int len) throws IOException {
-        if (len < 0)
-            throw new IllegalArgumentException("Negative length not allowed");
-        if (start < 0 || start >= myByteArray.length)
-            throw new IndexOutOfBoundsException("Out of bounds: " + start);
-
-        OutputStream out = Singleton.getInstance().getSocket().getOutputStream();
-        DataOutputStream dos = new DataOutputStream(out);
-
-        if (len > 0) {
-            dos.write(myByteArray);
-        }
-    }
-
 
 
 }
+
+
+

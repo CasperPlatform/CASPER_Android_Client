@@ -1,6 +1,7 @@
 package group1.com.casper_android_client;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +21,9 @@ public class LoggedInActivity extends AppCompatActivity {
     private Button sockets;
 
 
+    private TextView responce;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,19 @@ public class LoggedInActivity extends AppCompatActivity {
 
         // Socket connection activity
         sockets = (Button)findViewById(R.id.sockets);
+
+        responce = (TextView)findViewById(R.id.responce2);
+
+
+        if(Singleton.getInstance().getSocket().isBound()){
+            responce.setTextColor(Color.rgb(0,255,0));
+            responce.setText(" Socket Connection at: \n " + Singleton.getInstance().getSocket().getRemoteSocketAddress());
+        }else{
+            responce.setTextColor(Color.rgb(255,0,0));
+            responce.setText("No Socket Connection Found!");
+        }
+
+
 
     }
 
@@ -111,5 +128,6 @@ public class LoggedInActivity extends AppCompatActivity {
         Intent intent = new Intent(this,Socket_Connection.class);
         startActivity(intent);
     }
+
 
 }
