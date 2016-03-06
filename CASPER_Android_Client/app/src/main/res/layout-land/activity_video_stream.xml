@@ -98,7 +98,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="29dp"
-        android:background="#2DEF96" />
+        android:background="#2DEF96"
+        android:visibility="invisible" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -110,5 +111,6 @@
         android:layout_alignEnd="@+id/request"
         android:checked="false"
         android:textColor="#ffffff"
-        android:onClick="onFixed" />
+        android:onClick="onFixed"
+        android:visibility="invisible" />
 </RelativeLayout>

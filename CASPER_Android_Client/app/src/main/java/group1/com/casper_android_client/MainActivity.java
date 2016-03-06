@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 // Setting up Socket connection
                 SocketConnection SocketConnection = new SocketConnection(
                         "192.168.0.15",
-                        Integer.parseInt("9999"));
+                        Integer.parseInt("9999"),false);
                 SocketConnection.execute();
 
 
@@ -129,7 +129,50 @@ public class MainActivity extends AppCompatActivity {
 
                 Singleton.getInstance().setSocketConnection(new SocketConnection(
                         "192.168.10.1",
-                        Integer.parseInt("9999")));
+                        Integer.parseInt("9999"),false));
+                Singleton.getInstance().getSocketConnection().execute();
+
+
+
+
+                // Set progress wheel visable to indicate process
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      // Show the loading wheel
+                                      loading.setVisibility(v.VISIBLE);
+                                  }
+                              }
+
+                );
+
+                // Ugly but it takes a few milliseconds to do
+                while (!Singleton.getInstance().getSocket().isBound()) {
+
+                }
+
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      // Stop the loading wheel and show Error Msg.
+                                      loading.setVisibility(v.INVISIBLE);
+                                  }
+                              }
+                );
+
+
+                // Load next Activity
+                finish();
+
+                Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
+                startActivity(intent);
+            }
+            else if(user.getText().toString().equals("demo3") && password.getText().toString().equals("demo3")) {
+                // Setting up Socket connection
+
+                Singleton.getInstance().setSocketConnection(new SocketConnection(
+                        "192.168.10.1",
+                        Integer.parseInt("9999"),true));
                 Singleton.getInstance().getSocketConnection().execute();
 
 

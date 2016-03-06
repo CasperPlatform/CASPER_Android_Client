@@ -24,14 +24,16 @@ public class SocketConnection extends AsyncTask<Void, Void, Void> {
     // Convesion variables
     String dstAddress;
     int dstPort;
+    boolean dstUDP;
     String responsemsg = "";
     byte[] messages = new byte[60000];
     String text;
 
 
-    SocketConnection(String addr, int port) {
+    SocketConnection(String addr, int port,boolean udpAllso) {
         dstAddress = addr;
         dstPort = port;
+        dstUDP = udpAllso;
     }
 
     @Override
@@ -55,53 +57,45 @@ public class SocketConnection extends AsyncTask<Void, Void, Void> {
                 Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
                 Singleton.getInstance().getSocket().setReuseAddress(true);
 
-//            String messageStr="Request!";
-//            // Socket Port
-//            int udpSocketPort = 9998;
-//            // New Socket
-//            DatagramSocket UDPsocket = new DatagramSocket();
-//            // Create an InetAddress
-//            InetAddress casper = InetAddress.getByName("192.168.10.1");
-//
-//            // Output msg lenght
-//            int msg_length= messageStr.length();
-//            // Msg to bytes convertion
-//            byte[] message = messageStr.getBytes();
-//            // Package the message
-//            DatagramPacket msgPacket = new DatagramPacket(message, msg_length,casper,udpSocketPort);
-//            // Send Message over UDP
-//            UDPsocket.send(msgPacket);
-//
-//            // Incomming message
-//            byte[] incImage = new byte[60000];
-//            // Pacckage incomming message
-//            DatagramPacket imagePacket = new DatagramPacket(incImage, incImage.length,casper,udpSocketPort);
-//
-//            // Get data from incomming buffer
-//            UDPsocket.receive(imagePacket);
-//
-//            // Debug
-//            System.out.println(">>>>>>:" + imagePacket.getData().length);
-//
-//            // convert .JPG image into Bitmap
-//            final Bitmap bMap = BitmapFactory.decodeByteArray(imagePacket.getData(), 0, imagePacket.getData().length);
+                if(dstUDP == true) {
 
-//            // Debug
-//            System.out.println(">>>>>>"+bMap.getHeight());
-//            System.out.println(">>>>>"+bMap.getWidth());
+                String messageStr="Request!";
+                // Socket Port
+                int udpSocketPort = 9998;
+                // New Socket
+                DatagramSocket UDPsocket = new DatagramSocket();
+                // Create an InetAddress
+                InetAddress casper = InetAddress.getByName("192.168.10.1");
 
-                // Set imageview to incomming bitmap
-//            runOnUiThread(new Runnable() {
-//                              @Override
-//                              // UI element handling has to be run in UI thread
-//                              public void run() {
-//                                  testImage.setImageBitmap(bMap);
-//                                  testImage.invalidate();
-//                              }
-//                          }
-//
-//            );
+                // Output msg lenght
+                int msg_length= messageStr.length();
+                // Msg to bytes convertion
+                byte[] message = messageStr.getBytes();
+                // Package the message
+                DatagramPacket msgPacket = new DatagramPacket(message, msg_length,casper,udpSocketPort);
+                // Send Message over UDP
+                UDPsocket.send(msgPacket);
 
+                // Incomming message
+                byte[] incImage = new byte[60000];
+                // Pacckage incomming message
+                DatagramPacket imagePacket = new DatagramPacket(incImage, incImage.length,casper,udpSocketPort);
+
+                // Get data from incomming buffer
+                UDPsocket.receive(imagePacket);
+
+                // Debug
+                System.out.println(">>>>>>:" + imagePacket.getData().length);
+
+                // convert .JPG image into Bitmap
+                final Bitmap bMap = BitmapFactory.decodeByteArray(imagePacket.getData(), 0, imagePacket.getData().length);
+
+                // Debug
+                System.out.println(">>>>>>"+bMap.getHeight());
+                System.out.println(">>>>>"+bMap.getWidth());
+
+
+                }
 
 
 

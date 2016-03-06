@@ -57,7 +57,7 @@ public class Singleton {
     /**
      *
      */
-    private SocketConnection SocketConnection = new SocketConnection("0",0);
+    private SocketConnection SocketConnection = new SocketConnection("0",0,false);
 
     public group1.com.casper_android_client.SocketConnection getSocketConnection() {
         return SocketConnection;
