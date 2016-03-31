@@ -33,6 +33,20 @@ public class Singleton {
 
 
 
+    private String socketData;
+
+    public String getSocketData() {
+        return socketData;
+    }
+
+    public void setSocketData(String socketData) {
+        this.socketData = socketData;
+    }
+
+
+
+
+
 
     // User instance
     private User loggedInUser;

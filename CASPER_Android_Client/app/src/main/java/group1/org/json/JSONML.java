@@ -1,4 +1,4 @@
-package org.json;
+package group1.org.json;
 
 /*
 Copyright (c) 2008 JSON.org
@@ -46,6 +46,7 @@ public class JSONML {
      * @return A JSONArray if the value is the outermost tag, otherwise null.
      * @throws JSONException
      */
+
     private static Object parse(
         XMLTokener x,
         boolean    arrayForm,

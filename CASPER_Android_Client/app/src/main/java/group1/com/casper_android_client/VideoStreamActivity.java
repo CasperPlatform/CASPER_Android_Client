@@ -17,8 +17,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -37,7 +39,7 @@ public class VideoStreamActivity extends AppCompatActivity {
     private ImageView image_joystick, image_border;
 
     // Debug Text fields for Joystick
-    private TextView xAxis, yAxis, angle, distance, direction;
+    private TextView xAxis, yAxis, angle, distance, direction,responce;
 
     // Checkbox to start the timed sending of values
     private CheckBox fixedValues;
@@ -61,12 +63,36 @@ public class VideoStreamActivity extends AppCompatActivity {
         angle = (TextView)findViewById(R.id.angle);
         distance = (TextView)findViewById(R.id.distance);
         direction = (TextView)findViewById(R.id.direction);
+        responce = (TextView)findViewById(R.id.responce);
 
         // Checkbox to start sending of fixed values
         fixedValues = (CheckBox)findViewById(R.id.fixedValue);
 
         // Joystick
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
+
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                    runOnUiThread(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                        responce.setText(Singleton.getInstance().getSocketData());
+                                      }
+                                  }
+                    );
+
+
+            }
+        });
+
+            // Start the thread
+            thread.start();
+
+
+
 
         // Joystick creation
         js = new JoyStick(getApplicationContext()
@@ -77,6 +103,7 @@ public class VideoStreamActivity extends AppCompatActivity {
         js.setStickAlpha(150);
         js.setOffset(70);
         js.setMinimumDistance(50);
+
 
         // Set Joystick listener
         layout_joystick.setOnTouchListener(new View.OnTouchListener() {
@@ -153,7 +180,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                             }
 
                             // Create the 7 byte Array to send over TCP socket connection
-                            byte[] byteArray = {0x44,(byte)driveFlag,(byte)angleFlag,(byte)y,(byte)x,0xd,0xa};
+                            byte[] byteArray = {0x44,(byte)driveFlag,(byte)angleFlag,(byte)y,(byte)x,0x0d,0x0a,0x04};
 
 //                            // Debug
 //                            System.out.println(">>>>>>DF:"+(byte)driveFlag+"<<<<");
@@ -181,7 +208,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                     direction.setText("Direction :");
 
                     // Create the 7 byte Array to send over TCP socket connection
-                    byte[] byteArray = {0x44,(byte)'I',(byte)'I',(byte)0,(byte)0,0xd,0xa};
+                    byte[] byteArray = {0x44,(byte)'I',(byte)'I',(byte)0,(byte)0,0xd,0xa,0x4};
 
                     // Send the byteArray
                     try {
@@ -248,7 +275,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                             x = 90;
                         }
 
-                        byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0xd, 0xa};
+                        byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0x0d, 0x0a, 0x04};
 
 
 

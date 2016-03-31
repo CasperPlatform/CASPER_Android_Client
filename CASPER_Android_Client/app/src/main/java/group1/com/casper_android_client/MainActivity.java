@@ -28,7 +28,7 @@ import java.net.InetAddress;
 public class MainActivity extends AppCompatActivity {
 
     // Declare server URL
-    private final String PATH = "http://192.168.0.31:3000";
+    private final String PATH = "http://192.168.10.1:3000";
 
     // Progress bar
     private ProgressBar loading;

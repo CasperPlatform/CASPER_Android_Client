@@ -122,6 +122,9 @@ public class SocketConnection extends AsyncTask<Void, Void, Void> {
 
                     byteArrayOutputStream.write(buffer, 0, bytesRead);
                     responsemsg += byteArrayOutputStream.toString("UTF-8");
+                    Singleton.getInstance().setSocketData(responsemsg);
+
+                    System.out.println("---------------------------------------------------------------------------------->" + responsemsg);
 
                     if(isCancelled()){
                         break;
