@@ -40,10 +40,10 @@ public class LoggedInActivity extends AppCompatActivity {
                     try {
                         if (InetAddress.getByName("192.168.10.1").isReachable(2000)) {
 
-                            Singleton.getInstance().setSocketConnection(new SocketConnection(
+                            Singleton.getInstance().setTCPsocket(new TCPsocket(
                                     "192.168.10.1",
                                     Integer.parseInt("9999"), false));
-                            Singleton.getInstance().getSocketConnection().execute();
+                            Singleton.getInstance().getTCPsocket().execute();
 
 
 
@@ -151,7 +151,7 @@ public class LoggedInActivity extends AppCompatActivity {
     }
 
     public void socket(View v){
-        Intent intent = new Intent(this,Socket_Connection.class);
+        Intent intent = new Intent(this,Manual_socket_connection.class);
         startActivity(intent);
     }
 

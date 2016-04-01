@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,9 +26,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
-public class Socket_Connection extends AppCompatActivity {
+public class Manual_socket_connection extends AppCompatActivity {
 
     // Input and output text fields
     private TextView response;
@@ -40,6 +42,7 @@ public class Socket_Connection extends AppCompatActivity {
     private Button connectButton;
     private Button clearButton;
     private Button sendButton;
+    private CheckBox UDPselect;
 
     // View handleing to access when in asynctask
     private View errorView;
@@ -51,12 +54,13 @@ public class Socket_Connection extends AppCompatActivity {
     // Progress Bar
     private ProgressBar loading;
 
+    int count = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_socket__connection);
+        setContentView(R.layout.activity_manual_socket_connection);
 
         testImage = (ImageView)findViewById(R.id.bild);
 
@@ -76,6 +80,7 @@ public class Socket_Connection extends AppCompatActivity {
         connectButton = (Button)findViewById(R.id.connectButton);
         clearButton = (Button)findViewById(R.id.clearButton);
         sendButton = (Button)findViewById(R.id.sendButton);
+        UDPselect = (CheckBox)findViewById(R.id.udpCheck);
 
         // Set listener to connect Button
         connectButton.setOnClickListener(buttonConnectOnClickListener);
@@ -208,13 +213,15 @@ public class Socket_Connection extends AppCompatActivity {
         String dstAddress;
         int dstPort;
         String responsemsg = "";
-        byte[] messages = new byte[60000];
+        byte[] messages = new byte[8000];
         String text;
+        boolean isUDP;
 
 
         MyClientTask(String addr, int port){
             dstAddress = addr;
             dstPort = port;
+            isUDP = UDPselect.isChecked();
         }
 
         @Override
@@ -230,14 +237,12 @@ public class Socket_Connection extends AppCompatActivity {
              * Set fixed Ports UDP 9998 % TCP 9999
              *
              */
-
+            if(isUDP){
             try {
-                // Start a TCP socket connection
-                Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
 
 //                String messageStr="Request!";
 //                // Socket Port
-//                int udpSocketPort = 9998;
+//                int udpSocketPort = dstPort;
 //                // New Socket
 //                DatagramSocket UDPsocket = new DatagramSocket();
 //                // Create an InetAddress
@@ -282,94 +287,156 @@ public class Socket_Connection extends AppCompatActivity {
 //
 //                );
 
+                    String messageStr = "Request!";
+                    // Socket Port
+                    int udpSocketPort = dstPort;
+                    // New Socket
+                    DatagramSocket UDPsocket = new DatagramSocket();
+                    // Create an InetAddress
+                    InetAddress casper = InetAddress.getByName("192.168.10.1");
 
+                    // Output msg lenght
+                    // int msg_length = messageStr.length();
+                    // Msg to bytes convertion
+                    // byte[] message = messageStr.getBytes();
+                    // Package the message
+                    // DatagramPacket msgPacket = new DatagramPacket(message, msg_length, casper, udpSocketPort);
+                    // Send Message over UDP
+                    // UDPsocket.send(msgPacket);
 
-                runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      loading.setVisibility(errorView.INVISIBLE);
-                                          setVisable(errorView);
-                                          error.setTextColor(Color.rgb(0, 255, 0));
-                                          error.setText("server is reacheble");
+                    // Incomming message
+                    byte[] incImage = new byte[8000];
+                //                // Output msg lenght
+                                int msg_length= messageStr.length();
+                //                // Msg to bytes convertion
+                                byte[] message = messageStr.getBytes();
+                //                // Package the message
+                                DatagramPacket msgPacket = new DatagramPacket(message, msg_length,casper,udpSocketPort);
+                //                // Send Message over UDP
+                                UDPsocket.send(msgPacket);
+
+                        // Pacckage incomming message
+                        //DatagramPacket imagePacket = new DatagramPacket(incImage, incImage.length, casper, udpSocketPort);
+
+                        // Get data from incomming buffer
+                        //UDPsocket.receive(imagePacket);
+
+                        // Debug
+                        //System.out.println(">>>>>>:" + imagePacket.getData().length);
+                        DatagramPacket test = new DatagramPacket(incImage, incImage.length, casper, udpSocketPort);
+                         // while(true) {
+                              UDPsocket.receive(test);
+                              count++;
+
+                              String str = new String(test.getData(), "UTF-8");
+
+                              System.out.println("UDP MSG pgaNR:" + count + " Lenght: " + test.getData().length + " -------------------------------------->" + str);
+                        //  }
+                    // convert .JPG image into Bitmap
+                    //final Bitmap bMap = BitmapFactory.decodeByteArray(imagePacket.getData(), 0, imagePacket.getData().length);
+
+                    // Debug
+                    //System.out.println(">>>>>>" + bMap.getHeight());
+                    //System.out.println(">>>>>" + bMap.getWidth());
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (SocketException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            }else{
+                    try {
+
+                        // Start a TCP socket connection
+                        Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
+
+                        runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              loading.setVisibility(errorView.INVISIBLE);
+                                              setVisable(errorView);
+                                              error.setTextColor(Color.rgb(0, 255, 0));
+                                              error.setText("server is reacheble");
+                                          }
                                       }
-                                  }
 
-                    );
-
+                        );
 
 
-                ByteArrayOutputStream byteArrayOutputStream =
-                        new ByteArrayOutputStream(1024);
-                byte[] buffer = new byte[1024];
+                        ByteArrayOutputStream byteArrayOutputStream =
+                                new ByteArrayOutputStream(1024);
+                        byte[] buffer = new byte[1024];
 
-                int bytesRead;
-                InputStream inputStream = Singleton.getInstance().getSocket().getInputStream();
+                        int bytesRead;
+                        InputStream inputStream = Singleton.getInstance().getSocket().getInputStream();
 
 
-                // Get server address as message
-                runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      loading.setVisibility(errorView.INVISIBLE);
-                                      response.setText("Server respond -> " + Singleton.getInstance().getSocket().getInetAddress().toString());
-                                  }
-                              }
+                        // Get server address as message
+                        runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              loading.setVisibility(errorView.INVISIBLE);
+                                              response.setText("Server respond -> " + Singleton.getInstance().getSocket().getInetAddress().toString());
+                                          }
+                                      }
 
-                );
+                        );
 
                 /*
                  * notice:
                  * inputStream.read() will block if no data return
                 */
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    byteArrayOutputStream.write(buffer, 0, bytesRead);
-                    responsemsg += byteArrayOutputStream.toString("UTF-8");
-                }
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            byteArrayOutputStream.write(buffer, 0, bytesRead);
+                            responsemsg += byteArrayOutputStream.toString("UTF-8");
+                        }
 
-            } catch (UnknownHostException e) {
-                // TODO Auto-generated catch block
-                // e.printStackTrace();
-                responsemsg = "UnknownHostException: " + e.toString();
-                runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      loading.setVisibility(errorView.INVISIBLE);
-                                      setVisable(errorView);
-                                      error.setTextColor(Color.rgb(255,0,0));
-                                      error.setText("server is unreacheble!");
-                                  }
-                              }
+                    } catch (UnknownHostException e) {
+                        // TODO Auto-generated catch block
+                        // e.printStackTrace();
+                        responsemsg = "UnknownHostException: " + e.toString();
+                        runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              loading.setVisibility(errorView.INVISIBLE);
+                                              setVisable(errorView);
+                                              error.setTextColor(Color.rgb(255, 0, 0));
+                                              error.setText("server is unreacheble!");
+                                          }
+                                      }
 
-                );
+                        );
 
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                // Show user there was a problem
-                runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      loading.setVisibility(errorView.INVISIBLE);
-                                      setVisable(errorView);
-                                      error.setTextColor(Color.rgb(255,0,0));
-                                      error.setText("server is unreacheble!");
-                                  }
-                              }
-
-                );
-                e.printStackTrace();
-                responsemsg = "IOException: " + e.toString();
-            } finally {
-
-                if (Singleton.getInstance().getSocket() != null) {
-                    try {
-                        // Try closeing the socket connection.
-                        Singleton.getInstance().getSocket().close();
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
+                        // Show user there was a problem
+                        runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              loading.setVisibility(errorView.INVISIBLE);
+                                              setVisable(errorView);
+                                              error.setTextColor(Color.rgb(255, 0, 0));
+                                              error.setText("server is unreacheble!");
+                                          }
+                                      }
+
+                        );
                         e.printStackTrace();
+                        responsemsg = "IOException: " + e.toString();
+                    } finally {
+
+                        if (Singleton.getInstance().getSocket() != null) {
+                            try {
+                                // Try closeing the socket connection.
+                                Singleton.getInstance().getSocket().close();
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
-            }
             return null;
         }
     }

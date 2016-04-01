@@ -58,7 +58,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".VideoStreamActivity" />
         </activity>
-        <activity android:name=".Socket_Connection"
+        <activity android:name=".Manual_socket_connection"
             android:label="sockets"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">

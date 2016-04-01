@@ -2,7 +2,6 @@ package group1.com.casper_android_client;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -107,10 +106,10 @@ public class MainActivity extends AppCompatActivity {
 
 
                             // Setting up Socket connection
-                            SocketConnection SocketConnection = new SocketConnection(
+                            TCPsocket TCPsocket = new TCPsocket(
                                     "192.168.0.15",
                                     Integer.parseInt("9999"),false);
-                            SocketConnection.execute();
+                            TCPsocket.execute();
 
 
 
@@ -202,11 +201,11 @@ public class MainActivity extends AppCompatActivity {
                             if (InetAddress.getByName("192.168.10.1").isReachable(2000)) {
 
 
-                                Singleton.getInstance().setSocketConnection(new SocketConnection(
+                                Singleton.getInstance().setTCPsocket(new TCPsocket(
                                         "192.168.10.1",
                                         Integer.parseInt("9999"), false));
 
-                                Singleton.getInstance().getSocketConnection().execute();
+                                Singleton.getInstance().getTCPsocket().execute();
 
 
                                 // Ugly but it takes a few milliseconds to do
@@ -286,10 +285,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                Singleton.getInstance().setSocketConnection(new SocketConnection(
+                Singleton.getInstance().setTCPsocket(new TCPsocket(
                         "192.168.10.1",
-                        Integer.parseInt("9999"),true));
-                Singleton.getInstance().getSocketConnection().execute();
+                        Integer.parseInt("9999"), true));
+                Singleton.getInstance().getTCPsocket().execute();
 
 
 

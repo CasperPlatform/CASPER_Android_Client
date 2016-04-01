@@ -1,9 +1,6 @@
 package group1.com.casper_android_client;
 
-import android.app.AlarmManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,19 +13,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
  * Created by Andreas Fransson
+ * TODO fix so that video feed starts here
  */
 public class VideoStreamActivity extends AppCompatActivity {
 
@@ -191,7 +182,7 @@ public class VideoStreamActivity extends AppCompatActivity {
 //                            System.out.println(byteArray[6]);
 
                             // Send the byteArray
-                            Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
+                            Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
 
                         } catch (IOException e) {
                             // Server connection error
@@ -212,7 +203,7 @@ public class VideoStreamActivity extends AppCompatActivity {
 
                     // Send the byteArray
                     try {
-                        Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
+                        Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -285,7 +276,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                         System.out.println((byte)x);
                         System.out.println(" ");
                         // Send the byteArray
-                        Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
+                        Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
 
                     } catch (IOException e) {
                         // Server connection error
