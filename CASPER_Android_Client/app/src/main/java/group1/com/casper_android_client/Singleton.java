@@ -71,7 +71,7 @@ public class Singleton {
     /**
      *
      */
-    private TCPsocket TCPsocket = new TCPsocket("0",0,false);
+    private TCPsocket TCPsocket = new TCPsocket("0",0);
 
     public TCPsocket getTCPsocket() {
         return TCPsocket;
@@ -80,8 +80,6 @@ public class Singleton {
     public void setTCPsocket(TCPsocket TCPsocket) {
         this.TCPsocket = TCPsocket;
     }
-
-
 
     // TCP Socket connection
     private Socket socket = new Socket();
@@ -108,25 +106,23 @@ public class Singleton {
 
 
     // UDP Socket connection.
-    private DatagramSocket UDPsocketSend;
+    private DatagramSocket UDPsocket;
 
     /**
      * Get the current UDP Socket
      * @return
      */
-    public DatagramSocket getUDPsocketSend() {
-        return UDPsocketSend;
+    public DatagramSocket getUDPsocket() {
+        return UDPsocket;
     }
 
     /**
      * Set the current UDP Socket Connection
-     * @param UDPsocketSend
+     * @param UDPsocket
      */
-    public void setUDPsocketSend(DatagramSocket UDPsocketSend) {
-        this.UDPsocketSend = UDPsocketSend;
+    public void setUDPsocket(DatagramSocket UDPsocket) {
+        this.UDPsocket = UDPsocket;
     }
-
-
 
 
 
@@ -149,6 +145,7 @@ public class Singleton {
     public void setUDPsocketPackage(DatagramPacket UDPsocket) {
         this.UDPsocketPackage = UDPsocket;
     }
+
 
 
 

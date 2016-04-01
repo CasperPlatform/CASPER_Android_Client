@@ -32,10 +32,9 @@ public class TCPsocket extends AsyncTask<Void, Void, Void> {
     boolean dstUDP;
     String responsemsg = "";
 
-    TCPsocket(String addr, int port, boolean udpAllso) {
+    TCPsocket(String addr, int port) {
         dstAddress = addr;
         dstPort = port;
-        dstUDP = udpAllso;
     }
 
     @Override

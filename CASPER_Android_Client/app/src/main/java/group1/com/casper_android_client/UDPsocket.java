@@ -1,23 +1,13 @@
 package group1.com.casper_android_client;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Andreas Fransson on 16-03-06.
@@ -27,15 +17,13 @@ import java.util.concurrent.TimeoutException;
 public class UDPsocket extends AsyncTask<Void, Void, Void> {
 
     // Convesion variables
-    String dstAddress;
+    InetAddress dstAddress;
     int dstPort;
-    boolean dstUDP;
-    String responsemsg = "";
 
-    UDPsocket(String addr, int port, boolean udpAllso) {
-        dstAddress = addr;
+    UDPsocket(String addr, int port) throws UnknownHostException {
+        dstAddress = InetAddress.getByName(addr);
         dstPort = port;
-        dstUDP = udpAllso;
+
     }
 
     @Override
@@ -51,18 +39,11 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
          * TODO Set fixed Ports UDP 9998 % TCP 9999
          * TODO Access the UI of whatever element is handleing the connection
          */
-        byte[] messages = new byte[60000];
-        String text = "";
+        byte[] messages = new byte[8000];
 
         try {
+            Singleton.getInstance().setUDPsocket(new DatagramSocket(dstPort,dstAddress));
 
-            String messageStr = "Request!";
-            // Socket Port
-            int udpSocketPort = dstPort;
-            // New Socket
-            DatagramSocket UDPsocket = new DatagramSocket();
-            // Create an InetAddress
-            InetAddress casper = InetAddress.getByName("192.168.10.1");
 
             // Output msg lenght
             // int msg_length = messageStr.length();
@@ -74,21 +55,19 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             // UDPsocket.send(msgPacket);
 
             // Incomming message
-            byte[] incImage = new byte[8000];
+            byte[] incPackage = new byte[8000];
 
             while (true) {
 
                 // Pacckage incomming message
-                //DatagramPacket imagePacket = new DatagramPacket(incImage, incImage.length, casper, udpSocketPort);
-
+                //DatagramPacket imagePacket = new DatagramPacket(incPackage, incPackage.length, casper, udpSocketPort);
                 // Get data from incomming buffer
                 //UDPsocket.receive(imagePacket);
-
                 // Debug
                 //System.out.println(">>>>>>:" + imagePacket.getData().length);
-                DatagramPacket test = new DatagramPacket(incImage, incImage.length, casper, udpSocketPort);
-                text = text + test.getData().toString();
-                System.out.println(text);
+                DatagramPacket test = new DatagramPacket(incPackage, incPackage.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
+                String text = test.getData().toString();
+                System.out.println("Test data output ----->" + text);
 
             }
             // convert .JPG image into Bitmap
@@ -99,14 +78,22 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             //System.out.println(">>>>>" + bMap.getWidth());
 
 
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (SocketException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+
+    public void sendData(String data) throws IOException {
+        DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length());
+        Singleton.getInstance().getUDPsocket().send(dataAsPackage);
+
+    }
+
+
+
+
+
 
 }

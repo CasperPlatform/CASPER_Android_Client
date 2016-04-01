@@ -240,92 +240,20 @@ public class Manual_socket_connection extends AppCompatActivity {
             if(isUDP){
             try {
 
-//                String messageStr="Request!";
-//                // Socket Port
-//                int udpSocketPort = dstPort;
-//                // New Socket
-//                DatagramSocket UDPsocket = new DatagramSocket();
-//                // Create an InetAddress
-//                InetAddress casper = InetAddress.getByName("192.168.10.1");
-//
-//                // Output msg lenght
-//                int msg_length= messageStr.length();
-//                // Msg to bytes convertion
-//                byte[] message = messageStr.getBytes();
-//                // Package the message
-//                DatagramPacket msgPacket = new DatagramPacket(message, msg_length,casper,udpSocketPort);
-//                // Send Message over UDP
-//                UDPsocket.send(msgPacket);
-//
-//                // Incomming message
-//                byte[] incImage = new byte[60000];
-//                // Pacckage incomming message
-//                DatagramPacket imagePacket = new DatagramPacket(incImage, incImage.length,casper,udpSocketPort);
-//
-//                // Get data from incomming buffer
-//                UDPsocket.receive(imagePacket);
-//
-//                // Debug
-//                System.out.println(">>>>>>:" + imagePacket.getData().length);
-//
-//                // convert .JPG image into Bitmap
-//                final Bitmap bMap = BitmapFactory.decodeByteArray(imagePacket.getData(), 0, imagePacket.getData().length);
-//
-//                // Debug
-//                System.out.println(">>>>>>"+bMap.getHeight());
-//                System.out.println(">>>>>"+bMap.getWidth());
-//
-//                // Set imageview to incomming bitmap
-//                runOnUiThread(new Runnable() {
-//                                  @Override
-//                                  // UI element handling has to be run in UI thread
-//                                  public void run() {
-//                                      testImage.setImageBitmap(bMap);
-//                                      testImage.invalidate();
-//                                  }
-//                              }
-//
-//                );
+                    InetAddress dstAddressUDP = InetAddress.getByName(dstAddress);
+                    Singleton.getInstance().setUDPsocket(new DatagramSocket(dstPort,dstAddressUDP));
 
-                    String messageStr = "Request!";
-                    // Socket Port
-                    int udpSocketPort = dstPort;
-                    // New Socket
-                    DatagramSocket UDPsocket = new DatagramSocket();
-                    // Create an InetAddress
-                    InetAddress casper = InetAddress.getByName("192.168.10.1");
-
-                    // Output msg lenght
-                    // int msg_length = messageStr.length();
-                    // Msg to bytes convertion
-                    // byte[] message = messageStr.getBytes();
-                    // Package the message
-                    // DatagramPacket msgPacket = new DatagramPacket(message, msg_length, casper, udpSocketPort);
-                    // Send Message over UDP
-                    // UDPsocket.send(msgPacket);
 
                     // Incomming message
-                    byte[] incImage = new byte[8000];
-                //                // Output msg lenght
-                                int msg_length= messageStr.length();
-                //                // Msg to bytes convertion
-                                byte[] message = messageStr.getBytes();
-                //                // Package the message
-                                DatagramPacket msgPacket = new DatagramPacket(message, msg_length,casper,udpSocketPort);
-                //                // Send Message over UDP
-                                UDPsocket.send(msgPacket);
+                    byte[] incPackage = new byte[8000];
 
-                        // Pacckage incomming message
-                        //DatagramPacket imagePacket = new DatagramPacket(incImage, incImage.length, casper, udpSocketPort);
+                          String data = "test";
+                         DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length());
+                         Singleton.getInstance().getUDPsocket().send(dataAsPackage);
 
-                        // Get data from incomming buffer
-                        //UDPsocket.receive(imagePacket);
-
-                        // Debug
-                        //System.out.println(">>>>>>:" + imagePacket.getData().length);
-                        DatagramPacket test = new DatagramPacket(incImage, incImage.length, casper, udpSocketPort);
+                        DatagramPacket test = new DatagramPacket(incPackage, incPackage.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
                          // while(true) {
-                              UDPsocket.receive(test);
+                              Singleton.getInstance().getUDPsocket().receive(test);
                               count++;
 
                               String str = new String(test.getData(), "UTF-8");
@@ -347,6 +275,7 @@ public class Manual_socket_connection extends AppCompatActivity {
             }
             }else{
                     try {
+
 
                         // Start a TCP socket connection
                         Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
@@ -495,16 +424,20 @@ public class Manual_socket_connection extends AppCompatActivity {
      * @throws IOException
      */
     public void sendBytes(byte[] myByteArray, int start, int len) throws IOException {
+
         if (len < 0)
             throw new IllegalArgumentException("Negative length not allowed");
         if (start < 0 || start >= myByteArray.length)
             throw new IndexOutOfBoundsException("Out of bounds: " + start);
+        if(UDPselect.isChecked()){
+         Singleton.getInstance().getUDPsocket().send(new DatagramPacket(myByteArray,len));
+        }else {
+            OutputStream out = Singleton.getInstance().getSocket().getOutputStream();
+            DataOutputStream dos = new DataOutputStream(out);
 
-        OutputStream out = Singleton.getInstance().getSocket().getOutputStream();
-        DataOutputStream dos = new DataOutputStream(out);
-
-        if (len > 0) {
-            dos.write(myByteArray);
+            if (len > 0) {
+                dos.write(myByteArray);
+            }
         }
     }
 
