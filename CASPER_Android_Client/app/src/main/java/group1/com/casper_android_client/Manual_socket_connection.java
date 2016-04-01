@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -55,6 +56,8 @@ public class Manual_socket_connection extends AppCompatActivity {
     private ProgressBar loading;
 
     int count = 0;
+    int count2 = 0;
+    DatagramSocket testsocket ;
 
 
     @Override
@@ -199,11 +202,20 @@ public class Manual_socket_connection extends AppCompatActivity {
                         loading.setVisibility(v.INVISIBLE);
 
                     }else {
-                        // convertion task
-                        MyClientTask myClientTask = new MyClientTask(
-                                address.getText().toString(),
-                                Integer.parseInt(port.getText().toString()));
-                        myClientTask.execute();
+                        Thread penis = new Thread(){
+                            @Override
+                            public void run() {
+                                // convertion task
+                                MyClientTask myClientTask = new MyClientTask(
+                                        address.getText().toString(),
+                                        Integer.parseInt(port.getText().toString()));
+                                myClientTask.execute();
+
+
+                            }
+                        };
+                        penis.start();
+
                     }
                     }};
 
@@ -240,25 +252,46 @@ public class Manual_socket_connection extends AppCompatActivity {
             if(isUDP){
             try {
 
-                    InetAddress dstAddressUDP = InetAddress.getByName(dstAddress);
-                    Singleton.getInstance().setUDPsocket(new DatagramSocket(dstPort,dstAddressUDP));
+                InetSocketAddress dstAddressUDP = new InetSocketAddress(dstAddress,dstPort);
+                System.out.println("---->"+ dstAddress + "   " + dstAddressUDP);
 
+                System.out.println(dstAddressUDP);
+
+
+                    //Singleton.getInstance().setUDPsocket(new DatagramSocket());
+                    //Singleton.getInstance().getUDPsocket().setReuseAddress(true);
+                    //Singleton.getInstance().getUDPsocket().connect(dstAddressUDP);
+                    testsocket = new DatagramSocket();
+                    testsocket.connect(dstAddressUDP);
 
                     // Incomming message
                     byte[] incPackage = new byte[8000];
 
-                          String data = "test";
+                            String data = "test";
                          DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length());
-                         Singleton.getInstance().getUDPsocket().send(dataAsPackage);
+                        // Singleton.getInstance().getUDPsocket().send(dataAsPackage);
+                testsocket.send(dataAsPackage);
+                String tt = "";
+                DatagramPacket test;
+                String str;
+                test = new DatagramPacket(incPackage, incPackage.length, testsocket.getInetAddress(), testsocket.getPort());
+                while(true) {
+                    // while(true) {
+                    //Singleton.getInstance().getUDPsocket().receive(test);
+                    testsocket.receive(test);
+                    str = new String(test.getData(), "UTF-8");
+                    count++;
+                    //System.out.println("pkg: " + count);
+                    //tt = tt + str;
+                    if(count==25) {
+                        count2++;
+                       // System.out.println("UDP MSG pgaNR:" + count +" -------------------------------------->" + tt);
+                        System.out.println("got an image nr: " + count2);
+                        count = 0;
+                        //tt="";
+                    }
 
-                        DatagramPacket test = new DatagramPacket(incPackage, incPackage.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
-                         // while(true) {
-                              Singleton.getInstance().getUDPsocket().receive(test);
-                              count++;
-
-                              String str = new String(test.getData(), "UTF-8");
-
-                              System.out.println("UDP MSG pgaNR:" + count + " Lenght: " + test.getData().length + " -------------------------------------->" + str);
+                }
                         //  }
                     // convert .JPG image into Bitmap
                     //final Bitmap bMap = BitmapFactory.decodeByteArray(imagePacket.getData(), 0, imagePacket.getData().length);
@@ -368,7 +401,11 @@ public class Manual_socket_connection extends AppCompatActivity {
                 }
             return null;
         }
+
+
     }
+
+
 
     /**
      * Send a message to the socket server and print it.
@@ -430,7 +467,9 @@ public class Manual_socket_connection extends AppCompatActivity {
         if (start < 0 || start >= myByteArray.length)
             throw new IndexOutOfBoundsException("Out of bounds: " + start);
         if(UDPselect.isChecked()){
-         Singleton.getInstance().getUDPsocket().send(new DatagramPacket(myByteArray,len));
+         //Singleton.getInstance().getUDPsocket().send(new DatagramPacket(myByteArray,len));
+            testsocket.send(new DatagramPacket(myByteArray,len));
+            System.out.println(" ----- " + myByteArray.toString());
         }else {
             OutputStream out = Singleton.getInstance().getSocket().getOutputStream();
             DataOutputStream dos = new DataOutputStream(out);

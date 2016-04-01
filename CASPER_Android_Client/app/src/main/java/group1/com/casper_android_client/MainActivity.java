@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                             // Setting up Socket connection
                             TCPsocket TCPsocket = new TCPsocket(
                                     "192.168.0.15",
-                                    Integer.parseInt("9999"),false);
+                                    Integer.parseInt("9999"));
                             TCPsocket.execute();
 
 
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 Singleton.getInstance().setTCPsocket(new TCPsocket(
                                         "192.168.10.1",
-                                        Integer.parseInt("9999"), false));
+                                        Integer.parseInt("9999")));
 
                                 Singleton.getInstance().getTCPsocket().execute();
 
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Singleton.getInstance().setTCPsocket(new TCPsocket(
                         "192.168.10.1",
-                        Integer.parseInt("9999"), true));
+                        Integer.parseInt("9999")));
                 Singleton.getInstance().getTCPsocket().execute();
 
 
