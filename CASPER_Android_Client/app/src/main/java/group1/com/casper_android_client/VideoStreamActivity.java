@@ -34,6 +34,7 @@ public class VideoStreamActivity extends AppCompatActivity {
 
     // Joystick
     private RelativeLayout layout_joystick;
+    private RelativeLayout layout_camera_joystick;
 
     // Image's for Joystick
     private ImageView image_joystick, image_border;
@@ -47,6 +48,7 @@ public class VideoStreamActivity extends AppCompatActivity {
 
     // Make a Joystick
     JoyStick js;
+    JoyStick cameraJs;
 
     /**
      * Activate the activity
@@ -70,6 +72,8 @@ public class VideoStreamActivity extends AppCompatActivity {
 
         // Joystick
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
+        layout_camera_joystick = (RelativeLayout)findViewById(R.id.layout_camera_joystick);
+
 
 
         Thread thread = new Thread(new Runnable() {
@@ -92,8 +96,6 @@ public class VideoStreamActivity extends AppCompatActivity {
             thread.start();
 
 
-
-
         // Joystick creation
         js = new JoyStick(getApplicationContext()
                 , layout_joystick, R.drawable.image_button);
@@ -104,58 +106,66 @@ public class VideoStreamActivity extends AppCompatActivity {
         js.setOffset(70);
         js.setMinimumDistance(50);
 
+        // Camera joystick creation
+        cameraJs = new JoyStick(getApplicationContext()
+                , layout_camera_joystick, R.drawable.image_button);
+        cameraJs.setStickSize(150, 150);
+        cameraJs.setLayoutSize(400, 400);
+        cameraJs.setLayoutAlpha(200);
+        cameraJs.setStickAlpha(150);
+        cameraJs.setOffset(70);
+        cameraJs.setMinimumDistance(50);
 
-        // Set Joystick listener
-        layout_joystick.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View arg0, MotionEvent arg1) {
-                js.drawStick(arg1);
+        // Set Camera Joystick listener
+        layout_camera_joystick.setOnTouchListener(new View.OnTouchListener() {
+            public boolean OnTouch(View arg0, MotionEvent arg1) {
+                cameraJs.drawStick(arg1);
                 if (arg1.getAction() == MotionEvent.ACTION_DOWN
                         || arg1.getAction() == MotionEvent.ACTION_MOVE) {
-                    xAxis.setText("X : " + String.valueOf(js.getX()));
-                    yAxis.setText("Y : " + String.valueOf(js.getY()));
-                    angle.setText("Angle : " + String.valueOf(js.getAngle()));
-                    distance.setText("Distance : " + String.valueOf(js.getDistance()));
+//                    xAxis.setText("X : " + String.valueOf(cameraJs.getX()));
+//                    yAxis.setText("Y : " + String.valueOf(cameraJs.getY()));
+//                    angle.setText("Angle : " + String.valueOf(cameraJs.getAngle()));
+//                    distance.setText("Distance : " + String.valueOf(cameraJs.getDistance()));
 
-                    int direction = js.get8Direction();
-                    if (direction == JoyStick.STICK_UP) {
+                    int cameraDirection = cameraJs.get8Direction();
+                    if (cameraDirection == JoyStick.STICK_UP) {
                         VideoStreamActivity.this.direction.setText("Direction : Up");
-                    } else if (direction == JoyStick.STICK_UPRIGHT) {
+                    } else if (cameraDirection == JoyStick.STICK_UPRIGHT) {
                         VideoStreamActivity.this.direction.setText("Direction : Up Right");
-                    } else if (direction == JoyStick.STICK_RIGHT) {
+                    } else if (cameraDirection == JoyStick.STICK_RIGHT) {
                         VideoStreamActivity.this.direction.setText("Direction : Right");
-                    } else if (direction == JoyStick.STICK_DOWNRIGHT) {
+                    } else if (cameraDirection == JoyStick.STICK_DOWNRIGHT) {
                         VideoStreamActivity.this.direction.setText("Direction : Down Right");
-                    } else if (direction == JoyStick.STICK_DOWN) {
+                    } else if (cameraDirection == JoyStick.STICK_DOWN) {
                         VideoStreamActivity.this.direction.setText("Direction : Down");
-                    } else if (direction == JoyStick.STICK_DOWNLEFT) {
+                    } else if (cameraDirection == JoyStick.STICK_DOWNLEFT) {
                         VideoStreamActivity.this.direction.setText("Direction : Down Left");
-                    } else if (direction == JoyStick.STICK_LEFT) {
+                    } else if (cameraDirection == JoyStick.STICK_LEFT) {
                         VideoStreamActivity.this.direction.setText("Direction : Left");
-                    } else if (direction == JoyStick.STICK_UPLEFT) {
+                    } else if (cameraDirection == JoyStick.STICK_UPLEFT) {
                         VideoStreamActivity.this.direction.setText("Direction : Up Left");
-                    } else if (direction == JoyStick.STICK_NONE) {
+                    } else if (cameraDirection == JoyStick.STICK_NONE) {
                         VideoStreamActivity.this.direction.setText("Direction : Center");
                     }
-                    if(!fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()) {
-                        // Try sending directional values to socket server
+
+                    if (!fixedValues.isChecked() && Singleton.getInstance().getSocket().isBound()) {
+                        // Try sending camera directional values to socket server
                         try {
+                            // Command Camera Flags
+                            char cameraFlag;
+                            char crFlag = 'R';
+                            char cameraAngleFlag;
 
-                            // Command Flags
-                            char driveFlag;
-                            char cmdFlag = 'D';
-                            char angleFlag;
-
-                            // Bad logics hue hue
-                            if (js.getY()>0){
-                                driveFlag = 'B';
-                            }else if(js.getY()==0){
-                                driveFlag = 'I';
-                            }else{
-                                driveFlag = 'F';
+                            // great logix hehe
+                            if (cameraJs.getY() > 0) {
+                                cameraFlag = 'U';
+                            } else if (cameraJs.getY() == 0) {
+                                cameraFlag = 'M';
+                            } else {
+                                cameraFlag = 'D';
                             }
-
                             // Y
-                            int y = js.getY();
+                            int y = cameraJs.getY();
                             if (y < 0) {
                                 y = Math.abs(y);
                             }
@@ -163,32 +173,22 @@ public class VideoStreamActivity extends AppCompatActivity {
                             if (y > 255) {
                                 y = 255;
                             }
-
                             // X
-                            int x = js.getX();
-                            if(x < 0){
+                            int x = cameraJs.getX();
+                            if (x < 0) {
                                 x = Math.abs(x);
-                                angleFlag = 'L';
-                            }else if (x > 0){
-                                angleFlag = 'R';
-                            }else{
-                                angleFlag = 'I';
+                                cameraAngleFlag = 'L';
+                            } else if (x > 0) {
+                                cameraAngleFlag = 'R';
+                            } else {
+                                cameraAngleFlag = 'I';
                             }
                             // If X is bigger then it can be
-                            if (x > 90){
+                            if (x > 90) {
                                 x = 90;
                             }
-
-                            // Create the 7 byte Array to send over TCP socket connection
-                            byte[] byteArray = {0x44,(byte)driveFlag,(byte)angleFlag,(byte)y,(byte)x,0x0d,0x0a,0x04};
-
-//                            // Debug
-//                            System.out.println(">>>>>>DF:"+(byte)driveFlag+"<<<<");
-//                            System.out.println(">>>>>>AF:"+(byte)angleFlag+"<<<<");
-//                            System.out.println(">>>>>>Y:"+(byte)y+"<<<<");
-//                            System.out.println(">>>>>>X:"+(byte)x+"<<<<");
-//                            System.out.println(byteArray[5]);
-//                            System.out.println(byteArray[6]);
+                            // Created a camera-angle 7 byte Array to send over TCP socket connection
+                            byte[] byteArray = {0x44,(byte)cameraFlag,(byte)cameraAngleFlag,(byte)y,(byte)x,0x0d,0x0a,0x04};
 
                             // Send the byteArray
                             Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
@@ -208,7 +208,7 @@ public class VideoStreamActivity extends AppCompatActivity {
                     direction.setText("Direction :");
 
                     // Create the 7 byte Array to send over TCP socket connection
-                    byte[] byteArray = {0x44,(byte)'I',(byte)'I',(byte)0,(byte)0,0xd,0xa,0x4};
+                    byte[] byteArray = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0xd, 0xa, 0x4};
 
                     // Send the byteArray
                     try {
@@ -220,151 +220,269 @@ public class VideoStreamActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
-
     }
+           //SLUT PÅ AXELS SKIT
 
-    /**
-     * Checkbox
-     * @param v
-     */
-    public void onFixed(View v){
-        if(fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()){
-            new Timer().scheduleAtFixedRate(task = new TimerTask() {
-                @Override
-                public void run() {
-                    try {
 
-                        // Command Flags
-                        char driveFlag;
-                        char cmdFlag = 'D';
-                        char angleFlag;
 
-                        // Bad logics
-                        if (js.getY()<0){
-                            driveFlag = 'B';
-                        }else if(js.getY()==0){
-                            driveFlag = 'I';
-                        }else{
-                            driveFlag = 'F';
+
+
+//                            // ANKANS GREJER Set Joystick listener
+//                            layout_joystick.setOnTouchListener(new View.OnTouchListener() {
+//                                public boolean onTouch(View arg0, MotionEvent arg1) {
+//                                    js.drawStick(arg1);
+//                                    if (arg1.getAction() == MotionEvent.ACTION_DOWN
+//                                            || arg1.getAction() == MotionEvent.ACTION_MOVE) {
+//                                        xAxis.setText("X : " + String.valueOf(js.getX()));
+//                                        yAxis.setText("Y : " + String.valueOf(js.getY()));
+//                                        angle.setText("Angle : " + String.valueOf(js.getAngle()));
+//                                        distance.setText("Distance : " + String.valueOf(js.getDistance()));
+//
+//                                        int direction = js.get8Direction();
+//                                        if (direction == JoyStick.STICK_UP) {
+//                                            VideoStreamActivity.this.direction.setText("Direction : Up");
+//                                        } else if (direction == JoyStick.STICK_UPRIGHT) {
+//                                            VideoStreamActivity.this.direction.setText("Direction : Up Right");
+//                                        } else if (direction == JoyStick.STICK_RIGHT) {
+//                                            VideoStreamActivity.this.direction.setText("Direction : Right");
+//                                        } else if (direction == JoyStick.STICK_DOWNRIGHT) {
+//                                            VideoStreamActivity.this.direction.setText("Direction : Down Right");
+//                                        } else if (direction == JoyStick.STICK_DOWN) {
+//                                            VideoStreamActivity.this.direction.setText("Direction : Down");
+//                                        } else if (direction == JoyStick.STICK_DOWNLEFT) {
+//                                            VideoStreamActivity.this.direction.setText("Direction : Down Left");
+//                                        } else if (direction == JoyStick.STICK_LEFT) {
+//                                            VideoStreamActivity.this.direction.setText("Direction : Left");
+//                                        } else if (direction == JoyStick.STICK_UPLEFT) {
+//                                            VideoStreamActivity.this.direction.setText("Direction : Up Left");
+//                                        } else if (direction == JoyStick.STICK_NONE) {
+//                                            VideoStreamActivity.this.direction.setText("Direction : Center");
+//                                        }
+//                                        if (!fixedValues.isChecked() && Singleton.getInstance().getSocket().isBound()) {
+//                                            // Try sending directional values to socket server
+//                                            try {
+//
+//                                                // Command Flags
+//                                                char driveFlag;
+//                                                char cmdFlag = 'D';
+//                                                char angleFlag;
+//
+//                                                // Bad logics hue hue
+//                                                if (js.getY() > 0) {
+//                                                    driveFlag = 'B';
+//                                                } else if (js.getY() == 0) {
+//                                                    driveFlag = 'I';
+//                                                } else {
+//                                                    driveFlag = 'F';
+//                                                }
+//
+//                                                // Y
+//                                                int y = js.getY();
+//                                                if (y < 0) {
+//                                                    y = Math.abs(y);
+//                                                }
+//                                                // not over 255
+//                                                if (y > 255) {
+//                                                    y = 255;
+//                                                }
+//
+//                                                // X
+//                                                int x = js.getX();
+//                                                if (x < 0) {
+//                                                    x = Math.abs(x);
+//                                                    angleFlag = 'L';
+//                                                } else if (x > 0) {
+//                                                    angleFlag = 'R';
+//                                                } else {
+//                                                    angleFlag = 'I';
+//                                                }
+//                                                // If X is bigger then it can be
+//                                                if (x > 90) {
+//                                                    x = 90;
+//                                                }
+//
+//                                                // Create the 7 byte Array to send over TCP socket connection
+//                                                byte[] byteArray = {0x44,(byte)driveFlag,(byte) angleFlag,(byte)y,(byte)x,0x0d,0x0a,0x04};
+//
+////                            // Debug
+////                            System.out.println(">>>>>>DF:"+(byte)driveFlag+"<<<<");
+////                            System.out.println(">>>>>>AF:"+(byte)angleFlag+"<<<<");
+////                            System.out.println(">>>>>>Y:"+(byte)y+"<<<<");
+////                            System.out.println(">>>>>>X:"+(byte)x+"<<<<");
+////                            System.out.println(byteArray[5]);
+////                            System.out.println(byteArray[6]);
+//
+//                                                // Send the byteArray
+//                                                Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
+//
+//                                            } catch (IOException e) {
+//                                                // Server connection error
+//                                                e.printStackTrace();
+//                                            }
+//
+//                                        }
+//                                    } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
+//
+//                                        xAxis.setText("X :");
+//                                        yAxis.setText("Y :");
+//                                        angle.setText("Angle :");
+//                                        distance.setText("Distance :");
+//                                        direction.setText("Direction :");
+//
+//                                        // Create the 7 byte Array to send over TCP socket connection
+//                                        byte[] byteArray = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0xd, 0xa, 0x4};
+//
+//                                        // Send the byteArray
+//                                        try {
+//                                            Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
+//                                        } catch (IOException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                    return true;
+//                                }
+//                            });
+//
+//
+//                        }
+
+                        /**
+                         * Checkbox
+                         * @param v
+                         */
+                    public void onFixed (View v){
+                        if (fixedValues.isChecked() && Singleton.getInstance().getSocket().isBound()) {
+                            new Timer().scheduleAtFixedRate(task = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    try {
+
+                                        // Command Flags
+                                        char driveFlag;
+                                        char cmdFlag = 'D';
+                                        char angleFlag;
+
+                                        // Bad logics
+                                        if (js.getY() < 0) {
+                                            driveFlag = 'B';
+                                        } else if (js.getY() == 0) {
+                                            driveFlag = 'I';
+                                        } else {
+                                            driveFlag = 'F';
+                                        }
+
+                                        // Y
+                                        int y = js.getY();
+                                        if (y < 0) {
+                                            y = Math.abs(y);
+                                        }
+                                        // not over 255
+                                        if (y > 255) {
+                                            y = 255;
+                                        }
+
+                                        // X
+                                        int x = js.getX();
+                                        if (x < 0) {
+                                            x = Math.abs(x);
+                                            angleFlag = 'L';
+                                        } else if (x > 0) {
+                                            angleFlag = 'R';
+                                        } else {
+                                            angleFlag = 'I';
+                                        }
+                                        // If X is bigger then it can be
+                                        if (x > 90) {
+                                            x = 90;
+                                        }
+
+                                        byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0x0d, 0x0a, 0x04};
+
+
+                                        System.out.println(" ");
+                                        System.out.println((byte) y);
+                                        System.out.println((byte) x);
+                                        System.out.println(" ");
+                                        // Send the byteArray
+                                        Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
+
+                                    } catch (IOException e) {
+                                        // Server connection error
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, 0, 50);
+                        } else {
+                            if (task != null) {
+                                task.cancel();
+                            }
                         }
-
-                        // Y
-                        int y = js.getY();
-                        if (y < 0) {
-                            y = Math.abs(y);
-                        }
-                        // not over 255
-                        if (y > 255) {
-                            y = 255;
-                        }
-
-                        // X
-                        int x = js.getX();
-                        if(x < 0){
-                            x = Math.abs(x);
-                            angleFlag = 'L';
-                        }else if (x > 0){
-                            angleFlag = 'R';
-                        }else{
-                            angleFlag = 'I';
-                        }
-                        // If X is bigger then it can be
-                        if (x > 90){
-                            x = 90;
-                        }
-
-                        byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0x0d, 0x0a, 0x04};
-
-
-
-
-                        System.out.println(" ");
-                        System.out.println((byte)y);
-                        System.out.println((byte)x);
-                        System.out.println(" ");
-                        // Send the byteArray
-                        Singleton.getInstance().getSocketConnection().sendBytes(byteArray);
-
-                    } catch (IOException e) {
-                        // Server connection error
-                        e.printStackTrace();
                     }
-                }
-            }, 0, 50);
-        }else{
-            if(task!=null) {
-                task.cancel();
-            }
-        }
-    }
 
-    /**
-     * Create the menu
-     * @param menu
-     * @return
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_bar, menu);
-        return true;
-    }
+                    /**
+                     * Create the menu
+                     * @param menu
+                     * @return
+                     */
+                    @Override
+                    public boolean onCreateOptionsMenu (Menu menu){
+                        MenuInflater inflater = getMenuInflater();
+                        inflater.inflate(R.menu.menu_bar, menu);
+                        return true;
+                    }
 
-    /**
-     * Set the menu button actions
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.Settings:
-                task.cancel();
-                System.out.println("Going to settings");
-                Intent intent = new Intent(this,SettingsActivity.class);
-                startActivity(intent);
+                    /**
+                     * Set the menu button actions
+                     * @param item
+                     * @return
+                     */
+                    @Override
+                    public boolean onOptionsItemSelected (MenuItem item){
+                        // Handle item selection
+                        switch (item.getItemId()) {
+                            case R.id.Settings:
+                                task.cancel();
+                                System.out.println("Going to settings");
+                                Intent intent = new Intent(this, SettingsActivity.class);
+                                startActivity(intent);
 
-                return true;
-            case R.id.logout:
-                System.out.println("logging out");
-                logout();
-                return true;
+                                return true;
+                            case R.id.logout:
+                                System.out.println("logging out");
+                                logout();
+                                return true;
 
-            default:
-                return false;
-        }
-    }
+                            default:
+                                return false;
+                        }
+                    }
 
-    // Quit connection
-    public void logout(){
-        // Debug
-        if(Singleton.getInstance().getSocket().isBound()) {
-            try {
-                if(task != null){
-                    task.cancel();
-                    task = null;
-                }
+                    // Quit connection
+                    public void logout () {
+                        // Debug
+                        if (Singleton.getInstance().getSocket().isBound()) {
+                            try {
+                                if (task != null) {
+                                    task.cancel();
+                                    task = null;
+                                }
 
-                Singleton.getInstance().getSocket().close();
+                                Singleton.getInstance().getSocket().close();
 
-                // Transfer to main
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
+                                // Transfer to main
+                                Intent intent = new Intent(this, MainActivity.class);
+                                startActivity(intent);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
 
-        }
+                        }
 
-    }
+                    }
 
 
-
-}
+                    }
 
 
 
