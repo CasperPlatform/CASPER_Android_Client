@@ -17,11 +17,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.sun.jna.platform.win32.WinDef;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -29,6 +32,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Manual_socket_connection extends AppCompatActivity {
 
@@ -202,19 +207,11 @@ public class Manual_socket_connection extends AppCompatActivity {
                         loading.setVisibility(v.INVISIBLE);
 
                     }else {
-                        Thread penis = new Thread(){
-                            @Override
-                            public void run() {
-                                // convertion task
+
                                 MyClientTask myClientTask = new MyClientTask(
                                         address.getText().toString(),
                                         Integer.parseInt(port.getText().toString()));
                                 myClientTask.execute();
-
-
-                            }
-                        };
-                        penis.start();
 
                     }
                     }};
@@ -264,31 +261,55 @@ public class Manual_socket_connection extends AppCompatActivity {
                     testsocket = new DatagramSocket();
                     testsocket.connect(dstAddressUDP);
 
-                    // Incomming message
-                    byte[] incPackage = new byte[8000];
+                if(testsocket.isConnected()){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                }
 
-                            String data = "test";
-                         DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length());
-                        // Singleton.getInstance().getUDPsocket().send(dataAsPackage);
+
+
+                String data = "test";
+                DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length());
+                // Singleton.getInstance().getUDPsocket().send(dataAsPackage);
                 testsocket.send(dataAsPackage);
-                String tt = "";
                 DatagramPacket test;
-                String str;
+                // Incomming message
+                byte[] incPackage = new byte[8000];
                 test = new DatagramPacket(incPackage, incPackage.length, testsocket.getInetAddress(), testsocket.getPort());
+                Bitmap bMap = null;
+                byte HEADER_FLAG = 0x01;
+                byte PACKET_HEADER_FLAG = 0x02;
+                int packagecount=0;
+
+
                 while(true) {
-                    // while(true) {
-                    //Singleton.getInstance().getUDPsocket().receive(test);
+                    
                     testsocket.receive(test);
-                    str = new String(test.getData(), "UTF-8");
-                    count++;
-                    //System.out.println("pkg: " + count);
-                    //tt = tt + str;
-                    if(count==25) {
+
+                    incPackage =test.getData().clone();
+                    if(incPackage[0] == HEADER_FLAG){
+                        System.out.println("Image nr:" + getNumberFromBytes(Arrays.copyOfRange(incPackage, 2, 6)));
+                        System.out.println("Number of Bytes " + getNumberFromBytes(Arrays.copyOfRange(incPackage, 7, 11)));
+                        System.out.println(String.copyValueOf(new char[]{(char) incPackage[1]}));
+                        System.out.println("number of packages : " + (int)incPackage[6]);
+                        packagecount = (int)incPackage[6];
+                    }
+
+                    if (incPackage[0] == PACKET_HEADER_FLAG) {
+                        count++;
+                        System.out.println("count = "+count);
+                        System.out.println("Image nr " + getNumberFromBytes(Arrays.copyOfRange(incPackage, 1, 5)));
+                    }
+                    if(count==packagecount) {
                         count2++;
-                       // System.out.println("UDP MSG pgaNR:" + count +" -------------------------------------->" + tt);
                         System.out.println("got an image nr: " + count2);
+                      //  bMap =  BitmapFactory.decodeByteArray(test.getData(), 0, test.getData().length);
                         count = 0;
-                        //tt="";
+
                     }
 
                 }
@@ -403,6 +424,23 @@ public class Manual_socket_connection extends AppCompatActivity {
         }
 
 
+    }
+
+    /**
+     * Takes a Bytearray and converts it to an "unsigned int" represented in Java by a long
+     * @param bytes
+     * @return
+     */
+    public long getNumberFromBytes(byte[] bytes){
+        int first,second,third,forth;
+        long result;
+
+        first =  0x000000FF & (int)bytes[0];
+        second = 0x000000FF & (int)bytes[1];
+        third =  0x000000FF & (int)bytes[2];
+        forth =  0x000000FF & (int)bytes[3];
+        result = (first<<24|second<<16|third<<8|forth)& 0xFFFFFFFFL;
+        return result;
     }
 
 

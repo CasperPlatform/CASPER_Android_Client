@@ -57,6 +57,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             // Incomming message
             byte[] incPackage = new byte[8000];
 
+
             while (true) {
 
                 // Pacckage incomming message
@@ -82,7 +83,10 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
         return null;
+
     }
+
+
 
 
     public void sendData(String data) throws IOException {
