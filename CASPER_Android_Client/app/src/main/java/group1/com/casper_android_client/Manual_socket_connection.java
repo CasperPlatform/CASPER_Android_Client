@@ -334,7 +334,7 @@ public class Manual_socket_connection extends AppCompatActivity {
 
                         // Create a bitmap
                         bMap = BitmapFactory.decodeByteArray(imgeArray, 0, imgeArray.length);
-                        
+
 
 
 

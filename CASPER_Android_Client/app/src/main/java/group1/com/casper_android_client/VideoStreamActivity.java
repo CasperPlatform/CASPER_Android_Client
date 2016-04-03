@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -75,12 +76,25 @@ public class VideoStreamActivity extends AppCompatActivity {
                                   }
                     );
 
-
             }
         });
 
             // Start the thread
             thread.start();
+
+        UDPsocket videoStream = null;
+        try {
+            videoStream = new UDPsocket(
+                    "192.168.10.1",
+                    6000);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        videoStream.execute();
+
+
+
+
 
 
 

@@ -1,13 +1,16 @@
 package group1.com.casper_android_client;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 /**
  * Created by Andreas Fransson on 16-03-06.
@@ -39,44 +42,49 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
          * TODO Set fixed Ports UDP 9998 % TCP 9999
          * TODO Access the UI of whatever element is handleing the connection
          */
-        byte[] messages = new byte[8000];
-
+        byte[] packet = new byte[8006];
+        byte HEADER_FLAG = 0x01;
+        byte PACKET_HEADER_FLAG = 0x02;
+        int packageCount = 0;
+        int currentPacket = 0;
+        byte[] imgArray = new byte[0];
+        DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
+        
         try {
-            Singleton.getInstance().setUDPsocket(new DatagramSocket(dstPort,dstAddress));
+
+            InetSocketAddress udpAddress = new InetSocketAddress(dstAddress,dstPort);
+            Singleton.getInstance().setUDPsocket(new DatagramSocket());
+            Singleton.getInstance().getUDPsocket().connect(udpAddress);
 
 
-            // Output msg lenght
-            // int msg_length = messageStr.length();
-            // Msg to bytes convertion
-            // byte[] message = messageStr.getBytes();
-            // Package the message
-            // DatagramPacket msgPacket = new DatagramPacket(message, msg_length, casper, udpSocketPort);
-            // Send Message over UDP
-            // UDPsocket.send(msgPacket);
 
-            // Incomming message
-            byte[] incPackage = new byte[8000];
 
 
             while (true) {
 
-                // Pacckage incomming message
-                //DatagramPacket imagePacket = new DatagramPacket(incPackage, incPackage.length, casper, udpSocketPort);
-                // Get data from incomming buffer
-                //UDPsocket.receive(imagePacket);
-                // Debug
-                //System.out.println(">>>>>>:" + imagePacket.getData().length);
-                DatagramPacket test = new DatagramPacket(incPackage, incPackage.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
-                String text = test.getData().toString();
-                System.out.println("Test data output ----->" + text);
+            Singleton.getInstance().getUDPsocket().receive(imgDataPacket);
+            packet = new byte[imgDataPacket.getLength()];
+            packet = imgDataPacket.getData();
+
+            if(packet[0] == HEADER_FLAG){
+                currentPacket = 0;
+                imgArray = new byte[(int)getNumberFromBytes(Arrays.copyOfRange(packet,7,11))];
+                packageCount = (int)packet[6];
 
             }
-            // convert .JPG image into Bitmap
-            //final Bitmap bMap = BitmapFactory.decodeByteArray(imagePacket.getData(), 0, imagePacket.getData().length);
 
-            // Debug
-            //System.out.println(">>>>>>" + bMap.getHeight());
-            //System.out.println(">>>>>" + bMap.getWidth());
+            if(packet[0] == PACKET_HEADER_FLAG){
+                System.arraycopy(packet,6,imgArray,(int)packet[5]*8000,imgDataPacket.getLength()-6);
+                currentPacket++;
+            }
+
+            if(currentPacket == packageCount-1){
+
+                currentPacket=0;
+            }
+
+
+            }
 
 
         } catch (IOException e) {
@@ -93,6 +101,23 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
         DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length());
         Singleton.getInstance().getUDPsocket().send(dataAsPackage);
 
+    }
+
+    /**
+     * Takes a Bytearray and converts it to an "unsigned int" represented in Java by a long
+     * @param bytes
+     * @return
+     */
+    public long getNumberFromBytes(byte[] bytes){
+        int first,second,third,forth;
+        long result;
+
+        first =  0x000000FF & (int)bytes[0];
+        second = 0x000000FF & (int)bytes[1];
+        third =  0x000000FF & (int)bytes[2];
+        forth =  0x000000FF & (int)bytes[3];
+        result = (first<<24|second<<16|third<<8|forth)& 0xFFFFFFFFL;
+        return result;
     }
 
 

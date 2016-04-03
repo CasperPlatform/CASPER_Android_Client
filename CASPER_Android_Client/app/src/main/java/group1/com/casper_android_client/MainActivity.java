@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }// Backdoor for test purposes
-            else if(user.getText().toString().equals("demo") && password.getText().toString().equals("demo")){
+            else if(user.getText().toString().equals("demo2") && password.getText().toString().equals("demo2")){
 
                 Thread thread = new Thread(new Runnable() {
                     @Override
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 thread.start();
 
             }
-            else if(user.getText().toString().equals("demo2") && password.getText().toString().equals("demo2")) {
+            else if(user.getText().toString().equals("demo") && password.getText().toString().equals("demo")) {
                 // Setting up Socket connection
 
                 Thread thread = new Thread(new Runnable() {
