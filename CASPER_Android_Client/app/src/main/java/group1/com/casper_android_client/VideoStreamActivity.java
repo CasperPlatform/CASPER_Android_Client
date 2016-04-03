@@ -1,6 +1,8 @@
 package group1.com.casper_android_client;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -28,7 +30,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
     private RelativeLayout layout_joystick;
 
     // Image's for Joystick
-    private ImageView image_joystick, image_border;
+    private ImageView image_joystick, image_border,videoStream;
 
     // Debug Text fields for Joystick
     private TextView xAxis, yAxis, angle, distance, direction,responce;
@@ -48,6 +50,8 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_stream);
+
+        videoStream =(ImageView)findViewById(R.id.videoStream);
 
         // Joystick textfields listening on joystick input.
         xAxis = (TextView)findViewById(R.id.xAxis);
@@ -374,6 +378,17 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
     public void imgEvent(byte[] byteArray) {
         System.out.println(byteArray.toString());
         System.out.println("-------------->something happened!!");
+        // Create a bitmap
+        Bitmap bMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        // Set the imageview to bitmap
+        final Bitmap finalBMap = bMap;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                videoStream.setImageBitmap(finalBMap);
+            }
+        });
+
     }
 }
 
