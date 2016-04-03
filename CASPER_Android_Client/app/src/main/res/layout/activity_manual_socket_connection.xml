@@ -10,6 +10,18 @@
     tools:context=".Manual_socket_connection"
     android:background="@color/Casper">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bild"
+        android:src="@drawable/bild"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/response"
+        android:layout_alignRight="@+id/udpCheck"
+        android:layout_alignEnd="@+id/udpCheck" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -134,15 +146,6 @@
         android:indeterminateOnly="true"
         android:layout_below="@+id/socketLogo"
         android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bild"
-        android:src="@drawable/bild"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/errorMsg"
-        android:layout_alignStart="@+id/errorMsg" />
 
     <CheckBox
         android:layout_width="wrap_content"

@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.sun.jna.platform.win32.WinDef;
 
+import org.apache.commons.codec.DecoderException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -278,48 +280,82 @@ public class Manual_socket_connection extends AppCompatActivity {
                 testsocket.send(dataAsPackage);
                 DatagramPacket test;
                 // Incomming message
-                byte[] incPackage = new byte[8000];
-                test = new DatagramPacket(incPackage, incPackage.length, testsocket.getInetAddress(), testsocket.getPort());
+                byte[] incPackage = new byte[10000];
                 Bitmap bMap = null;
                 byte HEADER_FLAG = 0x01;
                 byte PACKET_HEADER_FLAG = 0x02;
                 int packagecount=0;
-
+                byte[] imgeArray = new byte[0];
+                test = new DatagramPacket(incPackage, incPackage.length, testsocket.getInetAddress(), testsocket.getPort());
 
                 while(true) {
-                    
                     testsocket.receive(test);
+                    // Show how much data has been transfered
+                    System.out.println("Package lenght---_>" + test.getLength());
+                    incPackage = new byte[test.getLength()];
+                    // set data to bytearray
+                    incPackage = test.getData();
 
-                    incPackage =test.getData().clone();
+
+                    // If the package is a start package
                     if(incPackage[0] == HEADER_FLAG){
+                        // Reset package count for new image
+                        count =0;
                         System.out.println("Image nr:" + getNumberFromBytes(Arrays.copyOfRange(incPackage, 2, 6)));
                         System.out.println("Number of Bytes " + getNumberFromBytes(Arrays.copyOfRange(incPackage, 7, 11)));
+                        imgeArray =new byte[(int)getNumberFromBytes(Arrays.copyOfRange(incPackage,7,11))];
                         System.out.println(String.copyValueOf(new char[]{(char) incPackage[1]}));
                         System.out.println("number of packages : " + (int)incPackage[6]);
                         packagecount = (int)incPackage[6];
                     }
 
+                    // If the package is part of an image
                     if (incPackage[0] == PACKET_HEADER_FLAG) {
-                        count++;
-                        System.out.println("count = "+count);
-                        System.out.println("Image nr " + getNumberFromBytes(Arrays.copyOfRange(incPackage, 1, 5)));
+                        try {
+                            System.out.println("Image nr: " + getNumberFromBytes(Arrays.copyOfRange(incPackage, 1, 5)));
+                            System.out.println("package number: " + (int) incPackage[5] + " and counter is at: " + count);
+                            System.arraycopy(incPackage, 6, imgeArray, (int) incPackage[5] * 8000, test.getLength() - 6);
+                            // count the package
+                            count++;
+                        }catch (IndexOutOfBoundsException e){
+                            System.out.println("ajajaja");
+
+                        }
+
                     }
-                    if(count==packagecount) {
+
+                    // If we got all packages for an image create an image and display it
+                    if(count==packagecount-1) {
+
+                        // Count the amount of images recived
                         count2++;
                         System.out.println("got an image nr: " + count2);
-                      //  bMap =  BitmapFactory.decodeByteArray(test.getData(), 0, test.getData().length);
+                        System.out.println("Package number when image recived :" + count + "packnr" + (int) incPackage[5]);
+
+                        // Create a bitmap
+                        bMap = BitmapFactory.decodeByteArray(imgeArray, 0, imgeArray.length);
+                        
+
+
+
+
+                        // reset package counter
                         count = 0;
+
+                        // Set the imageview to bitmap
+                        final Bitmap finalBMap = bMap;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                testImage.setImageBitmap(finalBMap);
+                            }
+                        });
 
                     }
 
                 }
-                        //  }
-                    // convert .JPG image into Bitmap
-                    //final Bitmap bMap = BitmapFactory.decodeByteArray(imagePacket.getData(), 0, imagePacket.getData().length);
 
-                    // Debug
-                    //System.out.println(">>>>>>" + bMap.getHeight());
-                    //System.out.println(">>>>>" + bMap.getWidth());
+
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             } catch (SocketException e) {
