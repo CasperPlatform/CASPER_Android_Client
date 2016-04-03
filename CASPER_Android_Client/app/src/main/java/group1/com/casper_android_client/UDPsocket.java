@@ -22,16 +22,21 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
     // Convesion variables
     InetAddress dstAddress;
     int dstPort;
+    private imgReady myImageReady;
+    private boolean is;
 
-    UDPsocket(String addr, int port) throws UnknownHostException {
+
+    UDPsocket(imgReady ir,String addr, int port) throws UnknownHostException {
         dstAddress = InetAddress.getByName(addr);
         dstPort = port;
+        this.myImageReady = ir;
 
     }
 
+
+
     @Override
     protected Void doInBackground(Void... v) {
-        System.out.println(">>>>>>>>>bound?: " + Singleton.getInstance().getSocket().isBound());
 
         /**
          *
@@ -48,20 +53,20 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
         int packageCount = 0;
         int currentPacket = 0;
         byte[] imgArray = new byte[0];
-        DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
-        
+
         try {
 
             InetSocketAddress udpAddress = new InetSocketAddress(dstAddress,dstPort);
             Singleton.getInstance().setUDPsocket(new DatagramSocket());
             Singleton.getInstance().getUDPsocket().connect(udpAddress);
 
+            DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
 
-
+            sendData("bajs");
 
 
             while (true) {
-
+                System.out.println("inne i while");
             Singleton.getInstance().getUDPsocket().receive(imgDataPacket);
             packet = new byte[imgDataPacket.getLength()];
             packet = imgDataPacket.getData();
@@ -75,17 +80,20 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
 
             if(packet[0] == PACKET_HEADER_FLAG){
                 System.arraycopy(packet,6,imgArray,(int)packet[5]*8000,imgDataPacket.getLength()-6);
-                currentPacket++;
+                currentPacket  = (int)packet[5];
+                System.out.println("package: " + (int)packet[5]);
             }
 
             if(currentPacket == packageCount-1){
-
+                is = true;
+                if (is){
+                    myImageReady.imgEvent(imgArray);
+                    System.out.println("fick en bild");
+                }
                 currentPacket=0;
+                is = false;
             }
-
-
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,9 +106,9 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
 
 
     public void sendData(String data) throws IOException {
-        DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length());
+        DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length(),Singleton.getInstance().getUDPsocket().getInetAddress(),Singleton.getInstance().getUDPsocket().getPort());
         Singleton.getInstance().getUDPsocket().send(dataAsPackage);
-
+        System.out.println("inne i send");
     }
 
     /**

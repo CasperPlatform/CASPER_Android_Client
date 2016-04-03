@@ -316,7 +316,9 @@ public class Manual_socket_connection extends AppCompatActivity {
                             System.out.println("package number: " + (int) incPackage[5] + " and counter is at: " + count);
                             System.arraycopy(incPackage, 6, imgeArray, (int) incPackage[5] * 8000, test.getLength() - 6);
                             // count the package
-                            count++;
+                            count = (int)incPackage[5];
+
+
                         }catch (IndexOutOfBoundsException e){
                             System.out.println("ajajaja");
 
@@ -330,7 +332,7 @@ public class Manual_socket_connection extends AppCompatActivity {
                         // Count the amount of images recived
                         count2++;
                         System.out.println("got an image nr: " + count2);
-                        System.out.println("Package number when image recived :" + count + "packnr" + (int) incPackage[5]);
+                        System.out.println("Package number when image recived :" + count + "packnr: " + (int) incPackage[5]);
 
                         // Create a bitmap
                         bMap = BitmapFactory.decodeByteArray(imgeArray, 0, imgeArray.length);

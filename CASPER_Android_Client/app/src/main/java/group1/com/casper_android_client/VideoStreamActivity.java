@@ -22,7 +22,7 @@ import java.util.TimerTask;
  * Created by Andreas Fransson
  * TODO fix so that video feed starts here
  */
-public class VideoStreamActivity extends AppCompatActivity {
+public class VideoStreamActivity extends AppCompatActivity implements imgReady{
 
     // Joystick
     private RelativeLayout layout_joystick;
@@ -84,13 +84,15 @@ public class VideoStreamActivity extends AppCompatActivity {
 
         UDPsocket videoStream = null;
         try {
-            videoStream = new UDPsocket(
-                    "192.168.10.1",
+            videoStream = new UDPsocket(this,
+                    "192.168.0.22",
                     6000);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
         videoStream.execute();
+
+
 
 
 
@@ -368,7 +370,11 @@ public class VideoStreamActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void imgEvent(byte[] byteArray) {
+        System.out.println(byteArray.toString());
+        System.out.println("-------------->something happened!!");
+    }
 }
 
 
