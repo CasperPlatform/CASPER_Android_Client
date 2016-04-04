@@ -10,12 +10,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,10 +39,14 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
 
     // Checkbox to start the timed sending of values
     private CheckBox fixedValues;
+    private Button request;
     TimerTask task;
 
     // Make a Joystick
     JoyStick js;
+
+
+
 
     /**
      * Activate the activity
@@ -63,6 +69,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
 
         // Checkbox to start sending of fixed values
         fixedValues = (CheckBox)findViewById(R.id.fixedValue);
+        request = (Button)findViewById(R.id.request);
 
         // Joystick
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
@@ -89,20 +96,12 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         UDPsocket videoStream = null;
         try {
             videoStream = new UDPsocket(this,
-                    "192.168.0.22",
+                    "192.168.10.1",
                     6000);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
         videoStream.execute();
-
-
-
-
-
-
-
-
 
 
         // Joystick creation
@@ -122,31 +121,31 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                 js.drawStick(arg1);
                 if (arg1.getAction() == MotionEvent.ACTION_DOWN
                         || arg1.getAction() == MotionEvent.ACTION_MOVE) {
-                    xAxis.setText("X : " + String.valueOf(js.getX()));
-                    yAxis.setText("Y : " + String.valueOf(js.getY()));
-                    angle.setText("Angle : " + String.valueOf(js.getAngle()));
-                    distance.setText("Distance : " + String.valueOf(js.getDistance()));
+//                    xAxis.setText("X : " + String.valueOf(js.getX()));
+//                    yAxis.setText("Y : " + String.valueOf(js.getY()));
+//                    angle.setText("Angle : " + String.valueOf(js.getAngle()));
+//                    distance.setText("Distance : " + String.valueOf(js.getDistance()));
 
                     int direction = js.get8Direction();
-                    if (direction == JoyStick.STICK_UP) {
-                        VideoStreamActivity.this.direction.setText("Direction : Up");
-                    } else if (direction == JoyStick.STICK_UPRIGHT) {
-                        VideoStreamActivity.this.direction.setText("Direction : Up Right");
-                    } else if (direction == JoyStick.STICK_RIGHT) {
-                        VideoStreamActivity.this.direction.setText("Direction : Right");
-                    } else if (direction == JoyStick.STICK_DOWNRIGHT) {
-                        VideoStreamActivity.this.direction.setText("Direction : Down Right");
-                    } else if (direction == JoyStick.STICK_DOWN) {
-                        VideoStreamActivity.this.direction.setText("Direction : Down");
-                    } else if (direction == JoyStick.STICK_DOWNLEFT) {
-                        VideoStreamActivity.this.direction.setText("Direction : Down Left");
-                    } else if (direction == JoyStick.STICK_LEFT) {
-                        VideoStreamActivity.this.direction.setText("Direction : Left");
-                    } else if (direction == JoyStick.STICK_UPLEFT) {
-                        VideoStreamActivity.this.direction.setText("Direction : Up Left");
-                    } else if (direction == JoyStick.STICK_NONE) {
-                        VideoStreamActivity.this.direction.setText("Direction : Center");
-                    }
+//                    if (direction == JoyStick.STICK_UP) {
+//                        VideoStreamActivity.this.direction.setText("Direction : Up");
+//                    } else if (direction == JoyStick.STICK_UPRIGHT) {
+//                        VideoStreamActivity.this.direction.setText("Direction : Up Right");
+//                    } else if (direction == JoyStick.STICK_RIGHT) {
+//                        VideoStreamActivity.this.direction.setText("Direction : Right");
+//                    } else if (direction == JoyStick.STICK_DOWNRIGHT) {
+//                        VideoStreamActivity.this.direction.setText("Direction : Down Right");
+//                    } else if (direction == JoyStick.STICK_DOWN) {
+//                        VideoStreamActivity.this.direction.setText("Direction : Down");
+//                    } else if (direction == JoyStick.STICK_DOWNLEFT) {
+//                        VideoStreamActivity.this.direction.setText("Direction : Down Left");
+//                    } else if (direction == JoyStick.STICK_LEFT) {
+//                        VideoStreamActivity.this.direction.setText("Direction : Left");
+//                    } else if (direction == JoyStick.STICK_UPLEFT) {
+//                        VideoStreamActivity.this.direction.setText("Direction : Up Left");
+//                    } else if (direction == JoyStick.STICK_NONE) {
+//                        VideoStreamActivity.this.direction.setText("Direction : Center");
+//                    }
                     if(!fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()) {
                         // Try sending directional values to socket server
                         try {
@@ -212,11 +211,11 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                     }
                 } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
 
-                    xAxis.setText("X :");
-                    yAxis.setText("Y :");
-                    angle.setText("Angle :");
-                    distance.setText("Distance :");
-                    direction.setText("Direction :");
+//                    xAxis.setText("X :");
+//                    yAxis.setText("Y :");
+//                    angle.setText("Angle :");
+//                    distance.setText("Distance :");
+//                    direction.setText("Direction :");
 
                     // Create the 7 byte Array to send over TCP socket connection
                     byte[] byteArray = {0x44,(byte)'I',(byte)'I',(byte)0,(byte)0,0xd,0xa,0x4};
@@ -231,10 +230,9 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                 return true;
             }
         });
-
-
-
     }
+
+
 
     /**
      * Checkbox
@@ -311,6 +309,9 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         }
     }
 
+
+
+
     /**
      * Create the menu
      * @param menu
@@ -349,7 +350,10 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         }
     }
 
-    // Quit connection
+
+    /**
+     * Log out
+     */
     public void logout(){
         // Debug
         if(Singleton.getInstance().getSocket().isBound()) {
@@ -374,9 +378,13 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
     }
 
 
+
+    /**
+     * Update the video display
+     * @param byteArray
+     */
     @Override
     public void imgEvent(byte[] byteArray) {
-        System.out.println(byteArray.toString());
         System.out.println("-------------->something happened!!");
         // Create a bitmap
         Bitmap bMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
@@ -390,6 +398,20 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         });
 
     }
+
+
+
+    /**
+     * Send a kill command to the Server
+     * @throws IOException
+     */
+    public void killSwitch(View v) throws IOException {
+        String killswitch = "kill";
+        DatagramPacket killSwitchPacket = new DatagramPacket(killswitch.getBytes(),killswitch.length(),Singleton.getInstance().getUDPsocket().getInetAddress(),Singleton.getInstance().getUDPsocket().getPort());
+        Singleton.getInstance().getUDPsocket().send(killSwitchPacket);
+    }
+
+
 }
 
 

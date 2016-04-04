@@ -14,7 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/videoStream"
-            android:background="#6969" />
+            android:background="#6969"
+            android:scaleType="fitStart" />
 
         <ImageView
             android:layout_width="200dp"
@@ -24,6 +25,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="#666" />
+
     </FrameLayout>
 
     <RelativeLayout
@@ -36,67 +38,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"></RelativeLayout>
+        android:layout_marginLeft="10dp">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
-
-        <TextView
-            android:id="@+id/xAxis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="X"
-            android:textColor="#ffffff"
-            android:textSize="20dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:id="@+id/angle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Y"
-            android:textColor="#ffffff"
-            android:textSize="20dp"
-            android:layout_below="@+id/xAxis"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:id="@+id/yAxis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Angle"
-            android:textColor="#ffffff"
-            android:textSize="20dp"
-            android:layout_below="@+id/angle"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:id="@+id/direction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Distance"
-            android:textColor="#ffffff"
-            android:textSize="20dp"
-            android:layout_below="@+id/yAxis"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:id="@+id/distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Direction"
-            android:textColor="#ffffff"
-            android:textSize="20dp"
-            android:layout_below="@+id/direction"
-            android:layout_centerHorizontal="true" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -108,18 +52,20 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="Get Video"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="@string/getVideo"
         android:id="@+id/request"
-        android:layout_marginRight="23dp"
-        android:layout_marginEnd="23dp"
-        android:layout_alignBottom="@+id/layout_joystick"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="29dp"
         android:background="#2DEF96"
-        android:visibility="invisible" />
+        android:visibility="visible"
+        android:layout_gravity="center_horizontal|top"
+        android:onClick="killSwitch"
+        android:nestedScrollingEnabled="false"
+        android:layout_toStartOf="@+id/fixedValue"
+        android:layout_alignRight="@+id/fixedValue"
+        android:layout_alignEnd="@+id/fixedValue"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -130,19 +76,7 @@
         android:textColor="#ffffff"
         android:onClick="onFixed"
         android:visibility="visible"
-        android:layout_alignTop="@+id/pointer"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/responce"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="31dp"
-        android:textColor="#000000" />
+        android:layout_alignLeft="@+id/layout_joystick"
+        android:layout_alignStart="@+id/layout_joystick" />
 
 </RelativeLayout>

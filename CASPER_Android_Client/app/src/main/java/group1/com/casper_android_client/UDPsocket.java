@@ -14,7 +14,6 @@ import java.util.Arrays;
 
 /**
  * Created by Andreas Fransson on 16-03-06.
- * TODO fix construcor so that the right type of connection is established.
  *
  */
 public class UDPsocket extends AsyncTask<Void, Void, Void> {
@@ -25,7 +24,13 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
     private imgReady myImageReady;
     private boolean is;
 
-
+    /**
+     * UDPsocket Constructor
+     * @param ir
+     * @param addr
+     * @param port
+     * @throws UnknownHostException
+     */
     UDPsocket(imgReady ir,String addr, int port) throws UnknownHostException {
         dstAddress = InetAddress.getByName(addr);
         dstPort = port;
@@ -34,19 +39,14 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
     }
 
 
-
+    /**
+     * Settup UDP connection.
+     * @param v
+     * @return
+     */
     @Override
     protected Void doInBackground(Void... v) {
 
-        /**
-         *
-         * TEST UDP CONNECTION
-         *
-         * TODO Make functional implementation
-         * TODO A no need to write in connection details
-         * TODO Set fixed Ports UDP 9998 % TCP 9999
-         * TODO Access the UI of whatever element is handleing the connection
-         */
         byte[] packet = new byte[8006];
         byte HEADER_FLAG = 0x01;
         byte PACKET_HEADER_FLAG = 0x02;
@@ -103,13 +103,18 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
     }
 
 
-
-
+    /**
+     * Sends a message to the Server
+     * @param data
+     * @throws IOException
+     */
     public void sendData(String data) throws IOException {
         DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length(),Singleton.getInstance().getUDPsocket().getInetAddress(),Singleton.getInstance().getUDPsocket().getPort());
         Singleton.getInstance().getUDPsocket().send(dataAsPackage);
         System.out.println("inne i send");
     }
+
+
 
     /**
      * Takes a Bytearray and converts it to an "unsigned int" represented in Java by a long
@@ -127,10 +132,4 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
         result = (first<<24|second<<16|third<<8|forth)& 0xFFFFFFFFL;
         return result;
     }
-
-
-
-
-
-
 }
