@@ -62,6 +62,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
 
             DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
 
+            System.out.println("-------->skickar start cmd");
             sendData("start");
 
 

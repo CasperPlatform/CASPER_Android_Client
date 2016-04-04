@@ -1,8 +1,10 @@
 package group1.com.casper_android_client;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -44,6 +46,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
 
     // Make a Joystick
     JoyStick js;
+    UDPsocket videoStreamTask = null;
 
 
 
@@ -74,15 +77,13 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
 
 
-        UDPsocket videoStream = null;
-        try {
-            videoStream = new UDPsocket(this,
-                    "192.168.10.1",
-                    6000);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        videoStream.execute();
+            try{
+                videoStreamTask = new UDPsocket(this,
+                        "192.168.10.1",
+                        6000);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
 
 
         // Joystick creation
@@ -102,31 +103,10 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                 js.drawStick(arg1);
                 if (arg1.getAction() == MotionEvent.ACTION_DOWN
                         || arg1.getAction() == MotionEvent.ACTION_MOVE) {
-//                    xAxis.setText("X : " + String.valueOf(js.getX()));
-//                    yAxis.setText("Y : " + String.valueOf(js.getY()));
-//                    angle.setText("Angle : " + String.valueOf(js.getAngle()));
-//                    distance.setText("Distance : " + String.valueOf(js.getDistance()));
 
                     int direction = js.get8Direction();
-//                    if (direction == JoyStick.STICK_UP) {
-//                        VideoStreamActivity.this.direction.setText("Direction : Up");
-//                    } else if (direction == JoyStick.STICK_UPRIGHT) {
-//                        VideoStreamActivity.this.direction.setText("Direction : Up Right");
-//                    } else if (direction == JoyStick.STICK_RIGHT) {
-//                        VideoStreamActivity.this.direction.setText("Direction : Right");
-//                    } else if (direction == JoyStick.STICK_DOWNRIGHT) {
-//                        VideoStreamActivity.this.direction.setText("Direction : Down Right");
-//                    } else if (direction == JoyStick.STICK_DOWN) {
-//                        VideoStreamActivity.this.direction.setText("Direction : Down");
-//                    } else if (direction == JoyStick.STICK_DOWNLEFT) {
-//                        VideoStreamActivity.this.direction.setText("Direction : Down Left");
-//                    } else if (direction == JoyStick.STICK_LEFT) {
-//                        VideoStreamActivity.this.direction.setText("Direction : Left");
-//                    } else if (direction == JoyStick.STICK_UPLEFT) {
-//                        VideoStreamActivity.this.direction.setText("Direction : Up Left");
-//                    } else if (direction == JoyStick.STICK_NONE) {
-//                        VideoStreamActivity.this.direction.setText("Direction : Center");
-//                    }
+
+
                     if(!fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()) {
                         // Try sending directional values to socket server
                         try {
@@ -173,13 +153,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                             // Create the 7 byte Array to send over TCP socket connection
                             byte[] byteArray = {0x44,(byte)driveFlag,(byte)angleFlag,(byte)y,(byte)x,0x0d,0x0a,0x04};
 
-//                            // Debug
-//                            System.out.println(">>>>>>DF:"+(byte)driveFlag+"<<<<");
-//                            System.out.println(">>>>>>AF:"+(byte)angleFlag+"<<<<");
-//                            System.out.println(">>>>>>Y:"+(byte)y+"<<<<");
-//                            System.out.println(">>>>>>X:"+(byte)x+"<<<<");
-//                            System.out.println(byteArray[5]);
-//                            System.out.println(byteArray[6]);
+
 
                             // Send the byteArray
                             Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
@@ -192,11 +166,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                     }
                 } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
 
-//                    xAxis.setText("X :");
-//                    yAxis.setText("Y :");
-//                    angle.setText("Angle :");
-//                    distance.setText("Distance :");
-//                    direction.setText("Direction :");
+
 
                     // Create the 7 byte Array to send over TCP socket connection
                     byte[] byteArray = {0x44,(byte)'I',(byte)'I',(byte)0,(byte)0,0xd,0xa,0x4};
@@ -212,7 +182,14 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
             }
         });
     }
+    @Override
+    protected void onResume(){
+    super.onResume();
+        System.out.println("----->resuming");
+        videoStreamTask.execute();
+        System.out.println("-----> is canceled? "+videoStreamTask.isCancelled());
 
+    }
 
 
     /**
@@ -305,6 +282,8 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         return true;
     }
 
+
+
     /**
      * Set the menu button actions
      * @param item
@@ -315,7 +294,8 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.Settings:
-                task.cancel();
+
+                //task.cancel();
                 System.out.println("Going to settings");
                 Intent intent = new Intent(this,SettingsActivity.class);
                 startActivity(intent);
@@ -325,7 +305,19 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                 System.out.println("logging out");
                 logout();
                 return true;
+            case android.R.id.home:
+                System.out.println("bajs");
+                try {
+                    kill();
+                    videoStreamTask.cancel(true);
+                    System.out.println("----->" + videoStreamTask.isCancelled());
+                    finish();
+                    NavUtils.navigateUpFromSameTask(this);
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return true;
             default:
                 return false;
         }
@@ -386,11 +378,15 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
      * @throws IOException
      */
     public void killSwitch(View v) throws IOException {
+        kill();
+    }
+
+    public void kill() throws IOException {
         String killswitch = "kill";
+        System.out.println("--------->kill");
         DatagramPacket killSwitchPacket = new DatagramPacket(killswitch.getBytes(),killswitch.length(),Singleton.getInstance().getUDPsocket().getInetAddress(),Singleton.getInstance().getUDPsocket().getPort());
         Singleton.getInstance().getUDPsocket().send(killSwitchPacket);
     }
-
 
 }
 
