@@ -12,6 +12,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -30,11 +35,12 @@ import java.util.TimerTask;
  */
 public class VideoStreamActivity extends AppCompatActivity implements imgReady{
 
+    boolean is = false;
     // Joystick
     private RelativeLayout layout_joystick;
 
     // Image's for Joystick
-    private ImageView image_joystick, image_border,videoStream;
+    private ImageView image_joystick, image_border,videoStream,mapView;
 
     // Debug Text fields for Joystick
     private TextView xAxis, yAxis, angle, distance, direction,responce;
@@ -72,6 +78,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         // Checkbox to start sending of fixed values
         fixedValues = (CheckBox)findViewById(R.id.fixedValue);
         request = (Button)findViewById(R.id.request);
+        mapView = (ImageView)findViewById(R.id.mapView);
 
         // Joystick
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
@@ -185,10 +192,11 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
     @Override
     protected void onResume(){
     super.onResume();
-        System.out.println("----->resuming");
-        videoStreamTask.execute();
-        System.out.println("-----> is canceled? "+videoStreamTask.isCancelled());
-
+        if(videoStreamTask.isCancelled()) {
+            System.out.println("----->resuming");
+            videoStreamTask.execute();
+            System.out.println("-----> is canceled? " + videoStreamTask.isCancelled());
+        }
     }
 
 
@@ -384,8 +392,38 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
     public void kill() throws IOException {
         String killswitch = "kill";
         System.out.println("--------->kill");
-        DatagramPacket killSwitchPacket = new DatagramPacket(killswitch.getBytes(),killswitch.length(),Singleton.getInstance().getUDPsocket().getInetAddress(),Singleton.getInstance().getUDPsocket().getPort());
-        Singleton.getInstance().getUDPsocket().send(killSwitchPacket);
+        if(Singleton.getInstance().getUDPsocket().isConnected()) {
+            DatagramPacket killSwitchPacket = new DatagramPacket(killswitch.getBytes(), killswitch.length(), Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
+            Singleton.getInstance().getUDPsocket().send(killSwitchPacket);
+        }
+
+    }
+
+    public void bigsmall(View v){
+        final float growTo = 1.5f;
+        final long duration = 1200;
+        AnimationSet growAndShrink = new AnimationSet(true);
+
+        if(!is) {
+            is = true;
+            ScaleAnimation grow = new ScaleAnimation(1, growTo, 1, growTo,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            grow.setDuration(duration / 2);
+            growAndShrink.addAnimation(grow);
+        }else {
+            is = false;
+            ScaleAnimation shrink = new ScaleAnimation(growTo, 1, growTo, 1,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            shrink.setDuration(duration / 2);
+            shrink.setStartOffset(duration / 2);
+            growAndShrink.addAnimation(shrink);
+        }
+        growAndShrink.setFillAfter(true);
+        growAndShrink.setInterpolator(new LinearInterpolator());
+        mapView.startAnimation(growAndShrink);
+
     }
 
 }
