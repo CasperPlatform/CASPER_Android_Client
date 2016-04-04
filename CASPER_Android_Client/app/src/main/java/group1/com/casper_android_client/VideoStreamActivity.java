@@ -65,7 +65,6 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         angle = (TextView)findViewById(R.id.angle);
         distance = (TextView)findViewById(R.id.distance);
         direction = (TextView)findViewById(R.id.direction);
-        responce = (TextView)findViewById(R.id.responce);
 
         // Checkbox to start sending of fixed values
         fixedValues = (CheckBox)findViewById(R.id.fixedValue);
@@ -74,24 +73,6 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         // Joystick
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
 
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                    runOnUiThread(new Runnable() {
-                                      @Override
-                                      public void run() {
-                                        responce.setText(Singleton.getInstance().getSocketData());
-                                      }
-                                  }
-                    );
-
-            }
-        });
-
-            // Start the thread
-            thread.start();
 
         UDPsocket videoStream = null;
         try {
@@ -385,7 +366,6 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
      */
     @Override
     public void imgEvent(byte[] byteArray) {
-        System.out.println("-------------->something happened!!");
         // Create a bitmap
         Bitmap bMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         // Set the imageview to bitmap

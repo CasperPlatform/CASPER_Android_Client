@@ -62,11 +62,10 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
 
             DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
 
-            sendData("bajs");
+            sendData("start");
 
 
             while (true) {
-                System.out.println("inne i while");
             Singleton.getInstance().getUDPsocket().receive(imgDataPacket);
             packet = new byte[imgDataPacket.getLength()];
             packet = imgDataPacket.getData();
@@ -79,7 +78,11 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             }
 
             if(packet[0] == PACKET_HEADER_FLAG){
-                System.arraycopy(packet,6,imgArray,(int)packet[5]*8000,imgDataPacket.getLength()-6);
+                try {
+                    System.arraycopy(packet, 6, imgArray, (int) packet[5] * 8000, imgDataPacket.getLength() - 6);
+                }catch (ArrayIndexOutOfBoundsException e){
+                    System.out.println("oh noes....");
+                }
                 currentPacket  = (int)packet[5];
                 System.out.println("package: " + (int)packet[5]);
             }
