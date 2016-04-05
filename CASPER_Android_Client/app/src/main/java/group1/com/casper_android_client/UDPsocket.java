@@ -59,6 +59,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
 
             InetSocketAddress udpAddress = new InetSocketAddress(dstAddress,dstPort);
             DatagramSocket UDPsocket = new DatagramSocket();
+            UDPsocket.setReuseAddress(true);
             UDPsocket.connect(udpAddress);
             //Singleton.getInstance().setUDPsocket(new DatagramSocket());
             //Singleton.getInstance().getUDPsocket().connect(udpAddress);
@@ -66,7 +67,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             //DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
             DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, UDPsocket.getInetAddress(), UDPsocket.getPort());
 
-            System.out.println("-------->skickar start cmd");
+            System.out.println("-------->skickar start cmd<--------");
             sendData("start");
 
 
@@ -102,6 +103,11 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
                 currentPacket=0;
                 is = false;
             }
+
+                if (isCancelled()) {
+                    break;
+                }
+
             }
 
         } catch (IOException e) {

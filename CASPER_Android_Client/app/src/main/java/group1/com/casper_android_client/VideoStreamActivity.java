@@ -254,9 +254,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
 
                         byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0x0d, 0x0a, 0x04};
 
-
-
-
+                        // Debug
                         System.out.println(" ");
                         System.out.println((byte)y);
                         System.out.println((byte)x);
@@ -316,10 +314,13 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                 logout();
                 return true;
             case android.R.id.home:
-                System.out.println("bajs");
+                System.out.println("------>Pressed android.native back navigation button<----");
                 try {
                     videoStreamTask.sendData("kill");
+                    videoStreamTask.UDPsocket.disconnect();
+                    videoStreamTask.UDPsocket.close();
                     videoStreamTask.cancel(true);
+
                     System.out.println("----->" + videoStreamTask.isCancelled());
                     finish();
                     NavUtils.navigateUpFromSameTask(this);
