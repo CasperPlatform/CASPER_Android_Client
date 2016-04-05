@@ -23,7 +23,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
     int dstPort;
     private imgReady myImageReady;
     private boolean is;
-
+    DatagramSocket UDPsocket;
     /**
      * UDPsocket Constructor
      * @param ir
@@ -48,6 +48,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... v) {
 
         byte[] packet = new byte[8006];
+        byte[] sendPacket = new byte[1024];
         byte HEADER_FLAG = 0x01;
         byte PACKET_HEADER_FLAG = 0x02;
         int packageCount = 0;
@@ -57,17 +58,21 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
         try {
 
             InetSocketAddress udpAddress = new InetSocketAddress(dstAddress,dstPort);
-            Singleton.getInstance().setUDPsocket(new DatagramSocket());
-            Singleton.getInstance().getUDPsocket().connect(udpAddress);
+            DatagramSocket UDPsocket = new DatagramSocket();
+            UDPsocket.connect(udpAddress);
+            //Singleton.getInstance().setUDPsocket(new DatagramSocket());
+            //Singleton.getInstance().getUDPsocket().connect(udpAddress);
 
-            DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
+            //DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
+            DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, UDPsocket.getInetAddress(), UDPsocket.getPort());
 
             System.out.println("-------->skickar start cmd");
             sendData("start");
 
 
             while (true) {
-            Singleton.getInstance().getUDPsocket().receive(imgDataPacket);
+            //Singleton.getInstance().getUDPsocket().receive(imgDataPacket);
+            UDPsocket.receive(imgDataPacket);
             packet = new byte[imgDataPacket.getLength()];
             packet = imgDataPacket.getData();
 
@@ -113,8 +118,10 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
      * @throws IOException
      */
     public void sendData(String data) throws IOException {
-        DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length(),Singleton.getInstance().getUDPsocket().getInetAddress(),Singleton.getInstance().getUDPsocket().getPort());
-        Singleton.getInstance().getUDPsocket().send(dataAsPackage);
+        //DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length(),Singleton.getInstance().getUDPsocket().getInetAddress(),Singleton.getInstance().getUDPsocket().getPort());
+        //Singleton.getInstance().getUDPsocket().send(dataAsPackage);
+        DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length(),UDPsocket.getInetAddress(),UDPsocket.getPort());
+        UDPsocket.send(dataAsPackage);
         System.out.println("inne i send");
     }
 

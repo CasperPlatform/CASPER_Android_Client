@@ -92,6 +92,8 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                 e.printStackTrace();
             }
 
+        videoStreamTask.execute();
+
 
         // Joystick creation
         js = new JoyStick(getApplicationContext()
@@ -189,15 +191,15 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
             }
         });
     }
-    @Override
-    protected void onResume(){
-    super.onResume();
-        if(videoStreamTask.isCancelled()) {
-            System.out.println("----->resuming");
-            videoStreamTask.execute();
-            System.out.println("-----> is canceled? " + videoStreamTask.isCancelled());
-        }
-    }
+//    @Override
+//    protected void onResume(){
+//    super.onResume();
+//        if(videoStreamTask.isCancelled()) {
+//            System.out.println("----->resuming");
+//            videoStreamTask.execute();
+//            System.out.println("-----> is canceled? " + videoStreamTask.isCancelled());
+//        }
+//    }
 
 
     /**
@@ -316,7 +318,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
             case android.R.id.home:
                 System.out.println("bajs");
                 try {
-                    kill();
+                    videoStreamTask.sendData("kill");
                     videoStreamTask.cancel(true);
                     System.out.println("----->" + videoStreamTask.isCancelled());
                     finish();
@@ -386,20 +388,14 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
      * @throws IOException
      */
     public void killSwitch(View v) throws IOException {
-        kill();
+        System.out.println("-------> Sent Kill cmd <-------");
+        videoStreamTask.sendData("kill");
     }
 
-    public void kill() throws IOException {
-        String killswitch = "kill";
-        System.out.println("--------->kill");
-        if(Singleton.getInstance().getUDPsocket().isConnected()) {
-            DatagramPacket killSwitchPacket = new DatagramPacket(killswitch.getBytes(), killswitch.length(), Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
-            Singleton.getInstance().getUDPsocket().send(killSwitchPacket);
-        }
 
-    }
 
     public void bigsmall(View v){
+
         final float growTo = 1.5f;
         final long duration = 1200;
         AnimationSet growAndShrink = new AnimationSet(true);

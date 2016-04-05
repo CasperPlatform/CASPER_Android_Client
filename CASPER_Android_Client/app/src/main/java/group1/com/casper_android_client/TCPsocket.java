@@ -43,12 +43,9 @@ public class TCPsocket extends AsyncTask<Void, Void, Void> {
 
         /**
          *
-         * TEST UDP CONNECTION
          *
-         * TODO Make functional implementation
-         * TODO A no need to write in connection details
-         * TODO Set fixed Ports UDP 9998 % TCP 9999
-         * TODO Access the UI of whatever element is handleing the connection
+         * TODO Set fixed Ports TCP 9999
+         * TODO Access the UI of whatever element is handleing the connection via interface
          */
 
             try {
