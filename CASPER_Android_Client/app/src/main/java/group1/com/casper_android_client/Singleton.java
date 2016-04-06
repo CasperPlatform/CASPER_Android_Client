@@ -1,6 +1,7 @@
 package group1.com.casper_android_client;
 
 import java.net.Socket;
+import group1.com.casper_android_client.TCPsocket;
 
 /**
  * Created by Andreas Fransson
@@ -66,7 +67,7 @@ public class Singleton {
     /**
      *
      */
-    private group1.com.casper_android_client.TCPsocket TCPsocket = new TCPsocket("0",0);
+    private TCPsocket TCPsocket;
 
     public TCPsocket getTCPsocket() {
         return TCPsocket;

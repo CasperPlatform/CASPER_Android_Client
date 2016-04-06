@@ -16,10 +16,11 @@ import java.net.InetAddress;
 
 public class LoggedInActivity extends AppCompatActivity {
 
-
+    // Controll buttons;
     private Button controls;
     private Button sockets;
 
+    // Error msg text
     private TextView responce;
 
 

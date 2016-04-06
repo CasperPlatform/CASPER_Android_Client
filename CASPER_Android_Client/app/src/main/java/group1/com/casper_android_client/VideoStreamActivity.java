@@ -172,19 +172,19 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                             e.printStackTrace();
                         }
 
-                    }
+                    }else if(Singleton.getInstance().getSocket().isBound()){
                 } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
 
 
+                        // Create the 7 byte Array to send over TCP socket connection
+                        byte[] byteArray = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0xd, 0xa, 0x4};
 
-                    // Create the 7 byte Array to send over TCP socket connection
-                    byte[] byteArray = {0x44,(byte)'I',(byte)'I',(byte)0,(byte)0,0xd,0xa,0x4};
-
-                    // Send the byteArray
-                    try {
-                        Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        // Send the byteArray
+                        try {
+                            Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 return true;
