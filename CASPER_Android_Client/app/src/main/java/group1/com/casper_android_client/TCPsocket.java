@@ -88,11 +88,11 @@ public class TCPsocket extends AsyncTask<Void, Void, Void> {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
                 responsemsg = "UnknownHostException: " + e.toString();
-                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!3");
+                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection! error recived at catch 1");
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!4");
+                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection! error recived at catch 2");
                 e.printStackTrace();
                 responsemsg = "IOException: " + e.toString();
             } finally {
@@ -102,7 +102,7 @@ public class TCPsocket extends AsyncTask<Void, Void, Void> {
                         // Try closeing the socket connection.
                         Singleton.getInstance().getSocket().close();
                     } catch (IOException e) {
-                        System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!5");
+                        System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection! error recived at catch 3");
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }

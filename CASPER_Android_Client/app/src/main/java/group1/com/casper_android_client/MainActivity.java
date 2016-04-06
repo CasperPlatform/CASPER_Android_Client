@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         public void onLogin(final View v)
         {
             // admin
-            if(user.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
+            if(user.getText().toString().equals("") && password.getText().toString().equals("")) {
 
                 // Load next Activity
                 finish();

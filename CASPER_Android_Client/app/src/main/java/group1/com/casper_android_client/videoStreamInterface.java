@@ -6,7 +6,7 @@ package group1.com.casper_android_client;
  * This interface is used to update the graphical component of the videostream.
  *
  */
-public interface imgReady {
-    public void imgEvent(byte[] byteArray);
+public interface videoStreamInterface {
+    public void imgRecived(byte[] byteArray);
 
 }

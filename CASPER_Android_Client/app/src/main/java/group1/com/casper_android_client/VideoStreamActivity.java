@@ -1,6 +1,5 @@
 package group1.com.casper_android_client;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,7 +15,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -24,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,7 +30,7 @@ import java.util.TimerTask;
  * Created by Andreas Fransson
  * TODO fix so that video feed starts here
  */
-public class VideoStreamActivity extends AppCompatActivity implements imgReady{
+public class VideoStreamActivity extends AppCompatActivity implements videoStreamInterface {
 
     boolean is = false;
     // Joystick
@@ -51,7 +48,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
     TimerTask task;
 
     // Make a Joystick
-    JoyStick js;
+    JoyStick driveStick;
     UDPsocket videoStreamTask = null;
 
 
@@ -66,6 +63,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_stream);
 
+        // Background imageView for displaying video
         videoStream =(ImageView)findViewById(R.id.videoStream);
 
         // Joystick textfields listening on joystick input.
@@ -95,25 +93,25 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
         videoStreamTask.execute();
 
 
-        // Joystick creation
-        js = new JoyStick(getApplicationContext()
+        // Drive Joystick creation and settings
+        driveStick = new JoyStick(getApplicationContext()
                 , layout_joystick, R.drawable.image_button);
-        js.setStickSize(150, 150);
-        js.setLayoutSize(400, 400);
-        js.setLayoutAlpha(200);
-        js.setStickAlpha(150);
-        js.setOffset(70);
-        js.setMinimumDistance(50);
+        driveStick.setStickSize(150, 150);
+        driveStick.setLayoutSize(400, 400);
+        driveStick.setLayoutAlpha(200);
+        driveStick.setStickAlpha(150);
+        driveStick.setOffset(70);
+        driveStick.setMinimumDistance(50);
 
 
-        // Set Joystick listener
+        // Set drive Joystick listener
         layout_joystick.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
-                js.drawStick(arg1);
+                driveStick.drawStick(arg1);
                 if (arg1.getAction() == MotionEvent.ACTION_DOWN
                         || arg1.getAction() == MotionEvent.ACTION_MOVE) {
 
-                    int direction = js.get8Direction();
+                    int direction = driveStick.get8Direction();
 
 
                     if(!fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()) {
@@ -125,17 +123,16 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                             char cmdFlag = 'D';
                             char angleFlag;
 
-                            // Bad logics hue hue
-                            if (js.getY()>0){
+                            if (driveStick.getY()>0){
                                 driveFlag = 'B';
-                            }else if(js.getY()==0){
+                            }else if(driveStick.getY()==0){
                                 driveFlag = 'I';
                             }else{
                                 driveFlag = 'F';
                             }
 
                             // Y
-                            int y = js.getY();
+                            int y = driveStick.getY();
                             if (y < 0) {
                                 y = Math.abs(y);
                             }
@@ -145,7 +142,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                             }
 
                             // X
-                            int x = js.getX();
+                            int x = driveStick.getX();
                             if(x < 0){
                                 x = Math.abs(x);
                                 angleFlag = 'L';
@@ -191,6 +188,8 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
             }
         });
     }
+
+
 //    @Override
 //    protected void onResume(){
 //    super.onResume();
@@ -219,16 +218,16 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                         char angleFlag;
 
                         // Bad logics
-                        if (js.getY()<0){
+                        if (driveStick.getY()<0){
                             driveFlag = 'B';
-                        }else if(js.getY()==0){
+                        }else if(driveStick.getY()==0){
                             driveFlag = 'I';
                         }else{
                             driveFlag = 'F';
                         }
 
                         // Y
-                        int y = js.getY();
+                        int y = driveStick.getY();
                         if (y < 0) {
                             y = Math.abs(y);
                         }
@@ -238,7 +237,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
                         }
 
                         // X
-                        int x = js.getX();
+                        int x = driveStick.getX();
                         if(x < 0){
                             x = Math.abs(x);
                             angleFlag = 'L';
@@ -368,7 +367,7 @@ public class VideoStreamActivity extends AppCompatActivity implements imgReady{
      * @param byteArray
      */
     @Override
-    public void imgEvent(byte[] byteArray) {
+    public void imgRecived(byte[] byteArray) {
         // Create a bitmap
         Bitmap bMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         // Set the imageview to bitmap

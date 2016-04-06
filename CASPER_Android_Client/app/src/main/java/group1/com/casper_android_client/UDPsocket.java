@@ -1,6 +1,5 @@
 package group1.com.casper_android_client;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import java.io.IOException;
@@ -8,7 +7,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
@@ -21,20 +19,20 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
     // Convesion variables
     InetAddress dstAddress;
     int dstPort;
-    private imgReady myImageReady;
-    private boolean is;
+    private videoStreamInterface videoStream;
+    private boolean isAllPackages;
     DatagramSocket UDPsocket;
     /**
      * UDPsocket Constructor
-     * @param ir
+     * @param videoStreamInterface
      * @param addr
      * @param port
      * @throws UnknownHostException
      */
-    UDPsocket(imgReady ir,String addr, int port) throws UnknownHostException {
+    UDPsocket(videoStreamInterface videoStreamInterface,String addr, int port) throws UnknownHostException {
         dstAddress = InetAddress.getByName(addr);
         dstPort = port;
-        this.myImageReady = ir;
+        this.videoStream = videoStreamInterface;
 
     }
 
@@ -57,6 +55,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
 
         try {
 
+            // Convert address and port  to InetSocketAddress
             InetSocketAddress udpAddress = new InetSocketAddress(dstAddress,dstPort);
             DatagramSocket UDPsocket = new DatagramSocket();
             UDPsocket.setReuseAddress(true);
@@ -67,7 +66,9 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             //DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, Singleton.getInstance().getUDPsocket().getInetAddress(), Singleton.getInstance().getUDPsocket().getPort());
             DatagramPacket imgDataPacket = new DatagramPacket(packet, packet.length, UDPsocket.getInetAddress(), UDPsocket.getPort());
 
+            // Debug
             System.out.println("-------->skickar start cmd<--------");
+            // Start cmd
             sendData("start");
 
 
@@ -77,6 +78,8 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             packet = new byte[imgDataPacket.getLength()];
             packet = imgDataPacket.getData();
 
+
+            // If the package isAllPackages a Header package reset variables and setup for new image
             if(packet[0] == HEADER_FLAG){
                 currentPacket = 0;
                 imgArray = new byte[(int)getNumberFromBytes(Arrays.copyOfRange(packet,7,11))];
@@ -84,6 +87,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
 
             }
 
+            // If the package isAllPackages a image package read the header and store the image information
             if(packet[0] == PACKET_HEADER_FLAG){
                 try {
                     System.arraycopy(packet, 6, imgArray, (int) packet[5] * 8000, imgDataPacket.getLength() - 6);
@@ -94,16 +98,20 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
                 System.out.println("package: " + (int)packet[5]);
             }
 
+
+            // If the number of packages recived isAllPackages equal to the number of packages in the imgage total
+            // send the image array over the videoStreamInterface to the UI thread.
             if(currentPacket == packageCount-1){
-                is = true;
-                if (is){
-                    myImageReady.imgEvent(imgArray);
+                isAllPackages = true;
+                if (isAllPackages){
+                    videoStream.imgRecived(imgArray);
                     System.out.println("fick en bild");
                 }
                 currentPacket=0;
-                is = false;
+                isAllPackages = false;
             }
 
+                // if  AsyncTask isAllPackages canceled break out of infinite loop
                 if (isCancelled()) {
                     break;
                 }
@@ -128,6 +136,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
         //Singleton.getInstance().getUDPsocket().send(dataAsPackage);
         DatagramPacket dataAsPackage = new DatagramPacket(data.getBytes(),data.length(),UDPsocket.getInetAddress(),UDPsocket.getPort());
         UDPsocket.send(dataAsPackage);
+        // Debug
         System.out.println("inne i send");
     }
 
