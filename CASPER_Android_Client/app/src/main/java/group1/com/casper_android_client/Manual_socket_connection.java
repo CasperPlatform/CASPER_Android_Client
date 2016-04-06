@@ -17,24 +17,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.sun.jna.platform.win32.WinDef;
-
-import org.apache.commons.codec.DecoderException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Manual_socket_connection extends AppCompatActivity {
@@ -256,10 +249,6 @@ public class Manual_socket_connection extends AppCompatActivity {
 
                 System.out.println(dstAddressUDP);
 
-
-                    //Singleton.getInstance().setUDPsocket(new DatagramSocket());
-                    //Singleton.getInstance().getUDPsocket().setReuseAddress(true);
-                    //Singleton.getInstance().getUDPsocket().connect(dstAddressUDP);
                     testsocket = new DatagramSocket();
                     testsocket.connect(dstAddressUDP);
 

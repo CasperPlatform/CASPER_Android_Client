@@ -2,10 +2,9 @@ package group1.com.casper_android_client;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Splash_Screen extends Activity {
+public class SplashScreenActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +23,7 @@ public class Splash_Screen extends Activity {
                 }finally{
 
                     // Go to Main Activity
-                    Intent intent = new Intent(Splash_Screen.this,MainActivity.class);
+                    Intent intent = new Intent(SplashScreenActivity.this,MainActivity.class);
                     startActivity(intent);
                 }
             }

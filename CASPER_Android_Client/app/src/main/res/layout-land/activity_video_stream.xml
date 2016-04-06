@@ -16,7 +16,7 @@
             android:id="@+id/videoStream"
             android:background="#6969"
             android:scaleType="fitXY"
-            android:src="#d7c5c5" />
+            android:src="#ffff" />
 
         <ImageView
             android:layout_width="200dp"
@@ -81,5 +81,16 @@
         android:visibility="visible"
         android:layout_alignLeft="@+id/layout_joystick"
         android:layout_alignStart="@+id/layout_joystick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/videoStatus"
+        android:id="@+id/videoStatus"
+        android:layout_alignParentBottom="true"
+        android:textSize="24dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="130dp"
+        android:visibility="invisible" />
 
 </RelativeLayout>

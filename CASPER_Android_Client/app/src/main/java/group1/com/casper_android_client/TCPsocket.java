@@ -1,8 +1,5 @@
 package group1.com.casper_android_client;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 
 import java.io.ByteArrayOutputStream;
@@ -10,14 +7,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Andreas Fransson on 16-03-06.
@@ -39,7 +30,7 @@ public class TCPsocket extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... v) {
-        System.out.println(">>>>>>>>>bound?: "+Singleton.getInstance().getSocket().isBound());
+        System.out.println(">>>>>>>>>bound?: "+ Singleton.getInstance().getSocket().isBound());
 
         /**
          *

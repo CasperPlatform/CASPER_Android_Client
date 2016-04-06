@@ -1,7 +1,5 @@
 package group1.com.casper_android_client;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.Socket;
 
 /**
@@ -45,9 +43,6 @@ public class Singleton {
 
 
 
-
-
-
     // User instance
     private User loggedInUser;
 
@@ -71,7 +66,7 @@ public class Singleton {
     /**
      *
      */
-    private TCPsocket TCPsocket = new TCPsocket("0",0);
+    private group1.com.casper_android_client.TCPsocket TCPsocket = new TCPsocket("0",0);
 
     public TCPsocket getTCPsocket() {
         return TCPsocket;
@@ -100,52 +95,6 @@ public class Singleton {
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
-
-
-
-
-
-    // UDP Socket connection.
-    private DatagramSocket UDPsocket;
-
-    /**
-     * Get the current UDP Socket
-     * @return
-     */
-    public DatagramSocket getUDPsocket() {
-        return UDPsocket;
-    }
-
-    /**
-     * Set the current UDP Socket Connection
-     * @param UDPsocket
-     */
-    public void setUDPsocket(DatagramSocket UDPsocket) {
-        this.UDPsocket = UDPsocket;
-    }
-
-
-
-
-    // UDP Package
-    private DatagramPacket UDPsocketPackage;
-
-    /**
-     * Get the current UDP package
-     * @return
-     */
-    public DatagramPacket getUDPsocketPackage() {
-        return UDPsocketPackage;
-    }
-
-    /**
-     * Set the current UDP Package
-     * @param UDPsocket
-     */
-    public void setUDPsocketPackage(DatagramPacket UDPsocket) {
-        this.UDPsocketPackage = UDPsocket;
-    }
-
 
 
 

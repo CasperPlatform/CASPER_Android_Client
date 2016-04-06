@@ -40,7 +40,8 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
     private ImageView image_joystick, image_border,videoStream,mapView;
 
     // Debug Text fields for Joystick
-    private TextView xAxis, yAxis, angle, distance, direction,responce;
+    private TextView xAxis, yAxis, angle, distance, direction,responce, videoStatusMsg;
+    private boolean videoStatus;
 
     // Checkbox to start the timed sending of values
     private CheckBox fixedValues;
@@ -64,7 +65,9 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         setContentView(R.layout.activity_video_stream);
 
         // Background imageView for displaying video
-        videoStream =(ImageView)findViewById(R.id.videoStream);
+        videoStream = (ImageView)findViewById(R.id.videoStream);
+
+        videoStatusMsg = (TextView)findViewById(R.id.videoStatus);
 
         // Joystick textfields listening on joystick input.
         xAxis = (TextView)findViewById(R.id.xAxis);
@@ -114,7 +117,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                     int direction = driveStick.get8Direction();
 
 
-                    if(!fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()) {
+                    if(!fixedValues.isChecked()&& Singleton.getInstance().getSocket().isBound()) {
                         // Try sending directional values to socket server
                         try {
 
@@ -345,7 +348,10 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                     task.cancel();
                     task = null;
                 }
-
+                videoStreamTask.sendData("kill");
+                videoStreamTask.UDPsocket.disconnect();
+                videoStreamTask.UDPsocket.close();
+                videoStreamTask.cancel(true);
                 Singleton.getInstance().getSocket().close();
 
                 // Transfer to main
@@ -368,6 +374,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
      */
     @Override
     public void imgRecived(byte[] byteArray) {
+
         // Create a bitmap
         Bitmap bMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         // Set the imageview to bitmap

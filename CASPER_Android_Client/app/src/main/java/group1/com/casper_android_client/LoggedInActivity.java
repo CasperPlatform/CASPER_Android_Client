@@ -20,7 +20,6 @@ public class LoggedInActivity extends AppCompatActivity {
     private Button controls;
     private Button sockets;
 
-
     private TextView responce;
 
 

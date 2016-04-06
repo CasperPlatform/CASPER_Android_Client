@@ -48,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
         // Declare Login Button
         LoginButton = (Button)findViewById(R.id.LoginButton);
 

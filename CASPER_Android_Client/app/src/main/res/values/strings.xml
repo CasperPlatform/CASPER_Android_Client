@@ -97,4 +97,5 @@
     <string name="Socket_Connection">Manual Socket Connection</string>
     <string name="User_Hint">Username</string>
     <string name="getVideo">Get Video</string>
+    <string name="videoStatus">No Video Available</string>
 </resources>
