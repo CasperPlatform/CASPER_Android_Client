@@ -99,11 +99,7 @@ public class TCPsocket extends AsyncTask<Void, Void, Void> {
                     }
                 }
             }
-
-
             return null;
-
-
     }
 
     /**

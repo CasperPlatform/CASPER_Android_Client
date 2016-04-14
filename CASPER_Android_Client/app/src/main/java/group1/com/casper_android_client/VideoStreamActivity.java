@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Timer;
@@ -84,7 +86,6 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         // Joystick
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
 
-
             try{
                 videoStreamTask = new UDPsocket(this,
                         "192.168.10.1",
@@ -94,7 +95,6 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
             }
 
         videoStreamTask.execute();
-
 
         // Drive Joystick creation and settings
         driveStick = new JoyStick(getApplicationContext()
@@ -193,15 +193,6 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
     }
 
 
-//    @Override
-//    protected void onResume(){
-//    super.onResume();
-//        if(videoStreamTask.isCancelled()) {
-//            System.out.println("----->resuming");
-//            videoStreamTask.execute();
-//            System.out.println("-----> is canceled? " + videoStreamTask.isCancelled());
-//        }
-//    }
 
 
     /**
@@ -318,9 +309,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
             case android.R.id.home:
                 System.out.println("------>Pressed android.native back navigation button<----");
                 try {
-                    videoStreamTask.sendData("kill");
-                    videoStreamTask.UDPsocket.disconnect();
-                    videoStreamTask.UDPsocket.close();
+                    videoStreamTask.startStop("stop");
                     videoStreamTask.cancel(true);
 
                     System.out.println("----->" + videoStreamTask.isCancelled());
@@ -328,6 +317,10 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                     NavUtils.navigateUpFromSameTask(this);
 
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch(NullPointerException e){
+                    System.out.println("no can do");
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return true;
@@ -348,7 +341,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                     task.cancel();
                     task = null;
                 }
-                videoStreamTask.sendData("kill");
+                videoStreamTask.startStop("stop");
                 videoStreamTask.UDPsocket.disconnect();
                 videoStreamTask.UDPsocket.close();
                 videoStreamTask.cancel(true);
@@ -358,6 +351,8 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }else{

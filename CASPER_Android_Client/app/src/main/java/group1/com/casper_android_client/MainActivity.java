@@ -27,7 +27,7 @@ import java.net.InetAddress;
 public class MainActivity extends AppCompatActivity {
 
     // Declare server URL for Node.js
-    private final String PATH = "http://192.168.10.1:3000";
+    private final String PATH = "http://192.168.10.1:10000";
 
     // Progress bar
     private ProgressBar loading;
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                             //authResult.setText("Successfully handshaked with\nDrone!");
                             System.out.println(jsonObject.get("token"));
                             // Set User
-                            Singleton.getInstance().setLoggedInUser(new User(jsonObject));
+                            Singleton.getInstance().setLoggedInUser(new User(jsonObject,userNameString));
                             // Make sure the error msg isnt displayed after haveing the correct login information.
                             runOnUiThread(new Runnable() {
                                 @Override

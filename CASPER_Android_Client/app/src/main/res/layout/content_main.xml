@@ -11,7 +11,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="group1.com.casper_android_client.MainActivity"
     tools:showIn="@layout/activity_main"
-    android:background="@color/Casper">
+    android:background="@color/Casper_bg">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
         android:text="@string/Logo"
         android:id="@+id/Logo"
         android:textColor="#ffffff"
-        android:textSize="@dimen/abc_text_size_display_3_material"
+        android:textSize="70dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp" />
@@ -31,7 +31,8 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/User"
-        android:background="#ffffff"
+        android:background="@drawable/rounded_corners"
+        android:textColorHint="#c7c7cd"
         android:textAlignment="viewStart"
         android:autoText="false"
         android:hint="@string/User_Hint"
@@ -39,7 +40,7 @@
         android:layout_below="@+id/Logo"
         android:layout_alignRight="@+id/Logo"
         android:layout_alignEnd="@+id/Logo"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="45dp"
         android:layout_alignLeft="@+id/Logo"
         android:layout_alignStart="@+id/Logo"
         android:textColor="#080808"
@@ -51,9 +52,10 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/Password"
-        android:background="#ffffff"
+        android:background="@drawable/rounded_corners"
         android:textAlignment="textStart"
         android:hint="@string/PasswordHint"
+        android:textColorHint="#c7c7cd"
         android:layout_below="@+id/User"
         android:layout_alignLeft="@+id/User"
         android:layout_alignStart="@+id/User"
@@ -102,5 +104,16 @@
         android:textColor="#ff0000"
         android:visibility="invisible"
         android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome"
+        android:id="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/Logo"
+        android:textSize="20dp"
+        android:textColor="#ffff"
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>

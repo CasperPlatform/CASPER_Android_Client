@@ -31,35 +31,36 @@ public class LoggedInActivity extends AppCompatActivity {
 
 
         System.out.println("Is user Logged in via REST?: " + Singleton.getInstance().getLoggedInUser());
+       // System.out.println(Singleton.getInstance().getLoggedInUser().toString());
 
-        if(Singleton.getInstance().getLoggedInUser() != null){
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    try {
-                        if (InetAddress.getByName("192.168.10.1").isReachable(2000)) {
-
-                            Singleton.getInstance().setTCPsocket(new TCPsocket(
-                                    "192.168.10.1",
-                                    Integer.parseInt("9999")));
-                            Singleton.getInstance().getTCPsocket().execute();
-
-
-
-                        }else{
-                            System.out.println("Connection error! Unable to connect Socket!");
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-
-            // Start the thread
-            thread.start();
-        }
+//        if(Singleton.getInstance().getLoggedInUser() != null){
+//            Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    try {
+//                        if (InetAddress.getByName("192.168.10.1").isReachable(2000)) {
+//
+//                            Singleton.getInstance().setTCPsocket(new TCPsocket(
+//                                    "192.168.10.1",
+//                                    Integer.parseInt("9999")));
+//                            Singleton.getInstance().getTCPsocket().execute();
+//
+//
+//
+//                        }else{
+//                            System.out.println("Connection error! Unable to connect Socket!");
+//                        }
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//
+//
+//            // Start the thread
+//            thread.start();
+//        }
 
 
         // Declare Video controller Button

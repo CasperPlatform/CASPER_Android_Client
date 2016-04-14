@@ -8,4 +8,5 @@
     <color name="primary_text_default_material_light">#deffffff</color>
     <color name="Casper">#203448</color>
     <color name="Casper_Green">#2DEF96</color>
+    <color name="Casper_bg">#1a2636</color>
 </resources>
