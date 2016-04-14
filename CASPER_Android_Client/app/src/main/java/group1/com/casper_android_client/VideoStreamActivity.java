@@ -49,7 +49,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
     // Checkbox to start the timed sending of values
     private CheckBox fixedValues;
-    TimerTask task;
+    Timer task = new Timer();
 
     // Make a Joystick
     JoyStick driveStick;
@@ -120,76 +120,68 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
                     int direction = driveStick.get8Direction();
 
+                    task.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            try {
 
-                    if(!fixedValues.isChecked()&& Singleton.getInstance().getSocket().isBound()) {
-                        // Try sending directional values to socket server
-                        try {
+                                // Command Flags
+                                char driveFlag;
+                                char cmdFlag = 'D';
+                                char angleFlag;
 
-                            // Command Flags
-                            char driveFlag;
-                            char cmdFlag = 'D';
-                            char angleFlag;
+                                // Bad logics
+                                if (driveStick.getY()<0){
+                                    driveFlag = 'B';
+                                }else if(driveStick.getY()==0){
+                                    driveFlag = 'I';
+                                }else{
+                                    driveFlag = 'F';
+                                }
 
-                            if (driveStick.getY()>0){
-                                driveFlag = 'B';
-                            }else if(driveStick.getY()==0){
-                                driveFlag = 'I';
-                            }else{
-                                driveFlag = 'F';
+                                // Y
+                                int y = driveStick.getY();
+                                if (y < 0) {
+                                    y = Math.abs(y);
+                                }
+                                // not over 255
+                                if (y > 255) {
+                                    y = 255;
+                                }
+
+                                // X
+                                int x = driveStick.getX();
+                                if(x < 0){
+                                    x = Math.abs(x);
+                                    angleFlag = 'L';
+                                }else if (x > 0){
+                                    angleFlag = 'R';
+                                }else{
+                                    angleFlag = 'I';
+                                }
+                                // If X is bigger then it can be
+                                if (x > 90){
+                                    x = 90;
+                                }
+
+                                byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0x0d, 0x0a, 0x04};
+
+                                // Debug
+                                System.out.println(" ");
+                                System.out.println((byte)y);
+                                System.out.println((byte)x);
+                                System.out.println(" ");
+                                // Send the byteArray
+                                Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
+
+                            } catch (IOException e) {
+                                // Server connection error
+                                e.printStackTrace();
                             }
-
-                            // Y
-                            int y = driveStick.getY();
-                            if (y < 0) {
-                                y = Math.abs(y);
-                            }
-                            // not over 255
-                            if (y > 255) {
-                                y = 255;
-                            }
-
-                            // X
-                            int x = driveStick.getX();
-                            if(x < 0){
-                                x = Math.abs(x);
-                                angleFlag = 'L';
-                            }else if (x > 0){
-                                angleFlag = 'R';
-                            }else{
-                                angleFlag = 'I';
-                            }
-                            // If X is bigger then it can be
-                            if (x > 90){
-                                x = 90;
-                            }
-
-                            // Create the 7 byte Array to send over TCP socket connection
-                            byte[] byteArray = {0x44,(byte)driveFlag,(byte)angleFlag,(byte)y,(byte)x,0x0d,0x0a,0x04};
-
-
-
-                            // Send the byteArray
-                            Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
-
-                        } catch (IOException e) {
-                            // Server connection error
-                            e.printStackTrace();
                         }
-
-                    }else if(Singleton.getInstance().getSocket().isBound()){
-                } else if (arg1.getAction() == MotionEvent.ACTION_UP) {
+                    }, 0, 50);
 
 
-                        // Create the 7 byte Array to send over TCP socket connection
-                        byte[] byteArray = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0xd, 0xa, 0x4};
-
-                        // Send the byteArray
-                        try {
-                            Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
                 }
                 return true;
             }
@@ -205,7 +197,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
      */
     public void onFixed(View v){
         if(fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()){
-            new Timer().scheduleAtFixedRate(task = new TimerTask() {
+            task.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
                     try {
@@ -266,9 +258,9 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                 }
             }, 0, 50);
         }else{
-            if(task!=null) {
                 task.cancel();
-            }
+                task.purge();
+
         }
     }
 
@@ -300,7 +292,8 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         switch (item.getItemId()) {
             case R.id.Settings:
 
-                //task.cancel();
+                task.cancel();
+                task.purge();
                 System.out.println("Going to settings");
                 Intent intent = new Intent(this,SettingsActivity.class);
                 startActivity(intent);
@@ -313,6 +306,8 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
             case android.R.id.home:
                 System.out.println("------>Pressed android.native back navigation button<----");
                 try {
+                    task.cancel();
+                    task.purge();
                     videoStreamTask.startStop("stop");
                     videoStreamTask.cancel(true);
 
@@ -341,10 +336,10 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         // Debug
         if(Singleton.getInstance().getSocket().isBound()) {
             try {
-                if(task != null){
                     task.cancel();
+                    task.purge();
                     task = null;
-                }
+
                 videoStreamTask.startStop("stop");
                 videoStreamTask.UDPsocket.disconnect();
                 videoStreamTask.UDPsocket.close();

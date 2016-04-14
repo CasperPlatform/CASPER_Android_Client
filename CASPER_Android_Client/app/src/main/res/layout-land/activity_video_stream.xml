@@ -52,7 +52,7 @@
         android:checked="false"
         android:textColor="#ffffff"
         android:onClick="onFixed"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:layout_alignLeft="@+id/layout_joystick"
         android:layout_alignStart="@+id/layout_joystick" />
 
