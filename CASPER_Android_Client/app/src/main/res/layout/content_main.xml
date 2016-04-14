@@ -75,7 +75,7 @@
         android:onClick="onLogin"
         android:layout_gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="116dp"
+        android:layout_marginBottom="50dp"
         android:layout_alignLeft="@+id/Password"
         android:layout_alignStart="@+id/Password"
         android:layout_alignRight="@+id/Password"
@@ -112,7 +112,7 @@
         android:id="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/Logo"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:textColor="#ffff"
         android:layout_marginTop="5dp" />
 
