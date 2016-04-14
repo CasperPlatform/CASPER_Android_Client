@@ -49,7 +49,6 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
     // Checkbox to start the timed sending of values
     private CheckBox fixedValues;
-    private Button request;
     TimerTask task;
 
     // Make a Joystick
@@ -82,7 +81,6 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
         // Checkbox to start sending of fixed values
         fixedValues = (CheckBox)findViewById(R.id.fixedValue);
-        request = (Button)findViewById(R.id.request);
         mapView = (ImageView)findViewById(R.id.mapView);
 
         // Joystick
@@ -389,16 +387,6 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
     }
 
-
-
-    /**
-     * Send a kill command to the Server
-     * @throws IOException
-     */
-    public void killSwitch(View v) throws IOException {
-        System.out.println("-------> Sent Kill cmd <-------");
-        videoStreamTask.sendData("kill");
-    }
 
 
 

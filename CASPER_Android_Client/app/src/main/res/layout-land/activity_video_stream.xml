@@ -44,23 +44,6 @@
 
     </RelativeLayout>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:text="@string/getVideo"
-        android:id="@+id/request"
-        android:background="#2DEF96"
-        android:visibility="visible"
-        android:layout_gravity="center_horizontal|top"
-        android:onClick="killSwitch"
-        android:nestedScrollingEnabled="false"
-        android:layout_toStartOf="@+id/fixedValue"
-        android:layout_alignRight="@+id/fixedValue"
-        android:layout_alignEnd="@+id/fixedValue"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp" />
-
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
