@@ -3,6 +3,8 @@ package group1.com.casper_android_client;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -93,8 +95,12 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
-
-        videoStreamTask.execute();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            videoStreamTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+        else {
+            videoStreamTask.execute();
+        }
 
         // Drive Joystick creation and settings
         driveStick = new JoyStick(getApplicationContext()
