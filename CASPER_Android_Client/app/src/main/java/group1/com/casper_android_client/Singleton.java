@@ -97,6 +97,15 @@ public class Singleton {
         this.socket = socket;
     }
 
+    private byte[] tcpPackage = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0x0d, 0x0a, 0x04};
+
+    public void setTcpPackage(byte[] tcpPacket){
+        this.tcpPackage = tcpPacket;
+    }
+
+    public byte[] getTcpPackage(){
+        return this.tcpPackage;
+    }
 
 
 }
