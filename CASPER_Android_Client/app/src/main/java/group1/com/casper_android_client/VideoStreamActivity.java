@@ -129,7 +129,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                         char angleFlag;
 
                         // Bad logics
-                        if (driveStick.getY() < 0) {
+                        if (driveStick.getY() > 0) {
                             driveFlag = 'B';
                         } else if (driveStick.getY() == 0) {
                             driveFlag = 'I';
