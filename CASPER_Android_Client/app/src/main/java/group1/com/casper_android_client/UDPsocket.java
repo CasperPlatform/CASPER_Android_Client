@@ -143,13 +143,12 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             // If the number of packages recived isAllPackages equal to the number of packages in the imgage total
             // send the image array over the videoStreamInterface to the UI thread.
             if(currentPacket == packageCount-1){
-                isAllPackages = true;
-                if (isAllPackages){
+
+                    System.out.println("image lenght" + imgArray.length);
                     videoStream.imgRecived(imgArray);
                     System.out.println("fick en bild");
-                }
+
                 currentPacket=0;
-                isAllPackages = false;
             }
 
                 // if  AsyncTask isAllPackages canceled break out of infinite loop

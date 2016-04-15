@@ -378,14 +378,16 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
         // Create a bitmap
         Bitmap bMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        // Set the imageview to bitmap
-        final Bitmap finalBMap = bMap;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                videoStream.setImageBitmap(finalBMap);
-            }
-        });
+        if(bMap != null) {
+            // Set the imageview to bitmap
+            final Bitmap finalBMap = bMap;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    videoStream.setImageBitmap(finalBMap);
+                }
+            });
+        }
 
     }
 
