@@ -163,12 +163,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                         }
                         byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0x0d, 0x0a, 0x04};
                         Singleton.getInstance().setTcpPackage(byteArray);
-
-                        // Debug
-//                                System.out.println(" ");
-//                                System.out.println((byte)y);
-//                                System.out.println((byte)x);
-//                                System.out.println(" ");
+                    
                         // Send the byteArray
                 }else if(arg1.getAction() == MotionEvent.ACTION_UP){
                     byte[] byteArray = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0x0d, 0x0a, 0x04};
@@ -193,82 +188,6 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
 
     }
-
-
-
-//
-//    /**
-//     * Checkbox
-//     * @param v
-//     */
-//    public void onFixed(View v){
-//        if(fixedValues.isChecked()&&Singleton.getInstance().getSocket().isBound()){
-//            task.scheduleAtFixedRate(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    try {
-//
-//                        // Command Flags
-//                        char driveFlag;
-//                        char cmdFlag = 'D';
-//                        char angleFlag;
-//
-//                        // Bad logics
-//                        if (driveStick.getY()<0){
-//                            driveFlag = 'B';
-//                        }else if(driveStick.getY()==0){
-//                            driveFlag = 'I';
-//                        }else{
-//                            driveFlag = 'F';
-//                        }
-//
-//                        // Y
-//                        int y = driveStick.getY();
-//                        if (y < 0) {
-//                            y = Math.abs(y);
-//                        }
-//                        // not over 255
-//                        if (y > 255) {
-//                            y = 255;
-//                        }
-//
-//                        // X
-//                        int x = driveStick.getX();
-//                        if(x < 0){
-//                            x = Math.abs(x);
-//                            angleFlag = 'L';
-//                        }else if (x > 0){
-//                            angleFlag = 'R';
-//                        }else{
-//                            angleFlag = 'I';
-//                        }
-//                        // If X is bigger then it can be
-//                        if (x > 90){
-//                            x = 90;
-//                        }
-//
-//                        byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0x0d, 0x0a, 0x04};
-//
-//                        // Debug
-//                        System.out.println(" ");
-//                        System.out.println((byte)y);
-//                        System.out.println((byte)x);
-//                        System.out.println(" ");
-//                        // Send the byteArray
-//                        Singleton.getInstance().getTCPsocket().sendBytes(byteArray);
-//
-//                    } catch (IOException e) {
-//                        // Server connection error
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }, 0, 50);
-//        }else{
-//                task.cancel();
-//                task.purge();
-//
-//        }
-//    }
 
 
 
