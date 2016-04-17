@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/okio-1.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/okhttp-2.6.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

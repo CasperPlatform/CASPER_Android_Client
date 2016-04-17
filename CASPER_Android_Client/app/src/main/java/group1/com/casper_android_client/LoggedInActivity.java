@@ -16,11 +16,11 @@ import java.net.InetAddress;
 
 public class LoggedInActivity extends AppCompatActivity {
 
-
+    // Controll buttons;
     private Button controls;
     private Button sockets;
 
-
+    // Error msg text
     private TextView responce;
 
 
@@ -31,35 +31,23 @@ public class LoggedInActivity extends AppCompatActivity {
 
 
         System.out.println("Is user Logged in via REST?: " + Singleton.getInstance().getLoggedInUser());
+       // System.out.println(Singleton.getInstance().getLoggedInUser().toString());
 
-        if(Singleton.getInstance().getLoggedInUser() != null){
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
 
-                    try {
-                        if (InetAddress.getByName("192.168.10.1").isReachable(2000)) {
 
-                            Singleton.getInstance().setSocketConnection(new SocketConnection(
+
+
+                            Singleton.getInstance().setTCPsocket(new TCPsocket(
                                     "192.168.10.1",
-                                    Integer.parseInt("9999"), false));
-                            Singleton.getInstance().getSocketConnection().execute();
+                                    Integer.parseInt("9999")));
+                            Singleton.getInstance().getTCPsocket().execute();
 
 
 
-                        }else{
-                            System.out.println("Connection error! Unable to connect Socket!");
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
 
 
-            // Start the thread
-            thread.start();
-        }
+
+
 
 
         // Declare Video controller Button
@@ -151,7 +139,7 @@ public class LoggedInActivity extends AppCompatActivity {
     }
 
     public void socket(View v){
-        Intent intent = new Intent(this,Socket_Connection.class);
+        Intent intent = new Intent(this,Manual_socket_connection.class);
         startActivity(intent);
     }
 

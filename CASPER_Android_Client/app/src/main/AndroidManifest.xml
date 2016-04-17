@@ -10,7 +10,7 @@
         android:label="CASP.ER"
         android:supportsRtl="true">
         <activity
-            android:name=".Splash_Screen"
+            android:name=".SplashScreenActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:parentActivityName=".Splash_Screen"
+            android:parentActivityName=".SplashScreenActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -58,7 +58,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".VideoStreamActivity" />
         </activity>
-        <activity android:name=".Socket_Connection"
+        <activity android:name=".Manual_socket_connection"
             android:label="sockets"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">

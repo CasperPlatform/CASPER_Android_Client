@@ -1,8 +1,5 @@
 package group1.com.casper_android_client;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 
 import java.io.ByteArrayOutputStream;
@@ -10,97 +7,43 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.concurrent.TimeoutException;
 
 /**
- * Created by AnkanX on 16-03-06.
+ * Created by Andreas Fransson on 16-03-06.
+ * TODO fix construcor so that the right type of connection is established.
+ *
  */
-public class SocketConnection extends AsyncTask<Void, Void, Void> {
+public class TCPsocket extends AsyncTask<Void, Void, Void> {
 
     // Convesion variables
     String dstAddress;
     int dstPort;
     boolean dstUDP;
     String responsemsg = "";
-    byte[] messages = new byte[60000];
-    String text;
 
-
-    SocketConnection(String addr, int port,boolean udpAllso) {
+    TCPsocket(String addr, int port) {
         dstAddress = addr;
         dstPort = port;
-        dstUDP = udpAllso;
     }
 
     @Override
     protected Void doInBackground(Void... v) {
-        System.out.println(">>>>>>>>>bound?: "+Singleton.getInstance().getSocket().isBound());
+        System.out.println(">>>>>>>>>bound?: "+ Singleton.getInstance().getSocket().isBound());
 
         /**
          *
-         * TEST UDP CONNECTION
          *
-         * TODO Make functional implementation
-         * TODO A no need to write in connection details
-         * TODO Set fixed Ports UDP 9998 % TCP 9999
-         * TODO Access the UI of whatever element is handleing the connection
+         * TODO Set fixed Ports TCP 9999
+         * TODO Access the UI of whatever element is handleing the connection via interface
          */
 
             try {
 
                 System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!");
                 // Start a TCP socket connection
-
-                    Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
-
-
-                    if(dstUDP == true) {
-
-                String messageStr="Request!";
-                // Socket Port
-                int udpSocketPort = 9998;
-                // New Socket
-                DatagramSocket UDPsocket = new DatagramSocket();
-                // Create an InetAddress
-                InetAddress casper = InetAddress.getByName("192.168.10.1");
-
-                // Output msg lenght
-                int msg_length= messageStr.length();
-                // Msg to bytes convertion
-                byte[] message = messageStr.getBytes();
-                // Package the message
-                DatagramPacket msgPacket = new DatagramPacket(message, msg_length,casper,udpSocketPort);
-                // Send Message over UDP
-                UDPsocket.send(msgPacket);
-
-                // Incomming message
-                byte[] incImage = new byte[60000];
-                // Pacckage incomming message
-                DatagramPacket imagePacket = new DatagramPacket(incImage, incImage.length,casper,udpSocketPort);
-
-                // Get data from incomming buffer
-                UDPsocket.receive(imagePacket);
-
-                // Debug
-                System.out.println(">>>>>>:" + imagePacket.getData().length);
-
-                // convert .JPG image into Bitmap
-                final Bitmap bMap = BitmapFactory.decodeByteArray(imagePacket.getData(), 0, imagePacket.getData().length);
-
-                // Debug
-                System.out.println(">>>>>>"+bMap.getHeight());
-                System.out.println(">>>>>"+bMap.getWidth());
-
-
-                }
-
-
+                Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
 
 
                 ByteArrayOutputStream byteArrayOutputStream =
@@ -119,11 +62,13 @@ public class SocketConnection extends AsyncTask<Void, Void, Void> {
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
 
 
-
                     byteArrayOutputStream.write(buffer, 0, bytesRead);
                     responsemsg += byteArrayOutputStream.toString("UTF-8");
+                    Singleton.getInstance().setSocketData(responsemsg);
 
-                    if(isCancelled()){
+                    System.out.println("---------------------------------------------------------------------------------->" + responsemsg);
+
+                    if (isCancelled()) {
                         break;
                     }
 
@@ -132,13 +77,13 @@ public class SocketConnection extends AsyncTask<Void, Void, Void> {
 
             } catch (UnknownHostException e) {
                 // TODO Auto-generated catch block
-                 e.printStackTrace();
+                e.printStackTrace();
                 responsemsg = "UnknownHostException: " + e.toString();
-                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!3");
+                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection! error recived at catch 1");
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!4");
+                System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection! error recived at catch 2");
                 e.printStackTrace();
                 responsemsg = "IOException: " + e.toString();
             } finally {
@@ -148,18 +93,13 @@ public class SocketConnection extends AsyncTask<Void, Void, Void> {
                         // Try closeing the socket connection.
                         Singleton.getInstance().getSocket().close();
                     } catch (IOException e) {
-                        System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!5");
+                        System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection! error recived at catch 3");
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
             }
-
-
             return null;
-
-
-
     }
 
     /**

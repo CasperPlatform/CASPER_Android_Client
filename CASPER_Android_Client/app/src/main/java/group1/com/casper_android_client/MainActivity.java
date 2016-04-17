@@ -2,7 +2,6 @@ package group1.com.casper_android_client;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -27,8 +26,8 @@ import java.net.InetAddress;
  */
 public class MainActivity extends AppCompatActivity {
 
-    // Declare server URL
-    private final String PATH = "http://192.168.0.31:3000";
+    // Declare server URL for Node.js
+    private final String PATH = "http://192.168.10.1:10000";
 
     // Progress bar
     private ProgressBar loading;
@@ -48,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
 
         // Declare Login Button
         LoginButton = (Button)findViewById(R.id.LoginButton);
@@ -73,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         public void onLogin(final View v)
         {
             // admin
-            if(user.getText().toString().equals("admin") && password.getText().toString().equals("admin")) {
+            if(user.getText().toString().equals("") && password.getText().toString().equals("")) {
 
                 // Load next Activity
                 finish();
@@ -81,105 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
 
-            }// Backdoor for test purposes
-            else if(user.getText().toString().equals("demo") && password.getText().toString().equals("demo")){
-
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        // Set progress wheel visable to indicate process
-                        runOnUiThread(new Runnable() {
-                                          @Override
-                                          public void run() {
-                                              // Show the loading wheel
-                                              loading.setVisibility(v.VISIBLE);
-                                          }
-                                      }
-
-                        );
-
-
-                        try {
-                            if (InetAddress.getByName("192.168.0.15").isReachable(2000)) {
-
-
-
-
-                            // Setting up Socket connection
-                            SocketConnection SocketConnection = new SocketConnection(
-                                    "192.168.0.15",
-                                    Integer.parseInt("9999"),false);
-                            SocketConnection.execute();
-
-
-
-                            // Set progress wheel visable to indicate process
-                            runOnUiThread(new Runnable() {
-                                              @Override
-                                              public void run() {
-                                                  // Show the loading wheel
-                                                  loading.setVisibility(v.VISIBLE);
-                                              }
-                                          }
-
-                            );
-
-                            // Ugly but it takes a few milliseconds to do
-                            while(!Singleton.getInstance().getSocket().isBound()){
-
-                            }
-
-                            runOnUiThread(new Runnable() {
-                                              @Override
-                                              public void run() {
-                                                  // Stop the loading wheel and show Error Msg.
-                                                  loading.setVisibility(v.INVISIBLE);
-                                              }
-                                          }
-                            );
-
-
-
-                            // Load next Activity
-                            finish();
-                            Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
-                            startActivity(intent);
-                            }else{
-
-                                runOnUiThread(new Runnable() {
-                                                  @Override
-                                                  public void run() {
-                                                      errormsg.setText("sConnection Error!");
-                                                      // Stop the loading wheel and show Error Msg.
-                                                      loading.setVisibility(v.INVISIBLE);
-                                                      errormsg.setVisibility(v.VISIBLE);
-                                                  }
-                                              }
-                                );
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            errormsg.setText("Connection Error!");
-                            runOnUiThread(new Runnable() {
-                                              @Override
-                                              public void run() {
-                                                  // Stop the loading wheel and show Error Msg.
-                                                  loading.setVisibility(v.INVISIBLE);
-                                                  errormsg.setVisibility(v.VISIBLE);
-                                              }
-                                          }
-                            );
-                        }
-                    }
-                });
-
-
-                // Start the thread
-                thread.start();
-
-            }
-            else if(user.getText().toString().equals("demo2") && password.getText().toString().equals("demo2")) {
+            }// TCP init only
+            else if(user.getText().toString().equals("demo") && password.getText().toString().equals("demo")) {
                 // Setting up Socket connection
 
                 Thread thread = new Thread(new Runnable() {
@@ -202,11 +101,11 @@ public class MainActivity extends AppCompatActivity {
                             if (InetAddress.getByName("192.168.10.1").isReachable(2000)) {
 
 
-                                Singleton.getInstance().setSocketConnection(new SocketConnection(
+                                Singleton.getInstance().setTCPsocket(new TCPsocket(
                                         "192.168.10.1",
-                                        Integer.parseInt("9999"), false));
+                                        Integer.parseInt("9999")));
 
-                                Singleton.getInstance().getSocketConnection().execute();
+                                Singleton.getInstance().getTCPsocket().execute();
 
 
                                 // Ugly but it takes a few milliseconds to do
@@ -262,102 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     // Start the thread
                     thread.start();
             }
-            else if(user.getText().toString().equals("demo3") && password.getText().toString().equals("demo3")) {
-                // Setting up Socket connection
-
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        // Set progress wheel visable to indicate process
-                        runOnUiThread(new Runnable() {
-                                          @Override
-                                          public void run() {
-                                              // Show the loading wheel
-                                              loading.setVisibility(v.VISIBLE);
-                                          }
-                                      }
-
-                        );
-
-
-                        try {
-                            if (InetAddress.getByName("192.168.10.1").isReachable(2000)) {
-
-
-
-                Singleton.getInstance().setSocketConnection(new SocketConnection(
-                        "192.168.10.1",
-                        Integer.parseInt("9999"),true));
-                Singleton.getInstance().getSocketConnection().execute();
-
-
-
-
-                // Set progress wheel visable to indicate process
-                runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      // Show the loading wheel
-                                      loading.setVisibility(v.VISIBLE);
-                                  }
-                              }
-
-                );
-
-                // Ugly but it takes a few milliseconds to do
-                while (!Singleton.getInstance().getSocket().isBound()) {
-
-                }
-
-                runOnUiThread(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      // Stop the loading wheel and show Error Msg.
-                                      loading.setVisibility(v.INVISIBLE);
-                                  }
-                              }
-                );
-
-
-                // Load next Activity
-                finish();
-
-                Intent intent = new Intent(MainActivity.this, LoggedInActivity.class);
-                startActivity(intent);
-            }else{
-
-                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        errormsg.setText("Connection Error!");
-                        // Stop the loading wheel and show Error Msg.
-                        loading.setVisibility(v.INVISIBLE);
-                        errormsg.setVisibility(v.VISIBLE);
-                    }
-                 });
-            }
-            } catch (IOException e) {
-                            e.printStackTrace();
-                            errormsg.setText("Connection Error!");
-                            runOnUiThread(new Runnable() {
-                                              @Override
-                                              public void run() {
-                                                  // Stop the loading wheel and show Error Msg.
-                                                  loading.setVisibility(v.INVISIBLE);
-                                                  errormsg.setVisibility(v.VISIBLE);
-                                              }
-                                          }
-                            );
-                        }
-                    }
-                });
-
-
-                // Start the thread
-                thread.start();
-            }
-            // Actual Access to Rest server and authentiation
+            // Node.js Token verification
             else
             {
 
@@ -400,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                             //authResult.setText("Successfully handshaked with\nDrone!");
                             System.out.println(jsonObject.get("token"));
                             // Set User
-                            Singleton.getInstance().setLoggedInUser(new User(jsonObject));
+                            Singleton.getInstance().setLoggedInUser(new User(jsonObject,userNameString));
                             // Make sure the error msg isnt displayed after haveing the correct login information.
                             runOnUiThread(new Runnable() {
                                 @Override

@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="ApacheHttp">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/httpclient-cache-4.5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/jna-platform-4.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/fluent-hc-4.5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/httpmime-4.5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/jna-4.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/httpclient-win-4.5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/commons-codec-1.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/httpcore-4.4.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/commons-logging-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CASPER_Android_Client/app/libs/ApacheHttp/httpclient-4.5.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

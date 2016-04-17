@@ -7,8 +7,20 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="group1.com.casper_android_client.Socket_Connection"
+    tools:context=".Manual_socket_connection"
     android:background="@color/Casper">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bild"
+        android:src="#ffff"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/response"
+        android:layout_alignRight="@+id/udpCheck"
+        android:layout_alignEnd="@+id/udpCheck" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,7 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp"
-        android:textColor="#ffffff"
+        android:textColor="@color/Casper_Green"
         android:textSize="40dp" />
 
     <TextView
@@ -135,14 +147,16 @@
         android:layout_below="@+id/socketLogo"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/bild"
-        android:src="@drawable/bild"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/errorMsg"
-        android:layout_alignStart="@+id/errorMsg" />
+        android:text="UDP"
+        android:id="@+id/udpCheck"
+        android:checked="false"
+        android:layout_alignBottom="@+id/address"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="#ffff" />
 
 
 </RelativeLayout>

@@ -15,5 +15,4 @@
         android:title="@string/logout"
         app:showAsAction="never"/>
 
-
 </menu>
