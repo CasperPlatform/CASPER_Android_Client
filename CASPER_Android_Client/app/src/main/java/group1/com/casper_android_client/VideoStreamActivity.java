@@ -86,19 +86,19 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         // Joystick
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
 
-            try{
-                videoStreamTask = new UDPsocket(this,
-                        "192.168.10.1",
-                        6000);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            videoStreamTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
-        else {
-            videoStreamTask.execute();
-        }
+//            try{
+//                videoStreamTask = new UDPsocket(this,
+//                        "192.168.10.1",
+//                        6000);
+//            } catch (UnknownHostException e) {
+//                e.printStackTrace();
+//            }
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//            videoStreamTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        }
+//        else {
+//            videoStreamTask.execute();
+//        }
 
 
 
@@ -234,19 +234,15 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                     task.cancel();
                     task.purge();
                     task = null;
-                    videoStreamTask.startStop("stop");
-                    videoStreamTask.cancel(true);
+//                    videoStreamTask.startStop("stop");
+//                    videoStreamTask.cancel(true);
 
                     System.out.println("----->" + videoStreamTask.isCancelled());
                     finish();
                     NavUtils.navigateUpFromSameTask(this);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch(NullPointerException e){
+                } catch(NullPointerException e) {
                     System.out.println("no can do");
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
                 return true;
             default:
@@ -266,18 +262,16 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                     task.purge();
                     task = null;
 
-                videoStreamTask.startStop("stop");
-                videoStreamTask.UDPsocket.disconnect();
-                videoStreamTask.UDPsocket.close();
-                videoStreamTask.cancel(true);
+//                videoStreamTask.startStop("stop");
+//                videoStreamTask.UDPsocket.disconnect();
+//                videoStreamTask.UDPsocket.close();
+//                videoStreamTask.cancel(true);
                 Singleton.getInstance().getSocket().close();
 
                 // Transfer to main
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }else{
