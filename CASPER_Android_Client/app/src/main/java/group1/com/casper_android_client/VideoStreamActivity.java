@@ -163,7 +163,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                         }
                         byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0x0d, 0x0a, 0x04};
                         Singleton.getInstance().setTcpPackage(byteArray);
-                    
+
                         // Send the byteArray
                 }else if(arg1.getAction() == MotionEvent.ACTION_UP){
                     byte[] byteArray = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0x0d, 0x0a, 0x04};
