@@ -27,6 +27,17 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
+    <!-- Example Video Quality Settings -->
+    <string name="pref_header_video_quality">Video Quality Setting</string>
+    <string name="pref_enable_quality">Enable epic quality</string>
+    <string name="pref_video_summary">This slidebar enables epic quality</string>
+
+
+
+    <!-- Example User information Settings -->
+    <string name="pref_header_user_information">User information</string>
+
+
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
         based on your message history

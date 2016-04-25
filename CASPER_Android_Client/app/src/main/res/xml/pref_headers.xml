@@ -6,15 +6,20 @@
         android:fragment="group1.com.casper_android_client.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_general" />
-
+    <!-- This header will be used to change video quality -->
+    <header
+        android:fragment="group1.com.casper_android_client.SettingsActivity$VideoQualityPreferenceFragment"
+        android:icon="@drawable/quality_camera"
+        android:title="@string/pref_header_video_quality" />
+    <!-- This header will be used to send notifications to the user -->
     <header
         android:fragment="group1.com.casper_android_client.SettingsActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/pref_header_notifications" />
-
+    <!-- This header will be used to Save account information -->
     <header
-        android:fragment="group1.com.casper_android_client.SettingsActivity$DataSyncPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
-        android:title="@string/pref_header_data_sync" />
+        android:fragment="group1.com.casper_android_client.SettingsActivity$UserInformationPreferenceFragment"
+        android:icon="@drawable/user_face_black"
+        android:title="@string/pref_header_user_information" />
 
 </preference-headers>

@@ -171,7 +171,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName)
                 || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
-                || NotificationPreferenceFragment.class.getName().equals(fragmentName);
+                || NotificationPreferenceFragment.class.getName().equals(fragmentName)
+                || VideoQualityPreferenceFragment.class.getName().equals(fragmentName)
+                || UserInformationPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -262,6 +264,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+    }
+        // Adding Video Quality option in menu // Axel
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class VideoQualityPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_video_quality);
+            setHasOptionsMenu(true);
+        }
+    }
+
+    // Adding User information option in menu // Axel
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class UserInformationPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_user_information);
+            setHasOptionsMenu(true);
         }
     }
 }
