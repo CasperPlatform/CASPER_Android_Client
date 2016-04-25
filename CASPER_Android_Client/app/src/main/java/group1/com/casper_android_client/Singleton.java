@@ -1,8 +1,7 @@
 package group1.com.casper_android_client;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.Socket;
+import group1.com.casper_android_client.TCPsocket;
 
 /**
  * Created by Andreas Fransson
@@ -45,9 +44,6 @@ public class Singleton {
 
 
 
-
-
-
     // User instance
     private User loggedInUser;
 
@@ -71,17 +67,15 @@ public class Singleton {
     /**
      *
      */
-    private SocketConnection SocketConnection = new SocketConnection("0",0,false);
+    private TCPsocket TCPsocket;
 
-    public group1.com.casper_android_client.SocketConnection getSocketConnection() {
-        return SocketConnection;
+    public TCPsocket getTCPsocket() {
+        return TCPsocket;
     }
 
-    public void setSocketConnection(group1.com.casper_android_client.SocketConnection socketConnection) {
-        SocketConnection = socketConnection;
+    public void setTCPsocket(TCPsocket TCPsocket) {
+        this.TCPsocket = TCPsocket;
     }
-
-
 
     // TCP Socket connection
     private Socket socket = new Socket();
@@ -103,53 +97,15 @@ public class Singleton {
         this.socket = socket;
     }
 
+    private byte[] tcpPackage = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0x0d, 0x0a, 0x04};
 
-
-
-
-    // UDP Socket connection.
-    private DatagramSocket UDPsocketSend;
-
-    /**
-     * Get the current UDP Socket
-     * @return
-     */
-    public DatagramSocket getUDPsocketSend() {
-        return UDPsocketSend;
+    public void setTcpPackage(byte[] tcpPacket){
+        this.tcpPackage = tcpPacket;
     }
 
-    /**
-     * Set the current UDP Socket Connection
-     * @param UDPsocketSend
-     */
-    public void setUDPsocketSend(DatagramSocket UDPsocketSend) {
-        this.UDPsocketSend = UDPsocketSend;
+    public byte[] getTcpPackage(){
+        return this.tcpPackage;
     }
-
-
-
-
-
-
-    // UDP Package
-    private DatagramPacket UDPsocketPackage;
-
-    /**
-     * Get the current UDP package
-     * @return
-     */
-    public DatagramPacket getUDPsocketPackage() {
-        return UDPsocketPackage;
-    }
-
-    /**
-     * Set the current UDP Package
-     * @param UDPsocket
-     */
-    public void setUDPsocketPackage(DatagramPacket UDPsocket) {
-        this.UDPsocketPackage = UDPsocket;
-    }
-
 
 
 }

@@ -14,7 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/videoStream"
-            android:background="#6969" />
+            android:background="#6969"
+            android:scaleType="fitXY"
+            android:src="#ffff" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -41,6 +43,7 @@
             android:onClick="expandMap"
             android:longClickable="false" />
 
+
     </FrameLayout>
 
     <RelativeLayout
@@ -53,7 +56,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"></RelativeLayout>
+        android:layout_marginLeft="10dp">
 
     <RelativeLayout
         android:layout_width="150dp"
@@ -70,36 +73,9 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
-
-        <TextView
             android:id="@+id/cameraDir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="C Direction"
-            android:textColor="#ffffff"
-            android:textSize="20dp"
             android:layout_below="@+id/direction"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:id="@+id/direction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Direction"
-            android:textColor="#ffffff"
-            android:textSize="20dp"
-            android:layout_below="@+id/direction"
-            android:layout_centerHorizontal="true" />
-    </LinearLayout>
-
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -108,20 +84,20 @@
         android:checked="false"
         android:textColor="#ffffff"
         android:onClick="onFixed"
-        android:visibility="visible"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:visibility="invisible"
+        android:layout_alignLeft="@+id/layout_joystick"
+        android:layout_alignStart="@+id/layout_joystick" />
         android:layout_centerVertical="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/responce"
-        android:layout_alignParentTop="true"
+        android:text="@string/videoStatus"
+        android:id="@+id/videoStatus"
+        android:layout_alignParentBottom="true"
+        android:textSize="24dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="31dp"
-        android:textColor="#000000" />
+        android:layout_marginBottom="150dp"
+        android:visibility="invisible" />
 
 </RelativeLayout>

@@ -4,11 +4,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/Casper</item>
-        <item name="colorPrimaryDark">#203448</item>
+        <item name="colorPrimary">@color/Casper_bg</item>
+        <item name="colorPrimaryDark">@color/Casper_bg</item>
         <item name="android:textColorPrimary">#ffffff</item>
-        <item name="android:windowBackground">@color/Casper</item>
-        <item name="android:colorBackground">@color/Casper</item>
+        <item name="android:windowBackground">@color/Casper_bg</item>
+        <item name="android:colorBackground">@color/Casper_bg</item>
     </style>
 
 
