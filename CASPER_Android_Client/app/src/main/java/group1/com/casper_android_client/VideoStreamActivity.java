@@ -27,6 +27,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -75,9 +76,6 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         // Joystick textfields listening on joystick input.
         xAxis = (TextView)findViewById(R.id.xAxis);
         yAxis = (TextView)findViewById(R.id.yAxis);
-        angle = (TextView)findViewById(R.id.angle);
-        distance = (TextView)findViewById(R.id.distance);
-        direction = (TextView)findViewById(R.id.direction);
 
         // Checkbox to start sending of fixed values
         fixedValues = (CheckBox)findViewById(R.id.fixedValue);
@@ -124,11 +122,14 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
                     int direction = driveStick.get8Direction();
 
+                    yAxis.setText(""+driveStick.getY());
+                    xAxis.setText(""+driveStick.getX());
+
                         // Command Flags
                         char driveFlag;
                         char angleFlag;
 
-                        // Bad logics
+
                         if (driveStick.getY() > 0) {
                             driveFlag = 'B';
                         } else if (driveStick.getY() == 0) {
@@ -141,10 +142,11 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                         int y = driveStick.getY();
                         if (y < 0) {
                             y = Math.abs(y);
+                            System.out.println("y--------------->" + y);
                         }
                         // not over 255
-                        if (y > 255) {
-                            y = 255;
+                        if (y > 90) {
+                            y = 90;
                         }
 
                         // X
@@ -161,13 +163,53 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                         if (x > 90) {
                             x = 90;
                         }
-                        byte[] byteArray = {0x44, (byte) driveFlag, (byte) angleFlag, (byte) y, (byte) x, 0x0d, 0x0a, 0x04};
+                    // Get Token
+                    try {
+                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
+                        byte[] byteArray = new byte[24];
+                        byteArray[0] = 0x44;
+                        System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
+                        byteArray[17] = (byte) driveFlag;
+                        byteArray[18] = (byte) angleFlag;
+                        byteArray[19] = (byte) y;
+                        byteArray[20] = (byte) x;
+                        byteArray[21] = (byte) 0x0d;
+                        byteArray[22] = (byte) 0x0a;
+                        byteArray[23] = (byte) 0x04;
+                        // Set
+                        System.out.println("token "+tokenArray.length);
+                        System.out.println(Arrays.toString(byteArray));
                         Singleton.getInstance().setTcpPackage(byteArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
 
                         // Send the byteArray
                 }else if(arg1.getAction() == MotionEvent.ACTION_UP){
-                    byte[] byteArray = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0x0d, 0x0a, 0x04};
+                    // Get Token
+                    try {
+                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
+                    byte[] byteArray = new byte[24];
+                    byteArray[0] = 0x44;
+                    System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
+                    byteArray[17] = (byte) 'I';
+                    byteArray[18] = (byte) 'I';
+                    byteArray[19] = (byte) 0;
+                    byteArray[20] = (byte) 0;
+                    byteArray[21] = (byte) 0x0d;
+                    byteArray[22] = (byte) 0x0a;
+                    byteArray[23] = (byte) 0x04;
+
+                    // Set
                     Singleton.getInstance().setTcpPackage(byteArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+
                 }
                 return true;
             }

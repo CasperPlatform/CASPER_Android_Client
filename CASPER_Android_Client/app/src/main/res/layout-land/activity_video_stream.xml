@@ -67,4 +67,22 @@
         android:layout_marginBottom="150dp"
         android:visibility="invisible" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/yAxis"
+        android:layout_above="@+id/videoStatus"
+        android:layout_alignRight="@+id/fixedValue"
+        android:layout_alignEnd="@+id/fixedValue" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/xAxis"
+        android:layout_alignTop="@+id/yAxis"
+        android:layout_toStartOf="@+id/yAxis"
+        android:layout_toLeftOf="@+id/yAxis" />
+
 </RelativeLayout>

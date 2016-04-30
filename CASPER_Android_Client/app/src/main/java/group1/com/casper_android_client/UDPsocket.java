@@ -136,7 +136,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
                     System.out.println("oh noes....");
                 }
                 currentPacket  = (int)packet[5];
-                System.out.println("package: " + (int)packet[5]);
+               // System.out.println("package: " + (int)packet[5]);
             }
 
 
@@ -144,9 +144,9 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
             // send the image array over the videoStreamInterface to the UI thread.
             if(currentPacket == packageCount-1){
 
-                    System.out.println("image lenght" + imgArray.length);
+                  //  System.out.println("image lenght" + imgArray.length);
                     videoStream.imgRecived(imgArray);
-                    System.out.println("fick en bild");
+                  //  System.out.println("fick en bild");
 
                 currentPacket=0;
             }
