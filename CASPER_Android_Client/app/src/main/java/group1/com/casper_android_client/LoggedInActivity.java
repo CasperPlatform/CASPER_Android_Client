@@ -37,6 +37,7 @@ public class LoggedInActivity extends AppCompatActivity {
 
 
 
+
                             Singleton.getInstance().setTCPsocket(new TCPsocket(
                                     "192.168.10.1",
                                     Integer.parseInt("9999")));

@@ -194,6 +194,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
         char startFlag = 'S';
         char stopFlag = 's';
         byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
+        System.out.println("Sending start" + Arrays.toString(tokenArray));
         byte[] send = new byte[20];
         send[0] = 0x01;
         System.arraycopy(tokenArray, 0, send, 1, tokenArray.length);

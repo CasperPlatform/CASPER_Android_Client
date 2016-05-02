@@ -2,6 +2,8 @@ package group1.com.casper_android_client;
 
 import android.os.AsyncTask;
 
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -26,6 +28,25 @@ public class TCPsocket extends AsyncTask<Void, Void, Void> {
     TCPsocket(String addr, int port) {
         dstAddress = addr;
         dstPort = port;
+
+        try{
+            byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
+            byte[] byteArray = new byte[24];
+            byteArray[0] = 0x44;
+            System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
+            byteArray[17] = (byte) 'I';
+            byteArray[18] = (byte) 'I';
+            byteArray[19] = (byte) 0;
+            byteArray[20] = (byte) 0;
+            byteArray[21] = (byte) 0x0d;
+            byteArray[22] = (byte) 0x0a;
+            byteArray[23] = (byte) 0x04;
+
+            Singleton.getInstance().setTcpPackage(byteArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
