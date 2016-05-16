@@ -124,10 +124,7 @@ public class LoggedInActivity extends AppCompatActivity {
 
     }
 
-    public void socket(View v){
-        Intent intent = new Intent(this,Manual_socket_connection.class);
-        startActivity(intent);
-    }
+
 
 
 }
