@@ -17,7 +17,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.ScaleAnimation;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -54,7 +53,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
     // Make a Joystick
     JoyStick driveStick;
-    UDPsocket videoStreamTask = null;
+    VideoSocket videoStreamTask = null;
 
 
 
@@ -85,7 +84,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
 
             try{
-                videoStreamTask = new UDPsocket(this,
+                videoStreamTask = new VideoSocket(this,
                         "192.168.10.1",
                         6000);
             } catch (UnknownHostException e) {
@@ -179,7 +178,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                         // Set
                         System.out.println("token "+tokenArray.length);
                         System.out.println(Arrays.toString(byteArray));
-                        Singleton.getInstance().setTcpPackage(byteArray);
+                        Singleton.getInstance().setDrivePackage(byteArray);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -203,7 +202,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                     byteArray[23] = (byte) 0x04;
 
                     // Set
-                    Singleton.getInstance().setTcpPackage(byteArray);
+                    Singleton.getInstance().setDrivePackage(byteArray);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -220,7 +219,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
             @Override
             public void run() {
                 try {
-                    Singleton.getInstance().getTCPsocket().sendBytes(Singleton.getInstance().getTcpPackage());
+                    Singleton.getInstance().getDriveSocket().sendCmd(Singleton.getInstance().getDrivePackage());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -268,7 +267,13 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                 return true;
             case R.id.logout:
                 System.out.println("logging out");
-                logout();
+                try {
+                    logout();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 return true;
             case android.R.id.home:
                 System.out.println("------>Pressed android.native back navigation button<----");
@@ -300,31 +305,20 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
     /**
      * Log out
      */
-    public void logout(){
-        // Debug
-        if(Singleton.getInstance().getSocket().isBound()) {
-            try {
-                    task.cancel();
-                    task.purge();
-                    task = null;
+    public void logout() throws IOException, JSONException {
 
-                videoStreamTask.startStop("stop");
-                videoStreamTask.UDPsocket.disconnect();
-                videoStreamTask.UDPsocket.close();
-                videoStreamTask.cancel(true);
-                Singleton.getInstance().getSocket().close();
 
-                // Transfer to main
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }else{
+        videoStreamTask.startStop("stop");
+        videoStreamTask.UDPsocket.disconnect();
+        videoStreamTask.UDPsocket.close();
+        videoStreamTask.cancel(true);
+        Singleton.getInstance().getDriveSocket().DriveSocket.disconnect();
+        Singleton.getInstance().getDriveSocket().DriveSocket.close();
+        Singleton.getInstance().getDriveSocket().cancel(true);
 
-        }
+        // Transfer to main
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
 
     }
 

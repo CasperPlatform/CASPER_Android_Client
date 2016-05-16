@@ -18,7 +18,7 @@ import java.util.TimerTask;
  * Created by Andreas Fransson on 16-03-06.
  *
  */
-public class UDPsocket extends AsyncTask<Void, Void, Void> {
+public class VideoSocket extends AsyncTask<Void, Void, Void> {
 
     // Convesion variables
     InetAddress dstAddress;
@@ -33,7 +33,7 @@ public class UDPsocket extends AsyncTask<Void, Void, Void> {
      * @param port
      * @throws UnknownHostException
      */
-    UDPsocket(videoStreamInterface videoStreamInterface,String addr, int port) throws UnknownHostException {
+    VideoSocket(videoStreamInterface videoStreamInterface, String addr, int port) throws UnknownHostException {
         dstAddress = InetAddress.getByName(addr);
         dstPort = port;
         this.videoStream = videoStreamInterface;

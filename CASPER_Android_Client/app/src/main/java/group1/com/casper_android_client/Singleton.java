@@ -1,7 +1,6 @@
 package group1.com.casper_android_client;
 
 import java.net.Socket;
-import group1.com.casper_android_client.TCPsocket;
 
 /**
  * Created by Andreas Fransson
@@ -64,49 +63,24 @@ public class Singleton {
     }
 
 
-    /**
-     *
-     */
-    private TCPsocket TCPsocket;
+    private DriveSocket driveSocket;
 
-    public TCPsocket getTCPsocket() {
-        return TCPsocket;
+    public void setDriveSocket(DriveSocket driveSocket){
+        this.driveSocket = driveSocket;
     }
 
-    public void setTCPsocket(TCPsocket TCPsocket) {
-        this.TCPsocket = TCPsocket;
+    public DriveSocket getDriveSocket(){
+        return this.driveSocket;
     }
 
-    // TCP Socket connection
-    private Socket socket = new Socket();
+    private byte[] drivePackage = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0x0d, 0x0a, 0x04};
 
-
-    /**
-     * Get the current TCP Socket connection
-     * @return
-     */
-    public Socket getSocket() {
-        return socket;
+    public void setDrivePackage(byte[] tcpPacket){
+        this.drivePackage = tcpPacket;
     }
 
-    /**
-     * Set the current TCP socket connection
-     * @param socket
-     */
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
-
-    private byte[] tcpPackage = {0x44, (byte) 'I', (byte) 'I', (byte) 0, (byte) 0, 0x0d, 0x0a, 0x04};
-
-
-
-    public void setTcpPackage(byte[] tcpPacket){
-        this.tcpPackage = tcpPacket;
-    }
-
-    public byte[] getTcpPackage(){
-        return this.tcpPackage;
+    public byte[] getDrivePackage(){
+        return this.drivePackage;
     }
 
 

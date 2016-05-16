@@ -15,6 +15,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class LoggedInActivity extends AppCompatActivity {
 
@@ -36,17 +37,14 @@ public class LoggedInActivity extends AppCompatActivity {
        // System.out.println(Singleton.getInstance().getLoggedInUser().toString());
 
 
-
-
-
-                            Singleton.getInstance().setTCPsocket(new TCPsocket(
-                                    "192.168.10.1",
-                                    Integer.parseInt("9999")));
-                            Singleton.getInstance().getTCPsocket().execute();
-
-
-
-
+        try {
+            Singleton.getInstance().setDriveSocket(new DriveSocket(
+                    "192.168.10.1",
+                    Integer.parseInt("9999")));
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        Singleton.getInstance().getDriveSocket().execute();
 
 
 
@@ -59,16 +57,6 @@ public class LoggedInActivity extends AppCompatActivity {
         sockets = (Button)findViewById(R.id.sockets);
 
         responce = (TextView)findViewById(R.id.responce2);
-
-
-        if(Singleton.getInstance().getSocket().isBound()){
-            responce.setTextColor(Color.rgb(0,255,0));
-            responce.setText(" Socket Connection at: \n " + Singleton.getInstance().getSocket().getRemoteSocketAddress());
-        }else{
-            responce.setTextColor(Color.rgb(255,0,0));
-            responce.setText("No Socket Connection Found!");
-        }
-
 
 
     }
@@ -121,16 +109,12 @@ public class LoggedInActivity extends AppCompatActivity {
     // Quit connection
     public void logout(){
         // Debug
-        System.out.println("--------------------->Bound? " + Singleton.getInstance().getSocket().isBound());
-        System.out.println("---------------------->closed? " + Singleton.getInstance().getSocket().isClosed());
-        if(Singleton.getInstance().getSocket().isBound()) {
+        if(Singleton.getInstance().getDriveSocket().DriveSocket.isConnected()) {
             // Close Socket
-            try {
                 finish();
-                Singleton.getInstance().getSocket().close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                Singleton.getInstance().getDriveSocket().DriveSocket.disconnect();
+                Singleton.getInstance().getDriveSocket().DriveSocket.close();
+
             // Transfer to main
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
