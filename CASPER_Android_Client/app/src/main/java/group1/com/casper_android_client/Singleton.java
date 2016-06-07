@@ -30,7 +30,9 @@ public class Singleton {
     }
 
 
-
+    /**
+     * Sockets
+     */
     private String socketData;
 
     public String getSocketData() {
@@ -63,6 +65,9 @@ public class Singleton {
     }
 
 
+    /**
+     * Sockets
+     */
     private DriveSocket driveSocket;
 
     public void setDriveSocket(DriveSocket driveSocket){
@@ -84,4 +89,33 @@ public class Singleton {
     }
 
 
+
+
+
+    /**
+     * CameraSocket
+     */
+    private cameraSocket cameraSocket;
+
+    public cameraSocket getCameraSocket() {
+        return cameraSocket;
+    }
+
+    public void setCameraSocket(cameraSocket cameraSocket) {
+        this.cameraSocket = cameraSocket;
+
+    }
+
+    /**
+     * Camera bytearray package
+     */
+
+    private byte[]  cameraPackage = {0x43, (byte) 'I', (byte) 0, (byte) 'I', (byte) 0, 0x0d, 0x0a, 0x04};
+    public byte[] getCameraPackage() {
+        return cameraPackage;
+    }
+
+    public void setCameraPackage(byte[] cameraPackage) {
+        this.cameraPackage = cameraPackage;
+    }
 }

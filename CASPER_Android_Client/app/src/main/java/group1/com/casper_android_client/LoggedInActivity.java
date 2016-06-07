@@ -33,18 +33,18 @@ public class LoggedInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_logged_in);
 
 
-        System.out.println("Is user Logged in via REST?: " + Singleton.getInstance().getLoggedInUser());
-       // System.out.println(Singleton.getInstance().getLoggedInUser().toString());
-
-
-        try {
-            Singleton.getInstance().setDriveSocket(new DriveSocket(
-                    "192.168.10.1",
-                    Integer.parseInt("9999")));
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        Singleton.getInstance().getDriveSocket().execute();
+//        System.out.println("Is user Logged in via REST?: " + Singleton.getInstance().getLoggedInUser());
+//       // System.out.println(Singleton.getInstance().getLoggedInUser().toString());
+//
+//
+//        try {
+//            Singleton.getInstance().setDriveSocket(new DriveSocket(
+//                    "192.168.10.1",
+//                    Integer.parseInt("9999")));
+//        } catch (UnknownHostException e) {
+//            e.printStackTrace();
+//        }
+//        Singleton.getInstance().getDriveSocket().execute();
 
 
 

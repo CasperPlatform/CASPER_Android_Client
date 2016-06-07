@@ -22,11 +22,23 @@
             android:layout_width="200dp"
             android:layout_height="130dp"
             android:id="@+id/mapView"
-            android:layout_gravity="right|bottom"
+            android:layout_gravity="center_horizontal|bottom"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:background="#666"
             android:onClick="bigsmall" />
+
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/camera_joystick"
+            android:nestedScrollingEnabled="true"
+            android:background="@drawable/image_button_bg"
+            android:layout_alignTop="@+id/layout_joystick"
+            android:layout_toEndOf="@+id/videoStatus"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp" />
 
     </FrameLayout>
 
@@ -66,23 +78,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="150dp"
         android:visibility="invisible" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/yAxis"
-        android:layout_above="@+id/videoStatus"
-        android:layout_alignRight="@+id/fixedValue"
-        android:layout_alignEnd="@+id/fixedValue" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/xAxis"
-        android:layout_alignTop="@+id/yAxis"
-        android:layout_toStartOf="@+id/yAxis"
-        android:layout_toLeftOf="@+id/yAxis" />
 
 </RelativeLayout>

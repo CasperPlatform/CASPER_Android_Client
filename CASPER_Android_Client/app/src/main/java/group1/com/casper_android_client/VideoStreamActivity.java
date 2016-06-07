@@ -25,6 +25,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Timer;
@@ -38,7 +39,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
     boolean is = false;
     // Joystick
-    private RelativeLayout layout_joystick;
+    private RelativeLayout layout_joystick, camera_joystick;
 
     // Image's for Joystick
     private ImageView image_joystick, image_border,videoStream,mapView;
@@ -50,9 +51,11 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
     // Checkbox to start the timed sending of values
     private CheckBox fixedValues;
     Timer task = new Timer();
+    Timer cameraTask = new Timer();
 
     // Make a Joystick
     JoyStick driveStick;
+    JoyStick cameraStick;
     VideoSocket videoStreamTask = null;
 
 
@@ -72,30 +75,26 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
         videoStatusMsg = (TextView)findViewById(R.id.videoStatus);
 
-        // Joystick textfields listening on joystick input.
-        xAxis = (TextView)findViewById(R.id.xAxis);
-        yAxis = (TextView)findViewById(R.id.yAxis);
-
         // Checkbox to start sending of fixed values
-        fixedValues = (CheckBox)findViewById(R.id.fixedValue);
         mapView = (ImageView)findViewById(R.id.mapView);
 
         // Joystick
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
+        camera_joystick = (RelativeLayout)findViewById(R.id.camera_joystick);
 
-            try{
-                videoStreamTask = new VideoSocket(this,
-                        "192.168.10.1",
-                        6000);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            videoStreamTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
-        else {
-            videoStreamTask.execute();
-        }
+//            try{
+//                videoStreamTask = new VideoSocket(this,
+//                        "192.168.10.1",
+//                        6000);
+//            } catch (UnknownHostException e) {
+//                e.printStackTrace();
+//            }
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//            videoStreamTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        }
+//        else {
+//            videoStreamTask.execute();
+//        }
 
 
 
@@ -119,10 +118,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                 if (arg1.getAction() == MotionEvent.ACTION_DOWN
                         || arg1.getAction() == MotionEvent.ACTION_MOVE) {
 
-                    int direction = driveStick.get8Direction();
 
-                    yAxis.setText(""+driveStick.getY());
-                    xAxis.setText(""+driveStick.getX());
 
                         // Command Flags
                         char driveFlag;
@@ -226,6 +222,108 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
 
             }
         }, 0, 50);
+
+
+
+        // Set drive Joystick listener
+        camera_joystick.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                cameraStick.drawStick(arg1);
+                if (arg1.getAction() == MotionEvent.ACTION_DOWN
+                        || arg1.getAction() == MotionEvent.ACTION_MOVE) {
+
+
+
+                    // Command Flags
+                    char XFlag;
+                    char YFlag;
+
+
+                    if (driveStick.getY() > 0) {
+                        YFlag = 'U';
+                    } else if (driveStick.getY() == 0) {
+                        YFlag = 'I';
+                    } else {
+                        YFlag = 'D';
+                    }
+
+                    // Y
+                    int y = driveStick.getY();
+                    if (y < 0) {
+                        y = Math.abs(y);
+                        System.out.println("y--------------->" + y);
+                    }
+                    // not over 255
+                    if (y > 90) {
+                        y = 90;
+                    }
+
+                    // X
+                    int x = driveStick.getX();
+                    if (x < 0) {
+                        x = Math.abs(x);
+                        XFlag = 'R';
+                    } else if (x > 0) {
+                        XFlag = 'L';
+                    } else {
+                        XFlag = 'I';
+                    }
+                    // If X is bigger then it can be
+                    if (x > 90) {
+                        x = 90;
+                    }
+                    // Get Token
+
+                        byte[] byteArray = new byte[8];
+                        byteArray[0] = 0x43;
+                        byteArray[1] = (byte) XFlag;
+                        byteArray[2] = (byte) x;
+                        byteArray[3] = (byte) YFlag;
+                        byteArray[4] = (byte) y;
+                        byteArray[5] = (byte) 0x0d;
+                        byteArray[6] = (byte) 0x0a;
+                        byteArray[7] = (byte) 0x04;
+                        // Set
+                        Singleton.getInstance().setCameraPackage(byteArray);
+
+
+
+
+                    // Send the byteArray
+                }else if(arg1.getAction() == MotionEvent.ACTION_UP){
+
+                        byte[] byteArray = new byte[8];
+                        byteArray[0] = 0x43;
+                        byteArray[1] = (byte) 'I';
+                        byteArray[2] = (byte) 0;
+                        byteArray[3] = (byte) 'I';
+                        byteArray[4] = (byte) 0;
+                        byteArray[5] = (byte) 0x0d;
+                        byteArray[6] = (byte) 0x0a;
+                        byteArray[7] = (byte) 0x04;
+                        // Set
+                        Singleton.getInstance().setCameraPackage(byteArray);
+
+                    
+
+                }
+                return true;
+            }
+        });
+
+
+        cameraTask.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    Singleton.getInstance().getCameraSocket().sendBytes(Singleton.getInstance().getCameraPackage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, 0, 50);
+
 
 
     }
