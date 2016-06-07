@@ -159,49 +159,49 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                             x = 90;
                         }
                     // Get Token
-                    try {
-                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
-                        byte[] byteArray = new byte[24];
-                        byteArray[0] = 0x44;
-                        System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
-                        byteArray[17] = (byte) driveFlag;
-                        byteArray[18] = (byte) angleFlag;
-                        byteArray[19] = (byte) y;
-                        byteArray[20] = (byte) x;
-                        byteArray[21] = (byte) 0x0d;
-                        byteArray[22] = (byte) 0x0a;
-                        byteArray[23] = (byte) 0x04;
-                        // Set
-                        System.out.println("token "+tokenArray.length);
-                        System.out.println(Arrays.toString(byteArray));
-                        Singleton.getInstance().setDrivePackage(byteArray);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
+//                        byte[] byteArray = new byte[24];
+//                        byteArray[0] = 0x44;
+//                        System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
+//                        byteArray[17] = (byte) driveFlag;
+//                        byteArray[18] = (byte) angleFlag;
+//                        byteArray[19] = (byte) y;
+//                        byteArray[20] = (byte) x;
+//                        byteArray[21] = (byte) 0x0d;
+//                        byteArray[22] = (byte) 0x0a;
+//                        byteArray[23] = (byte) 0x04;
+//                        // Set
+//                        System.out.println("token "+tokenArray.length);
+//                        System.out.println(Arrays.toString(byteArray));
+//                        Singleton.getInstance().setDrivePackage(byteArray);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
 
 
 
                         // Send the byteArray
                 }else if(arg1.getAction() == MotionEvent.ACTION_UP){
                     // Get Token
-                    try {
-                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
-                    byte[] byteArray = new byte[24];
-                    byteArray[0] = 0x44;
-                    System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
-                    byteArray[17] = (byte) 'I';
-                    byteArray[18] = (byte) 'I';
-                    byteArray[19] = (byte) 0;
-                    byteArray[20] = (byte) 0;
-                    byteArray[21] = (byte) 0x0d;
-                    byteArray[22] = (byte) 0x0a;
-                    byteArray[23] = (byte) 0x04;
-
-                    // Set
-                    Singleton.getInstance().setDrivePackage(byteArray);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
+//                    byte[] byteArray = new byte[24];
+//                    byteArray[0] = 0x44;
+//                    System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
+//                    byteArray[17] = (byte) 'I';
+//                    byteArray[18] = (byte) 'I';
+//                    byteArray[19] = (byte) 0;
+//                    byteArray[20] = (byte) 0;
+//                    byteArray[21] = (byte) 0x0d;
+//                    byteArray[22] = (byte) 0x0a;
+//                    byteArray[23] = (byte) 0x04;
+//
+//                    // Set
+//                    Singleton.getInstance().setDrivePackage(byteArray);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
 
 
 
@@ -210,19 +210,28 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
             }
         });
 
+//
+//        task.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Singleton.getInstance().getDriveSocket().sendCmd(Singleton.getInstance().getDrivePackage());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }, 0, 50);
 
-        task.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    Singleton.getInstance().getDriveSocket().sendCmd(Singleton.getInstance().getDrivePackage());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, 0, 50);
-
+        // Drive Joystick creation and settings
+        cameraStick = new JoyStick(getApplicationContext()
+                , camera_joystick, R.drawable.image_button);
+        cameraStick.setStickSize(150, 150);
+        cameraStick.setLayoutSize(400, 400);
+        cameraStick.setLayoutAlpha(200);
+        cameraStick.setStickAlpha(150);
+        cameraStick.setOffset(70);
+        cameraStick.setMinimumDistance(50);
 
 
         // Set drive Joystick listener
@@ -304,7 +313,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                         // Set
                         Singleton.getInstance().setCameraPackage(byteArray);
 
-                    
+
 
                 }
                 return true;

@@ -29,29 +29,23 @@ public class cameraSocket extends AsyncTask<Void, Void, Void> {
         dstAddress = addr;
         dstPort = port;
 
-        try{
-            byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
-            byte[] byteArray = new byte[24];
-            byteArray[0] = 0x44;
-            System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
-            byteArray[17] = (byte) 'I';
-            byteArray[18] = (byte) 'I';
-            byteArray[19] = (byte) 0;
-            byteArray[20] = (byte) 0;
-            byteArray[21] = (byte) 0x0d;
-            byteArray[22] = (byte) 0x0a;
-            byteArray[23] = (byte) 0x04;
-
-            Singleton.getInstance().setDrivePackage(byteArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        byte[] byteArray = new byte[8];
+        byteArray[0] = 0x43;
+        byteArray[1] = (byte) 'I';
+        byteArray[2] = (byte) 0;
+        byteArray[3] = (byte) 'I';
+        byteArray[4] = (byte) 0;
+        byteArray[5] = (byte) 0x0d;
+        byteArray[6] = (byte) 0x0a;
+        byteArray[7] = (byte) 0x04;
+        // Set
+        Singleton.getInstance().setCameraPackage(byteArray);
 
     }
 
     @Override
     protected Void doInBackground(Void... v) {
-        System.out.println(">>>>>>>>>bound?: "+ Singleton.getInstance().getCameraSocket().isBound());
+
 
         /**
          *
@@ -64,7 +58,7 @@ public class cameraSocket extends AsyncTask<Void, Void, Void> {
 
                 System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection!");
                 // Start a TCP socket connection
-                Singleton.getInstance().setCameraSocket(new Socket(dstAddress, dstPort));
+                Singleton.getInstance().setSocket(new Socket(dstAddress, dstPort));
 
 
                 ByteArrayOutputStream byteArrayOutputStream =
@@ -72,7 +66,7 @@ public class cameraSocket extends AsyncTask<Void, Void, Void> {
                 byte[] buffer = new byte[1024];
 
                 int bytesRead;
-                InputStream inputStream = Singleton.getInstance().getCameraSocket().getInputStream();
+                InputStream inputStream = Singleton.getInstance().getSocket().getInputStream();
 
 
 
@@ -84,10 +78,6 @@ public class cameraSocket extends AsyncTask<Void, Void, Void> {
 
 
                     byteArrayOutputStream.write(buffer, 0, bytesRead);
-                    responsemsg += byteArrayOutputStream.toString("UTF-8");
-                    Singleton.getInstance().setSocketData(responsemsg);
-
-                    System.out.println("---------------------------------------------------------------------------------->" + responsemsg);
 
                     if (isCancelled()) {
                         break;
@@ -107,18 +97,8 @@ public class cameraSocket extends AsyncTask<Void, Void, Void> {
                 System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection! error recived at catch 2");
                 e.printStackTrace();
                 responsemsg = "IOException: " + e.toString();
-            } finally {
 
-                if (Singleton.getInstance().getCameraSocket() != null) {
-                    try {
-                        // Try closeing the socket connection.
-                        Singleton.getInstance().getCameraSocket().close();
-                    } catch (IOException e) {
-                        System.out.println(">>>>>>>>>>>>>>>>>Starting Socket connection! error recived at catch 3");
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
+
             }
             return null;
     }
@@ -145,7 +125,7 @@ public class cameraSocket extends AsyncTask<Void, Void, Void> {
         if (start < 0 || start >= myByteArray.length)
             throw new IndexOutOfBoundsException("Out of bounds: " + start);
 
-        OutputStream out = Singleton.getInstance().getCameraSocket().getOutputStream();
+        OutputStream out = Singleton.getInstance().getSocket().getOutputStream();
         DataOutputStream dos = new DataOutputStream(out);
 
         if (len > 0) {

@@ -49,12 +49,20 @@ public class LoggedInActivity extends AppCompatActivity {
 
 
 
+            Singleton.getInstance().setCameraSocket(new cameraSocket(
+                    "192.168.0.15",
+                    Integer.parseInt("9999")));
+
+        Singleton.getInstance().getCameraSocket().execute();
+
+
+
 
         // Declare Video controller Button
         controls = (Button) findViewById(R.id.controlButton);
 
-        // Socket connection activity
-        sockets = (Button)findViewById(R.id.sockets);
+//        // Socket connection activity
+//        sockets = (Button)findViewById(R.id.sockets);
 
         responce = (TextView)findViewById(R.id.responce2);
 

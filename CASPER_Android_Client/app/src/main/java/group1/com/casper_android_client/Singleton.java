@@ -107,6 +107,20 @@ public class Singleton {
     }
 
     /**
+     *
+     */
+
+    private Socket socket;
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+
+    /**
      * Camera bytearray package
      */
 
