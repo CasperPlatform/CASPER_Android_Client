@@ -82,19 +82,19 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         layout_joystick = (RelativeLayout)findViewById(R.id.layout_joystick);
         camera_joystick = (RelativeLayout)findViewById(R.id.camera_joystick);
 
-//            try{
-//                videoStreamTask = new VideoSocket(this,
-//                        "192.168.10.1",
-//                        6000);
-//            } catch (UnknownHostException e) {
-//                e.printStackTrace();
-//            }
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-//            videoStreamTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//        }
-//        else {
-//            videoStreamTask.execute();
-//        }
+            try{
+                videoStreamTask = new VideoSocket(this,
+                        "192.168.10.1",
+                        6000);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            videoStreamTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+        else {
+            videoStreamTask.execute();
+        }
 
 
 
@@ -159,49 +159,49 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                             x = 90;
                         }
                     // Get Token
-//                    try {
-//                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
-//                        byte[] byteArray = new byte[24];
-//                        byteArray[0] = 0x44;
-//                        System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
-//                        byteArray[17] = (byte) driveFlag;
-//                        byteArray[18] = (byte) angleFlag;
-//                        byteArray[19] = (byte) y;
-//                        byteArray[20] = (byte) x;
-//                        byteArray[21] = (byte) 0x0d;
-//                        byteArray[22] = (byte) 0x0a;
-//                        byteArray[23] = (byte) 0x04;
-//                        // Set
-//                        System.out.println("token "+tokenArray.length);
-//                        System.out.println(Arrays.toString(byteArray));
-//                        Singleton.getInstance().setDrivePackage(byteArray);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+                    try {
+                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
+                        byte[] byteArray = new byte[24];
+                        byteArray[0] = 0x44;
+                        System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
+                        byteArray[17] = (byte) driveFlag;
+                        byteArray[18] = (byte) angleFlag;
+                        byteArray[19] = (byte) y;
+                        byteArray[20] = (byte) x;
+                        byteArray[21] = (byte) 0x0d;
+                        byteArray[22] = (byte) 0x0a;
+                        byteArray[23] = (byte) 0x04;
+                        // Set
+                        System.out.println("token "+tokenArray.length);
+                        System.out.println(Arrays.toString(byteArray));
+                        Singleton.getInstance().setDrivePackage(byteArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
 
 
                         // Send the byteArray
                 }else if(arg1.getAction() == MotionEvent.ACTION_UP){
                     // Get Token
-//                    try {
-//                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
-//                    byte[] byteArray = new byte[24];
-//                    byteArray[0] = 0x44;
-//                    System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
-//                    byteArray[17] = (byte) 'I';
-//                    byteArray[18] = (byte) 'I';
-//                    byteArray[19] = (byte) 0;
-//                    byteArray[20] = (byte) 0;
-//                    byteArray[21] = (byte) 0x0d;
-//                    byteArray[22] = (byte) 0x0a;
-//                    byteArray[23] = (byte) 0x04;
-//
-//                    // Set
-//                    Singleton.getInstance().setDrivePackage(byteArray);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+                    try {
+                        byte[] tokenArray = Singleton.getInstance().getLoggedInUser().getToken().getBytes();
+                    byte[] byteArray = new byte[24];
+                    byteArray[0] = 0x44;
+                    System.arraycopy(tokenArray, 0, byteArray, 1, tokenArray.length);
+                    byteArray[17] = (byte) 'I';
+                    byteArray[18] = (byte) 'I';
+                    byteArray[19] = (byte) 0;
+                    byteArray[20] = (byte) 0;
+                    byteArray[21] = (byte) 0x0d;
+                    byteArray[22] = (byte) 0x0a;
+                    byteArray[23] = (byte) 0x04;
+
+                    // Set
+                    Singleton.getInstance().setDrivePackage(byteArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
 
 
@@ -210,20 +210,20 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
             }
         });
 
-//
-//        task.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Singleton.getInstance().getDriveSocket().sendCmd(Singleton.getInstance().getDrivePackage());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        }, 0, 50);
 
-        // Drive Joystick creation and settings
+        task.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    Singleton.getInstance().getDriveSocket().sendCmd(Singleton.getInstance().getDrivePackage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, 0, 50);
+
+
         cameraStick = new JoyStick(getApplicationContext()
                 , camera_joystick, R.drawable.image_button);
         cameraStick.setStickSize(150, 150);
@@ -232,7 +232,6 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         cameraStick.setStickAlpha(150);
         cameraStick.setOffset(70);
         cameraStick.setMinimumDistance(50);
-
 
         // Set drive Joystick listener
         camera_joystick.setOnTouchListener(new View.OnTouchListener() {
@@ -248,16 +247,16 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                     char YFlag;
 
 
-                    if (driveStick.getY() > 0) {
+                    if (cameraStick.getY() > 0) {
                         YFlag = 'U';
-                    } else if (driveStick.getY() == 0) {
+                    } else if (cameraStick.getY() == 0) {
                         YFlag = 'I';
                     } else {
                         YFlag = 'D';
                     }
 
                     // Y
-                    int y = driveStick.getY();
+                    int y = cameraStick.getY();
                     if (y < 0) {
                         y = Math.abs(y);
                         System.out.println("y--------------->" + y);
@@ -268,7 +267,7 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
                     }
 
                     // X
-                    int x = driveStick.getX();
+                    int x = cameraStick.getX();
                     if (x < 0) {
                         x = Math.abs(x);
                         XFlag = 'R';
@@ -321,17 +320,17 @@ public class VideoStreamActivity extends AppCompatActivity implements videoStrea
         });
 
 
-        cameraTask.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    Singleton.getInstance().getCameraSocket().sendBytes(Singleton.getInstance().getCameraPackage());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, 0, 50);
+//        cameraTask.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Singleton.getInstance().getCameraSocket().sendBytes(Singleton.getInstance().getCameraPackage());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }, 0, 50);
 
 
 
